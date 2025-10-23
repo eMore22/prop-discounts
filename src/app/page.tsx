@@ -2,10 +2,27 @@
 
 import React, { useState, useEffect } from 'react';
 import { Copy, ExternalLink, Clock, CheckCircle, XCircle, AlertCircle, ArrowUpDown } from 'lucide-react';
-import { discountCodes, type DiscountCode } from '@/lib/data';
+import { getDeals } from '@/lib/getDeals';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
 import { ValueCalculator } from '@/components/ValueCalculator';
+
+// Your existing DiscountCode interface
+export interface DiscountCode {
+  firm: string;
+  code: string;
+  discount: string;
+  expiry: string;
+  link: string;
+  description?: string;
+  propScore?: number;
+  verificationStatus?: 'verified' | 'sponsored' | 'community-favorite' | 'limited-time';
+  votes?: {
+    gotPaid: number;
+    stillWaiting: number;
+    failed: number;
+  };
+}
 
 const CountdownTimer: React.FC<{ expiryDate: string }> = ({ expiryDate }) => {
   const [timeLeft, setTimeLeft] = useState("");
@@ -142,9 +159,42 @@ const DiscountCard: React.FC<{ discount: DiscountCode; onCopy: (code: string) =>
 };
 
 export default function PropDiscountsApp() {
+  const [discountCodes, setDiscountCodes] = useState<DiscountCode[]>([]);
+  const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'active' | 'expired'>('all');
   const [sortBy, setSortBy] = useState<'default' | 'score' | 'discount'>('default');
+
+  // Fetch deals from Supabase and map to UI format
+  useEffect(() => {
+    async function fetchDeals() {
+      try {
+        const deals = await getDeals();
+        // Map database fields to UI format
+        const mappedDeals: DiscountCode[] = deals.map(deal => ({
+          firm: deal.firm,
+          code: deal.code,
+          discount: deal.discount,
+          expiry: deal.expiry || '',
+          link: deal.link || '',
+          description: deal.description,
+          propScore: deal.prop_score || undefined,
+          verificationStatus: deal.verification_status,
+          votes: {
+            gotPaid: deal.votes_got_paid || 0,
+            stillWaiting: deal.votes_still_waiting || 0,
+            failed: deal.votes_failed || 0
+          }
+        }));
+        setDiscountCodes(mappedDeals);
+      } catch (error) {
+        console.error('Error fetching deals:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchDeals();
+  }, []);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -175,6 +225,17 @@ export default function PropDiscountsApp() {
   });
 
   const activeCount = discountCodes.filter(code => new Date(code.expiry) >= new Date()).length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-xl text-gray-600">Loading deals...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">

@@ -1,41 +1,142 @@
 "use client";
 
-import React, { useState } from 'react';
-import { notFound } from 'next/navigation';
-import { discountCodes } from '@/lib/data';
+import React, { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { getDealBySlug, getDeals } from '@/lib/getDeals';
 import { ExternalLink, Copy, Calendar, Tag, TrendingUp, Shield, Clock, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
 import { TraderFeedback } from '@/components/TraderFeedback';
 
-export default function FirmDetailPage({ params }: { params: { firm: string } }) {
-  const [copied, setCopied] = useState(false);
+interface FirmDetail {
+  id: string;
+  firm: string;
+  code: string;
+  discount: string;
+  expiry: string | null;
+  slug: string;
+  description?: string;
+  link?: string;
+  prop_score?: number;
+  verification_status?: 'verified' | 'sponsored' | 'community-favorite' | 'limited-time';
+  votes_got_paid?: number;
+  votes_still_waiting?: number;
+  votes_failed?: number;
+}
+
+export default function FirmDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const firmSlug = params.firm as string;
   
-  const firm = discountCodes.find(
-    f => f.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === params.firm
-  );
+  const [firm, setFirm] = useState<FirmDetail | null>(null);
+  const [otherFirms, setOtherFirms] = useState<FirmDetail[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
-  if (!firm) {
-    notFound();
-  }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [firmData, allFirms] = await Promise.all([
+          getDealBySlug(firmSlug),
+          getDeals()
+        ]);
+        
+        setFirm(firmData);
+        setOtherFirms(allFirms.filter(f => f.slug !== firmSlug).slice(0, 3));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [firmSlug]);
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
       setCopied(true);
+      
+      // Track analytics
+      if (firm) {
+        await fetch('/api/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dealId: firm.id,
+            eventType: 'code_copied'
+          })
+        });
+      }
+      
       setTimeout(() => setCopied(false), 3000);
-    });
+    } catch (error) {
+      console.error('Failed to copy:', error);
+    }
   };
 
-  const isExpired = new Date(firm.expiry) < new Date();
-  const daysLeft = Math.floor((+new Date(firm.expiry) - +new Date()) / (1000 * 60 * 60 * 24));
+  const trackLinkClick = async () => {
+    if (!firm) return;
+    
+    try {
+      await fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dealId: firm.id,
+          eventType: 'link_clicked'
+        })
+      });
+    } catch (error) {
+      console.error('Failed to track click:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-xl text-gray-600">Loading firm details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!firm) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Firm Not Found</h1>
+          <p className="text-gray-600 mb-6">The firm you're looking for doesn't exist.</p>
+          <button
+            onClick={() => router.push('/prop-firms')}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
+          >
+            Back to Firms
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const isExpired = firm.expiry ? new Date(firm.expiry) < new Date() : false;
+  const daysLeft = firm.expiry ? Math.floor((+new Date(firm.expiry) - +new Date()) / (1000 * 60 * 60 * 24)) : 0;
 
   const features = [
     { icon: Tag, label: "Discount Code", value: firm.code },
     { icon: TrendingUp, label: "Save Up To", value: firm.discount },
-    { icon: Calendar, label: "Expires On", value: firm.expiry },
+    { icon: Calendar, label: "Expires On", value: firm.expiry || 'No expiry' },
     { icon: Clock, label: "Time Left", value: isExpired ? "Expired" : `${daysLeft} days` }
   ];
+
+  const votes = {
+    gotPaid: firm.votes_got_paid || 0,
+    stillWaiting: firm.votes_still_waiting || 0,
+    failed: firm.votes_failed || 0
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -47,18 +148,20 @@ export default function FirmDetailPage({ params }: { params: { firm: string } })
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="text-5xl md:text-6xl font-bold mb-4">{firm.firm}</h1>
-              <p className="text-xl text-blue-100">{firm.description}</p>
+              {firm.description && (
+                <p className="text-xl text-blue-100">{firm.description}</p>
+              )}
             </div>
             <div className="flex flex-col gap-3">
-              {firm.propScore && <PropScoreBadge score={firm.propScore} />}
-              {firm.verificationStatus && <VerificationBadge status={firm.verificationStatus} />}
+              {firm.prop_score && <PropScoreBadge score={firm.prop_score} />}
+              {firm.verification_status && <VerificationBadge status={firm.verification_status} />}
             </div>
           </div>
         </div>
       </section>
 
       {copied && (
-        <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 z-50">
+        <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 z-50 animate-fade-in">
           <CheckCircle className="w-5 h-5" />
           <span className="font-medium">Copied to clipboard!</span>
         </div>
@@ -84,14 +187,34 @@ export default function FirmDetailPage({ params }: { params: { firm: string } })
                   </div>
                   
                   <div className="flex gap-3">
-                    <button onClick={() => copyToClipboard(firm.code)} disabled={isExpired} className={`flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${isExpired ? 'bg-gray-300 text-gray-500' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>
+                    <button 
+                      onClick={() => copyToClipboard(firm.code)} 
+                      disabled={isExpired} 
+                      className={`flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                        isExpired 
+                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                          : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
+                      }`}
+                    >
                       <Copy className="w-5 h-5" />
                       {copied ? 'Copied!' : 'Copy Code'}
                     </button>
-                    <a href={firm.link} target="_blank" rel="noopener noreferrer" className={`flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${isExpired ? 'bg-gray-300 text-gray-500 pointer-events-none' : 'bg-green-600 hover:bg-green-700 text-white'}`}>
-                      <ExternalLink className="w-5 h-5" />
-                      Visit {firm.firm}
-                    </a>
+                    {firm.link && (
+                      <a 
+                        href={firm.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={trackLinkClick}
+                        className={`flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                          isExpired 
+                            ? 'bg-gray-300 text-gray-500 pointer-events-none' 
+                            : 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg'
+                        }`}
+                      >
+                        <ExternalLink className="w-5 h-5" />
+                        Visit {firm.firm}
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -139,24 +262,30 @@ export default function FirmDetailPage({ params }: { params: { firm: string } })
                 <p className="text-blue-100 text-sm">This discount code has been verified by our team and is working as of today.</p>
               </div>
 
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">Compare With</h3>
-                <div className="space-y-2">
-                  {discountCodes.filter(f => f.firm !== firm.firm).slice(0, 3).map(otherFirm => {
-                    const otherSlug = otherFirm.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-                    return (
-                      <Link key={otherFirm.firm} href={`/prop-firms/${otherSlug}`} className="block p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors">
+              {otherFirms.length > 0 && (
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Compare With</h3>
+                  <div className="space-y-2">
+                    {otherFirms.map(otherFirm => (
+                      <Link 
+                        key={otherFirm.id} 
+                        href={`/prop-firms/${otherFirm.slug}`} 
+                        className="block p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                      >
                         <p className="font-semibold text-gray-900 text-sm">{otherFirm.firm}</p>
                         <p className="text-xs text-gray-600">{otherFirm.discount} discount</p>
                       </Link>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {firm.votes && (
-                <TraderFeedback firmName={firm.firm} initialVotes={firm.votes} />
               )}
+
+              {/* UPDATED: Added dealId prop */}
+              <TraderFeedback 
+                firmName={firm.firm}
+                dealId={firm.id}
+                initialVotes={votes} 
+              />
             </div>
           </div>
         </div>

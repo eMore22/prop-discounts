@@ -1,17 +1,22 @@
 // src/lib/supabase.ts
 import { createClient } from '@supabase/supabase-js';
 
-// Get environment variables with fallbacks for build time
+// Get environment variables - provide fallbacks for build time
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-// Only validate in runtime (not during build)
-if (typeof window !== 'undefined' && (!supabaseUrl || !supabaseAnonKey)) {
-  console.error('Supabase environment variables are missing');
+// Only throw error at runtime, not build time
+function getSupabaseClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // During build, this won't throw - only at runtime
+    if (typeof window !== 'undefined') {
+      console.error('Supabase configuration is missing');
+    }
+    // Return a dummy client for build purposes
+    return createClient('https://placeholder.supabase.co', 'placeholder-key');
+  }
+  
+  return createClient(supabaseUrl, supabaseAnonKey);
 }
 
-// Create client with empty strings as fallback (won't be used if env vars exist)
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
-);
+export const supabase = getSupabaseClient();

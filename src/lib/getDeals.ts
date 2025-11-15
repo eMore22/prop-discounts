@@ -1,5 +1,5 @@
 // src/lib/getDeals.ts
-import { supabase } from './supabase';
+import { createClient } from '@supabase/supabase-js';
 
 export interface Deal {
   id: string;
@@ -18,31 +18,57 @@ export interface Deal {
   created_at: string;
 }
 
-export async function getDeals(): Promise<Deal[]> {
-  const { data, error } = await supabase
-    .from('prop_deals')
-    .select('*')
-    .order('prop_score', { ascending: false });
+// Create client only when needed
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase environment variables are not set');
+  }
+  
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
 
-  if (error) {
-    console.error('Error fetching deals:', error);
+export async function getDeals(): Promise<Deal[]> {
+  try {
+    const supabase = getSupabaseClient();
+    
+    const { data, error } = await supabase
+      .from('prop_deals')
+      .select('*')
+      .order('prop_score', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching deals:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Error in getDeals:', error);
     return [];
   }
-
-  return data || [];
 }
 
 export async function getDealBySlug(slug: string): Promise<Deal | null> {
-  const { data, error } = await supabase
-    .from('prop_deals')
-    .select('*')
-    .eq('slug', slug)
-    .single();
+  try {
+    const supabase = getSupabaseClient();
+    
+    const { data, error } = await supabase
+      .from('prop_deals')
+      .select('*')
+      .eq('slug', slug)
+      .single();
 
-  if (error) {
-    console.error('Error fetching deal:', error);
+    if (error) {
+      console.error('Error fetching deal:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error in getDealBySlug:', error);
     return null;
   }
-
-  return data;
 }

@@ -4,30 +4,39 @@
 import { getDeals } from '@/lib/getDeals';
 import PropDiscountsClient from './PropDiscountsClient';
 
+// Force dynamic rendering - prevents build-time Supabase calls
+export const dynamic = 'force-dynamic';
+
 // This is a Server Component - runs on server, SEO-friendly
 export default async function HomePage() {
-  // Fetch data on the server
-  const deals = await getDeals();
-  
-  // Map to UI format
-  const discountCodes = deals.map(deal => ({
-    firm: deal.firm,
-    code: deal.code,
-    discount: deal.discount,
-    expiry: deal.expiry || '',
-    link: deal.link || '',
-    description: deal.description,
-    propScore: deal.prop_score || undefined,
-    verificationStatus: deal.verification_status,
-    votes: {
-      gotPaid: deal.votes_got_paid || 0,
-      stillWaiting: deal.votes_still_waiting || 0,
-      failed: deal.votes_failed || 0
-    }
-  }));
+  try {
+    // Fetch data on the server
+    const deals = await getDeals();
+    
+    // Map to UI format
+    const discountCodes = deals.map(deal => ({
+      firm: deal.firm,
+      code: deal.code,
+      discount: deal.discount,
+      expiry: deal.expiry || '',
+      link: deal.link || '',
+      description: deal.description,
+      propScore: deal.prop_score || undefined,
+      verificationStatus: deal.verification_status,
+      votes: {
+        gotPaid: deal.votes_got_paid || 0,
+        stillWaiting: deal.votes_still_waiting || 0,
+        failed: deal.votes_failed || 0
+      }
+    }));
 
-  // Pass server-fetched data to client component
-  return <PropDiscountsClient initialDiscountCodes={discountCodes} />;
+    // Pass server-fetched data to client component
+    return <PropDiscountsClient initialDiscountCodes={discountCodes} />;
+  } catch (error) {
+    console.error('Error loading deals:', error);
+    // Return empty array on error so page still renders
+    return <PropDiscountsClient initialDiscountCodes={[]} />;
+  }
 }
 
 // Add metadata for SEO

@@ -6,6 +6,9 @@ import { notFound } from 'next/navigation';
 import FirmDetailClient from './FirmDetailClient';
 import type { Metadata } from 'next';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: {
     firm: string;
@@ -47,6 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     };
   } catch (error) {
+    console.error('Error generating metadata:', error);
     return {
       title: 'Firm Not Found | Prop Discounts',
     };
@@ -82,19 +86,3 @@ export default async function FirmDetailPage({ params }: PageProps) {
     notFound();
   }
 }
-
-// Generate static paths for all firms at build time
-export async function generateStaticParams() {
-  try {
-    const deals = await getDeals();
-    return deals.map((deal) => ({
-      firm: deal.slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
-}
-
-// Revalidate every hour
-export const revalidate = 3600;

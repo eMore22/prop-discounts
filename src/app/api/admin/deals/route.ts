@@ -4,14 +4,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import jwt from 'jsonwebtoken';
 
-// --- Initialize the Secure Client (SERVICE ROLE) ---
-// FIX APPLIED HERE: Using the secure, server-only SUPABASE_URL variable
-const supabaseAdmin = createClient(
-    process.env.SUPABASE_URL!, 
-    process.env.SUPABASE_SERVICE_KEY!
-);
-
+// Define and check environment variables explicitly. 
+// This is the safest way to ensure Vercel sees the keys during the build process.
+const supabaseUrl = process.env.SUPABASE_URL;
+const serviceKey = process.env.SUPABASE_SERVICE_KEY;
 const jwtSecret = process.env.JWT_SECRET;
+
+// CRITICAL CHECK: Throw a custom error if keys are missing during build/runtime
+if (!supabaseUrl || !serviceKey || !jwtSecret) {
+    throw new Error('Server environment variables (SUPABASE_URL, SUPABASE_SERVICE_KEY, JWT_SECRET) are missing or undefined. Check Vercel Preview/Production scopes.');
+}
+
+
+// --- Initialize the Secure Client (SERVICE ROLE) ---
+// FIX APPLIED: Using the secure, non-public SUPABASE_URL variable
+const supabaseAdmin = createClient(
+    supabaseUrl, 
+    serviceKey
+);
 
 // Interface for type safety
 interface DealPayload {
@@ -33,13 +43,13 @@ interface DealPayload {
 function verifyAdminToken(request: NextRequest): boolean {
     const tokenCookie = request.cookies.get('admin_token');
 
-    if (!tokenCookie || !tokenCookie.value || !jwtSecret) {
+    if (!tokenCookie || !tokenCookie.value) {
         return false;
     }
 
     try {
         // Must verify the token with the secret to ensure it's authentic and unexpired
-        jwt.verify(tokenCookie.value, jwtSecret);
+        jwt.verify(tokenCookie.value, jwtSecret!);
         return true;
     } catch (error) {
         return false; // Token is invalid or expired

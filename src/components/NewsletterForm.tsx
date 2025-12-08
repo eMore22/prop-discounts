@@ -1,43 +1,59 @@
-// src/components/NewsletterForm.tsx
-
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export const NewsletterForm = () => {
-  const [email, setEmail] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Newsletter signup submitted:', email);
-    setIsSubmitted(true);
-    // In a real application, you would connect this to an email service like Mailchimp or Brevo.
+    setStatus("loading");
+
+    try {
+      const res = await fetch("https://buttondown.email/api/emails/embed-subscribe/propcoupouns", {
+        method: "POST",
+        body: new URLSearchParams({ email }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   };
 
-  if (isSubmitted) {
+  if (status === "success") {
     return (
-      <div className="bg-green-500 text-white p-4 rounded-lg text-center">
-        <p>Thank you for signing up! Check your inbox for our first newsletter.</p>
+      <div className="text-center py-8">
+        <p className="text-[#00ff9d] text-2xl font-bold">Welcome aboard!</p>
+        <p className="text-gray-400 mt-2">Check your inbox — your first deals drop Tuesday</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
       <input
         type="email"
-        placeholder="Enter your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full sm:w-auto flex-grow p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-800"
+        placeholder="you@trader.com"
         required
+        disabled={status === "loading"}
+        className="flex-1 px-6 py-4 rounded-xl bg-[#111] border border-[#333] text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff9d] transition"
       />
       <button
         type="submit"
-        className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        disabled={status === "loading"}
+        className="px-10 py-4 bg-[#00ff9d] hover:bg-[#00cc7a] text-black font-bold rounded-xl transition shadow-lg hover:shadow-xl disabled:opacity-70"
       >
-        Subscribe
+        {status === "loading" ? "Subscribing..." : "Send Me Deals"}
       </button>
     </form>
   );

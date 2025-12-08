@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { NewsletterForm } from "@/components/NewsletterForm"; // ← This line is important!
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,38 +44,19 @@ export default function RootLayout({
         <Navbar />
         {children}
 
-        {/* CLEAN & HIGH-CONVERTING NEWSLETTER BAR */}
+        {/* ←←← PERFECT NEWSLETTER BAR – FINAL VERSION ↓↓↓ */}
         <div className="bg-[#0a0a0f] border-t border-[#333] py-12">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <p className="text-[#00ff9d] text-2xl md:text-3xl font-bold mb-6">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <h2 className="text-[#00ff9d] text-2xl md:text-3xl font-bold mb-8">
               Get the hottest prop deals in your inbox every Tuesday
-            </p>
-            <form
-              action="https://buttondown.email/api/emails/embed-subscribe/propcoupuons"
-              method="post"
-              target="popupwindow"
-              onSubmit={() => window.open('https://buttondown.email/propcoupouns', 'popupwindow')}
-              className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto items-center justify-center"
-            >
-              <input
-                type="email"
-                name="email"
-                placeholder="you@trader.com"
-                required
-                className="w-full px-6 py-4 rounded-xl bg-[#111] border border-[#333] text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff9d] transition"
-              />
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-10 py-4 bg-[#00ff9d] hover:bg-[#00cc7a] text-black font-bold rounded-xl transition shadow-lg hover:shadow-xl"
-              >
-                Send Me Deals
-              </button>
-            </form>
-            <p className="text-gray-500 text-sm mt-4">
-              Zero spam · Unsubscribe anytime · 5,000+ traders already subscribed
+            </h2>
+            <NewsletterForm />
+            <p className="text-gray-500 text-sm mt-6">
+              Zero spam · Unsubscribe anytime · Join 5,000+ traders saving big
             </p>
           </div>
         </div>
+        {/* ←←← END OF NEWSLETTER BAR ↑↑↑ */}
 
         <Footer />
       </body>

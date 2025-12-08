@@ -124,7 +124,7 @@ export default function ContactPage() {
                 <MessageSquare className="w-12 h-12 text-purple-600 mb-4" />
                 <h3 className="text-2xl font-bold mb-2 text-gray-800">Join Our Community</h3>
                 <p className="text-gray-600 mb-4">Connect with fellow traders</p>
-                <a href="https://discord.gg/proptrading" className="text-purple-600 font-semibold hover:underline">Discord Server</a>
+                <a href="https://discord.gg/n2fXVD6CJ" className="text-purple-600 font-semibold hover:underline">Discord Server</a>
               </div>
             </div>
           </div>
@@ -138,4 +138,4 @@ export default function ContactPage() {
       </section>
     </div>
   );
-} 
+}

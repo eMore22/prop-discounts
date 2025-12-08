@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
     await transporter.sendMail({
       from: `${name} <${email}>`,
-      to: process.env.GMAIL_USER,
+      to: process.env.GMAIL_USER,  // Your correct email: propfirmdiscountss@gmail.com
       subject: `New Contact Form: ${subject || 'Inquiry'}`,
       text: `Name: ${name}\nEmail: ${email}\nReason: ${subject}\n\nMessage:\n${message}`,
       html: `<h2>New Message from Prop Coupons</h2>

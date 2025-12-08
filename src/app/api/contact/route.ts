@@ -1,22 +1,35 @@
-// src/app/api/contact/route.ts
 import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json();
-    const { name, email, message } = data;
+    const { name, email, subject, message } = await request.json();
 
-    // Here, you would typically use a service like Nodemailer, SendGrid, or Brevo
-    // to send the email to yourself. For now, we'll just log the data.
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
 
-    console.log('New contact form submission:');
-    console.log(`Name: ${name}`);
-    console.log(`Email: ${email}`);
-    console.log(`Message: ${message}`);
+    await transporter.sendMail({
+      from: `${name} <${email}>`,
+      to: process.env.GMAIL_USER,
+      subject: `New Contact Form: ${subject || 'Inquiry'}`,
+      text: `Name: ${name}\nEmail: ${email}\nReason: ${subject}\n\nMessage:\n${message}`,
+      html: `<h2>New Message from Prop Coupons</h2>
+             <p><strong>Name:</strong> ${name}</p>
+             <p><strong>Email:</strong> ${email}</p>
+             <p><strong>Reason:</strong> ${subject}</p>
+             <p><strong>Message:</strong> ${message}</p>`,
+    });
 
-    return NextResponse.json({ success: true, message: 'Message sent successfully!' }, { status: 200 });
+    return NextResponse.json({ success: true, message: 'Message sent successfully!' });
   } catch (error) {
-    console.error('Failed to process contact form submission:', error);
+    console.error('Failed to send email:', error);
     return NextResponse.json({ success: false, message: 'Failed to send message.' }, { status: 500 });
   }
 }

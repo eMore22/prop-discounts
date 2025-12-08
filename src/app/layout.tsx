@@ -45,6 +45,23 @@ export default function RootLayout({
 
         <Navbar />
         {children}
+
+        {/* ——————— NEWSLETTER SIGNUP SECTION ——————— */}
+        <section style={{ background: '#0f0f17', padding: '60px 0' }}>
+          <div style={{ maxWidth: '720px', margin: '0 auto', padding: '0 20px', textAlign: 'center' }}>
+            <p style={{ color: '#00ff9d', fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+              Get the hottest prop deals in your inbox every Tuesday
+            </p>
+            <iframe
+              scrolling="no"
+              style={{ width: '100%', height: '220px', border: '1px #333 solid', borderRadius: '12px', background: '#111' }}
+              src="https://buttondown.com/propcoupons?as_embed=true"
+              title="Prop Coupons Newsletter"
+            ></iframe>
+          </div>
+        </section>
+        {/* ——————————————————————————————— */}
+
         <Footer />
       </body>
     </html>

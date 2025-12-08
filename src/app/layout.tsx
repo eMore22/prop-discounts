@@ -55,7 +55,7 @@ export default function RootLayout({
             <iframe
               scrolling="no"
               style={{ width: '100%', height: '220px', border: '1px #333 solid', borderRadius: '12px', background: '#111' }}
-              src="https://buttondown.com/propcoupons?as_embed=true"
+              src="https://buttondown.com/propcoupouns?as_embed=true"
               title="Prop Coupons Newsletter"
             ></iframe>
           </div>

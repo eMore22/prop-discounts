@@ -7,11 +7,6 @@ import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
 import { ValueCalculator } from '@/components/ValueCalculator';
 
-export const metadata = {
-  title: "Prop Firm Discount Codes December 2025 | Verified Coupons – Prop Coupons",
-  description: "Save on FTMO, FundedNext, The5ers & more with exclusive prop firm promo codes. Best deals updated daily for 2025 challenges.",
-};
-
 export interface DiscountCode {
   firm: string;
   code: string;
@@ -57,23 +52,84 @@ export default function Home() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    setToast('Code copied!');
+    setToast('Code copied to clipboard!');
     setTimeout(() => setToast(null), 2000);
   };
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white">
-      {/* Minimal SEO fixes: H1 and small text */}
       <h1 className="text-4xl font-bold text-center py-8 text-[#00ff9d]">Prop Firm Discount Codes December 2025</h1>
       <p className="text-center text-gray-400 mb-8 px-4">Exclusive verified promo codes for top prop firms – updated daily.</p>
 
-      {/* Your original content below — unchanged */}
       <ValueCalculator />
 
-      {/* Your original filters, sort, grid, cards, toast — keep exactly as before */}
-      <div className="grid gap-6">
+      <div className="flex flex-wrap gap-4 mb-8 justify-center">
+        <button 
+          onClick={() => setFilter('all')} 
+          className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-[#00ff9d] text-black' : 'bg-[#1a1a2e] text-white'}`}
+        >
+          All Codes
+        </button>
+        <button 
+          onClick={() => setFilter('verified')} 
+          className={`px-4 py-2 rounded-full ${filter === 'verified' ? 'bg-[#00ff9d] text-black' : 'bg-[#1a1a2e] text-white'}`}
+        >
+          Verified
+        </button>
+        <button 
+          onClick={() => setFilter('expired')} 
+          className={`px-4 py-2 rounded-full ${filter === 'expired' ? 'bg-[#00ff9d] text-black' : 'bg-[#1a1a2e] text-white'}`}
+        >
+          Expired
+        </button>
+      </div>
+
+      <div className="flex justify-center gap-4 mb-8">
+        <button onClick={() => setSort('discount')} className="flex items-center gap-2 px-4 py-2 bg-[#1a1a2e] rounded-full">
+          <ArrowUpDown className="w-4 h-4" /> Sort by Discount
+        </button>
+        <button onClick={() => setSort('expiry')} className="flex items-center gap-2 px-4 py-2 bg-[#1a1a2e] rounded-full">
+          <Clock className="w-4 h-4" /> Sort by Expiry
+        </button>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedCodes.map((dc) => (
-          <DiscountCard key={dc.firm} discount={dc} onCopy={copyToClipboard} />
+          <div key={dc.firm} className="bg-[#1a1a2e] rounded-xl p-6 border border-[#333] hover:border-[#00ff9d] transition-all">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-bold">{dc.firm}</h3>
+              {dc.propScore && <PropScoreBadge score={dc.propScore} />}
+            </div>
+            <p className="text-gray-400 mb-4">{dc.description}</p>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Tag className="w-4 h-4 text-[#00ff9d]" />
+                <span className="font-mono text-[#00ff9d]">{dc.code}</span>
+              </div>
+              <button 
+                onClick={() => copyToClipboard(dc.code)} 
+                className="text-gray-400 hover:text-white"
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-400">Expires {dc.expiry}</span>
+              </div>
+              <VerificationBadge status={dc.verificationStatus} />
+            </div>
+            <a 
+              href={dc.affiliateLink} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full bg-[#00ff9d] text-black font-bold py-2 px-4 rounded-lg hover:bg-[#00e68a] transition-colors flex items-center justify-center gap-2"
+            >
+              Get {dc.discount} Off
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
         ))}
       </div>
 

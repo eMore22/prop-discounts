@@ -104,7 +104,6 @@ export default function FirmDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -118,18 +117,14 @@ export default function FirmDetailPage() {
         </div>
       </section>
 
-      {/* Main Content */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {/* Introduction */}
           <div className="prose prose-lg max-w-none mb-12">
             <p className="text-xl text-gray-700 leading-relaxed mb-8">
               {firm.firm} is a leading prop trading firm in 2025, offering funded accounts up to $200,000 with flexible trading rules and competitive profit splits. Use our exclusive discount code <strong className="text-blue-600 font-mono bg-blue-50 px-2 py-1 rounded">{firm.code}</strong> to save {firm.discount} on any challenge size. This promotion is verified and active for December 2025{firm.expiry ? `, expiring on ${firm.expiry}` : ''}.
             </p>
           </div>
 
-          {/* Quick Stats */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <div className="bg-blue-50 p-6 rounded-xl text-center border-2 border-blue-200">
               <div className="text-4xl font-bold text-blue-600 mb-2">{firm.discount}</div>
@@ -145,7 +140,6 @@ export default function FirmDetailPage() {
             </div>
           </div>
 
-          {/* Discount Code Card */}
           <div className="bg-white rounded-2xl shadow-xl p-8 mb-12 border-2 border-blue-200">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -171,8 +165,7 @@ export default function FirmDetailPage() {
             <div className="flex gap-4">
               <button
                 onClick={copyCode}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
-              >
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg">
                 {copied ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                 {copied ? 'Copied!' : 'Copy Code'}
               </button>
@@ -180,15 +173,13 @@ export default function FirmDetailPage() {
                 href={firm.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg"
-              >
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-lg font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg">
                 <ExternalLink className="w-5 h-5" />
                 Visit {firm.firm}
               </a>
             </div>
           </div>
 
-          {/* Main Review Section */}
           <div className="prose prose-lg max-w-none mb-12">
             <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
               <h2 className="text-3xl font-bold mb-6">{firm.firm} Review: Is It Worth It in 2025?</h2>
@@ -205,7 +196,6 @@ export default function FirmDetailPage() {
             </div>
           </div>
 
-          {/* Pros and Cons */}
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <div className="bg-green-50 rounded-xl p-8 border-2 border-green-200">
               <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-900">
@@ -238,7 +228,6 @@ export default function FirmDetailPage() {
             </div>
           </div>
 
-          {/* Trading Rules */}
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
             <h2 className="text-3xl font-bold mb-6">{firm.firm} Complete Trading Rules & Requirements</h2>
             
@@ -256,7 +245,6 @@ export default function FirmDetailPage() {
             </ul>
           </div>
 
-          {/* How to Use Code */}
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
             <h2 className="text-3xl font-bold mb-6">How to Use Your {firm.firm} Discount Code</h2>
             
@@ -303,7 +291,6 @@ export default function FirmDetailPage() {
             </ol>
           </div>
 
-          {/* Success Tips */}
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
             <h2 className="text-3xl font-bold mb-6">Success Tips for {firm.firm} Challenges</h2>
             
@@ -346,7 +333,6 @@ export default function FirmDetailPage() {
             </ul>
           </div>
 
-          {/* Trader Feedback */}
           {firm.id && (
             <div className="mb-12">
               <TraderFeedback
@@ -361,7 +347,6 @@ export default function FirmDetailPage() {
             </div>
           )}
 
-          {/* Other Firms */}
           {otherFirms.length > 0 && (
             <div className="mt-12">
               <h2 className="text-3xl font-bold mb-8 text-gray-900">Compare Other Prop Firms</h2>
@@ -370,8 +355,7 @@ export default function FirmDetailPage() {
                   <Link
                     key={other.slug}
                     href={`/prop-firms/${other.slug}`}
-                    className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-2 border-transparent hover:border-blue-200"
-                  >
+                    className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-2 border-transparent hover:border-blue-200">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-xl font-bold text-gray-900">{other.firm}</h3>
                       {other.prop_score && <PropScoreBadge score={other.prop_score} />}

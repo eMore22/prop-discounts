@@ -1,5 +1,12 @@
 import React from 'react';
+import { Metadata } from 'next';
 import { Search, Copy, ExternalLink, CheckCircle, Zap, Shield, HelpCircle } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'How Prop Coupon Works - Save on Prop Firm Challenges in 4 Steps',
+  description: 'Learn how to use Prop Coupon to save money on prop firm evaluations. Browse codes, copy discounts, visit firms, and save instantly. Free guide for traders.',
+  keywords: 'how prop coupon works, using discount codes, prop firm savings guide, challenge discounts',
+};
 
 export default function HowItWorksPage() {
   const steps = [

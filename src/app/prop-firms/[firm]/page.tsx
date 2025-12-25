@@ -170,6 +170,7 @@ export default function FirmDetailPage() {
                 {copied ? 'Copied!' : 'Copy Code'}
               </button>
               
+              <a
                 href={firm.link}
                 target="_blank"
                 rel="noopener noreferrer"

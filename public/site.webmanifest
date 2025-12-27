@@ -1,6 +1,6 @@
 {
-  "name": "Prop Firm Coupons",
-  "short_name": "Prop Coupons",
+  "name": "Prop Coupons",
+  "short_name": "PropCoupons",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +13,21 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#00ff9d",
-  "background_color": "#0a0a0f",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
+```
+
+### **B. Check Your Files Are in `public/`:**
+
+Make sure you have these files:
+```
+public/
+  ├── favicon.ico
+  ├── favicon-16x16.png
+  ├── favicon-32x32.png
+  ├── apple-touch-icon.png
+  ├── android-chrome-192x192.png
+  ├── android-chrome-512x512.png
+  └── site.webmanifest

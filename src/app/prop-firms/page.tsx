@@ -6,9 +6,6 @@ import Link from 'next/link';
 import { getDeals } from '@/lib/getDeals';
 import { Search, TrendingUp, Award, CheckCircle } from 'lucide-react';
 
-// Note: Since this is a client component, metadata must be set in a parent layout
-// or we need to make this a server component with a separate client component for interactivity
-
 interface FirmData {
   firm: string;
   code: string;
@@ -26,10 +23,10 @@ export default function FirmsPage() {
 
   useEffect(() => {
     // Set page metadata dynamically
-    document.title = 'Compare Prop Firms 2025 | Reviews & Discount Codes – Prop Coupons';
+    document.title = 'Compare Prop Firms 2026 | Reviews & Discount Codes – Prop Firm Discounts';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Compare top prop trading firms like FTMO, FundedNext, and The5ers. Get reviews, prop scores, rules, and exclusive discount codes for 2025.');
+      metaDescription.setAttribute('content', 'Compare top prop trading firms like FTMO, FundedNext, and The5ers. Get reviews, prop scores, rules, and exclusive discount codes for 2026.');
     }
 
     async function fetchFirms() {
@@ -63,8 +60,8 @@ export default function FirmsPage() {
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Compare Top Prop Firms 2025</h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">Discover the best prop trading firms with our detailed reviews, prop scores, rules comparisons, and exclusive discount codes updated for December 2025.</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Compare Top Prop Firms 2026</h1>
+            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">Discover the best prop trading firms with our detailed reviews, prop scores, rules comparisons, and exclusive discount codes updated for January 2026.</p>
           </div>
         </div>
       </section>
@@ -72,13 +69,13 @@ export default function FirmsPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Complete Prop Firm Comparison Guide 2025</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Complete Prop Firm Comparison Guide 2026</h2>
             
             <p className="text-gray-700 mb-6">
-              At Prop Coupon, we provide the most comprehensive comparisons of prop trading firms for 2025. We evaluate each firm based on critical factors including profit splits (ranging from 70% to 95%), drawdown rules, funding amounts (from $5,000 to $200,000), payout speed, and overall trading conditions. Our prop score system (rated out of 10) helps you quickly identify the best match for your trading style, whether you trade forex, futures, stocks, or crypto.
+              At Prop Firm Discounts, we provide the most comprehensive comparisons of prop trading firms for 2026. We evaluate each firm based on critical factors including profit splits (ranging from 70% to 95%), drawdown rules, funding amounts (from $5,000 to $200,000), payout speed, and overall trading conditions. Our prop score system (rated out of 10) helps you quickly identify the best match for your trading style, whether you trade forex, futures, stocks, or crypto.
             </p>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Best Prop Firms for Beginners in 2025</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Best Prop Firms for Beginners in 2026</h2>
             <p className="text-gray-700 mb-6">
               For new traders, we recommend firms with relaxed rules and high prop scores. FundedNext (score 9/10) and FTMO (score 8.5/10) lead the pack with beginner-friendly policies. When comparing prop firms, focus on these key metrics: profit splits (typically 70-90%), daily drawdown limits (usually 5-6%), overall drawdown (10-12%), and minimum trading days required. Use our exclusive discount codes to reduce your entry costs by up to 50%.
             </p>
@@ -120,7 +117,7 @@ export default function FirmsPage() {
             </div>
           </div>
 
-          {/* Search and filtering UI - rest of component stays the same */}
+          {/* Search and filtering UI */}
           <div className="relative max-w-xl mx-auto mb-12">
             <input
               type="text"

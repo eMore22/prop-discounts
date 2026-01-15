@@ -242,8 +242,8 @@ export default function PropDiscountsApp() {
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">Prop Firm Discounts</h1>
-            <p className="text-lg text-gray-600">Exclusive promo codes for top prop trading firms</p>
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">Prop Firm Discount Codes</h1>
+            <p className="text-lg text-gray-600">Exclusive promo codes for top prop trading firms - Updated January 2026</p>
             <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full">
               <CheckCircle className="w-5 h-5 text-blue-600" />
               <span className="text-sm font-semibold text-blue-800">{activeCount} Active {activeCount === 1 ? 'Deal' : 'Deals'} Available</span>

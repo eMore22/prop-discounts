@@ -14,10 +14,10 @@ export default function ContactPage() {
 
   // Set metadata dynamically
   React.useEffect(() => {
-    document.title = 'Contact Prop Coupon - Get Help with Discount Codes';
+    document.title = 'Contact Prop Firm Discounts - Get Help with Discount Codes';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Contact Prop Coupon for support with discount codes, partnership inquiries, or feedback. Email us at contact@propcoupon.com or join our Discord community.');
+      metaDescription.setAttribute('content', 'Contact Prop Firm Discounts for support with discount codes, partnership inquiries, or feedback. Email us at contact@propfirmdiscounts.com or join our Discord community.');
     }
   }, []);
 
@@ -126,7 +126,7 @@ export default function ContactPage() {
                 <Mail className="w-12 h-12 text-blue-600 mb-4" />
                 <h3 className="text-2xl font-bold mb-2 text-gray-800">Email Us</h3>
                 <p className="text-gray-600 mb-4">For quick inquiries or support</p>
-                <a href="mailto:contact@propcoupon.com" className="text-blue-600 font-semibold hover:underline">contact@propcoupon.com</a>
+                <a href="mailto:contact@propcoupouns.com" className="text-blue-600 font-semibold hover:underline">contact@propcoupouns.com</a>
               </div>
 
               <div className="bg-white rounded-xl shadow-lg p-8">
@@ -141,7 +141,7 @@ export default function ContactPage() {
           <div className="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-8 text-white text-center">
             <h3 className="text-2xl font-bold mb-4">Partnership Opportunities</h3>
             <p className="text-blue-100 mb-6">Are you a prop firm looking to offer exclusive deals to our community? We'd love to work with you!</p>
-            <a href="mailto:partnership@propcoupon.com" className="inline-block bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-105">Contact Partnerships Team</a>
+            <a href="mailto:partnership@propcoupouns.com" className="inline-block bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all hover:scale-105">Contact Partnerships Team</a>
           </div>
         </div>
       </section>

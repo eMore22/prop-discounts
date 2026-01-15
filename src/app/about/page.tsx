@@ -1,13 +1,16 @@
+// ==========================================
+// FILE 2: src/app/about/page.tsx
+// ==========================================
 import React from 'react';
 import { Metadata } from 'next';
 import { Target, Heart, Shield, TrendingUp, Users, Award } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Prop Coupon - Your Trusted Source for Prop Firm Discounts',
-  description: 'Learn about Prop Coupon: We help traders save money on prop firm challenges with verified discount codes. 15+ firms, 50+ active deals, 10K+ traders helped.',
-  keywords: 'about prop coupon, prop firm discounts, trading discounts, funded account deals',
+  title: 'About Prop Firm Discounts - Your Trusted Source for Prop Firm Discounts',
+  description: 'Learn about Prop Firm Discounts: We help traders save money on prop firm challenges with verified discount codes. 15+ firms, 50+ active deals, 10K+ traders helped.',
+  keywords: 'about prop firm discounts, prop firm discounts, trading discounts, funded account deals',
   openGraph: {
-    title: 'About Prop Coupon - Trusted Prop Trading Discount Source',
+    title: 'About Prop Firm Discounts - Trusted Prop Trading Discount Source',
     description: 'We help traders save money on prop firm challenges with verified discount codes.',
     type: 'website',
   }
@@ -49,7 +52,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">About Prop Coupon</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">About Prop Firm Discounts</h1>
             <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">Your trusted source for verified prop firm discount codes and exclusive deals</p>
           </div>
         </div>
@@ -62,7 +65,7 @@ export default function AboutPage() {
               <Target className="w-10 h-10 text-blue-600" />
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Our Mission</h2>
             </div>
-            <p className="text-lg text-gray-700 leading-relaxed mb-6">At Prop Coupon, we're on a mission to make prop trading more accessible and affordable for traders worldwide. We understand that starting your prop trading journey can be expensive, and that's why we've dedicated ourselves to finding and verifying the best discount codes available.</p>
+            <p className="text-lg text-gray-700 leading-relaxed mb-6">At Prop Firm Discounts, we're on a mission to make prop trading more accessible and affordable for traders worldwide. We understand that starting your prop trading journey can be expensive, and that's why we've dedicated ourselves to finding and verifying the best discount codes available.</p>
             <p className="text-lg text-gray-700 leading-relaxed">We work tirelessly to maintain relationships with top prop firms, ensuring our community always has access to the latest and most valuable deals. Whether you're a beginner taking your first evaluation or an experienced trader scaling up, we're here to help you save money and achieve your trading goals.</p>
           </div>
         </div>
@@ -74,7 +77,7 @@ export default function AboutPage() {
             <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
               <p className="text-lg text-gray-700 mb-6">
-                Prop Coupon was founded in 2023 by a team of experienced prop traders who were frustrated with the high costs of evaluation challenges. We realized that many prop firms offered discount codes, but traders had no centralized place to find them. Missing out on a 20% discount meant hundreds of dollars wasted—money that could be used for better risk management or additional challenges.
+                Prop Firm Discounts was founded in 2023 by a team of experienced prop traders who were frustrated with the high costs of evaluation challenges. We realized that many prop firms offered discount codes, but traders had no centralized place to find them. Missing out on a 20% discount meant hundreds of dollars wasted—money that could be used for better risk management or additional challenges.
               </p>
               
               <p className="text-lg text-gray-700 mb-6">

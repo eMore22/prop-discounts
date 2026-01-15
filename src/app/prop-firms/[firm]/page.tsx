@@ -44,10 +44,10 @@ export default function FirmDetailPage() {
         setFirm(deal);
 
         // Set metadata dynamically
-        document.title = `${deal.firm} Discount Code 2025 – ${deal.discount} Off | Prop Coupon`;
+        document.title = `${deal.firm} Discount Code 2026 – ${deal.discount} Off | Prop Firm Discounts`;
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
-          metaDescription.setAttribute('content', `Use ${deal.firm} promo code ${deal.code} for ${deal.discount} off challenges. Verified December 2025 deals, reviews, rules, and how to apply.`);
+          metaDescription.setAttribute('content', `Use ${deal.firm} promo code ${deal.code} for ${deal.discount} off challenges. Verified January 2026 deals, reviews, rules, and how to apply.`);
         }
 
         const allDeals = await getDeals();
@@ -108,8 +108,8 @@ export default function FirmDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              {firm.firm} Discount Code & Complete Review 2025
-            </h1>
+  {firm.firm} Discount Code & Complete Review 2026
+		</h1>
             <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
               Save {firm.discount} with verified promo code {firm.code}
             </p>
@@ -121,7 +121,7 @@ export default function FirmDetailPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none mb-12">
             <p className="text-xl text-gray-700 leading-relaxed mb-8">
-              {firm.firm} is a leading prop trading firm in 2025, offering funded accounts up to $200,000 with flexible trading rules and competitive profit splits. Use our exclusive discount code <strong className="text-blue-600 font-mono bg-blue-50 px-2 py-1 rounded">{firm.code}</strong> to save {firm.discount} on any challenge size. This promotion is verified and active for December 2025{firm.expiry ? `, expiring on ${firm.expiry}` : ''}.
+              {firm.firm} is a leading prop trading firm in 2026, offering funded accounts up to $200,000 with flexible trading rules and competitive profit splits. Use our exclusive discount code <strong className="text-blue-600 font-mono bg-blue-50 px-2 py-1 rounded">{firm.code}</strong> to save {firm.discount} on any challenge size. This promotion is verified and active for January 2026{firm.expiry ? `, expiring on ${firm.expiry}` : ''}.
             </p>
           </div>
 
@@ -183,7 +183,7 @@ export default function FirmDetailPage() {
 
           <div className="prose prose-lg max-w-none mb-12">
             <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-              <h2 className="text-3xl font-bold mb-6">{firm.firm} Review: Is It Worth It in 2025?</h2>
+              <h2 className="text-3xl font-bold mb-6">{firm.firm} Review: Is It Worth It in 2026?</h2>
               
               <p className="text-gray-700 leading-relaxed mb-6">
                 {firm.firm} stands out in the competitive prop trading space for several reasons. With a prop score of {firm.prop_score || 'N/A'}/10 based on trader feedback and our analysis, this firm offers a balanced approach to funded trading. Traders appreciate the high profit splits (up to 90%), reasonable drawdown limits (typically 5% daily, 10% overall), and flexible trading rules that allow strategies like scalping, news trading, and holding positions over weekends.

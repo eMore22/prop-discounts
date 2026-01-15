@@ -1,3 +1,6 @@
+// ==========================================
+// FILE 1: src/app/layout.tsx
+// ==========================================
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
@@ -9,8 +12,8 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Prop Firm Discount Codes December 2025 | Verified Coupons – Prop Coupons",
-  description: "Save on FTMO, FundedNext, The5ers & more with exclusive prop firm promo codes. Best deals updated daily for 2025 challenges.",
+  title: "Prop Firm Discount Codes January 2026 | Verified Coupons – Prop Firm Discounts",
+  description: "Save on FTMO, FundedNext, The5ers & more with exclusive prop firm promo codes. Best deals updated daily for 2026 challenges.",
   icons: {
     icon: [
       { url: '/favicon.ico' },

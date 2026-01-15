@@ -6,19 +6,16 @@ import { discountCodes } from '@/lib/data';
 import { ArrowLeftRight, CheckCircle, XCircle, TrendingUp, Calendar, Tag, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
-// Note: Since this is a client component, we'll set metadata via useEffect
-// For better SEO, consider splitting into server/client components
-
 export default function ComparePage() {
   const [firm1, setFirm1] = useState(discountCodes[0]);
   const [firm2, setFirm2] = useState(discountCodes[1]);
 
   // Set metadata dynamically for client component
   React.useEffect(() => {
-    document.title = 'Compare Prop Firms Side-by-Side | Best Discount Codes 2025';
+    document.title = 'Compare Prop Firms Side-by-Side | Best Discount Codes 2026';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Compare top prop firm discount codes side-by-side. See which prop firm offers the best deals on funded accounts. Updated December 2025.');
+      metaDescription.setAttribute('content', 'Compare top prop firm discount codes side-by-side. See which prop firm offers the best deals on funded accounts. Updated January 2026.');
     }
   }, []);
 

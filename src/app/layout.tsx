@@ -1,6 +1,7 @@
 // ==========================================
-// FILE 1: src/app/layout.tsx
+// FILE: src/app/layout.tsx (COMPLETE UPDATED FILE)
 // ==========================================
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
@@ -8,6 +9,7 @@ import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,6 +42,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className={inter.className}>
+        <GoogleAnalytics />
         <Navbar />
         {children}
         <div className="bg-[#0a0a0f] border-t border-[#333] py-12">

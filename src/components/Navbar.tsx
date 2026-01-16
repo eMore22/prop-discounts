@@ -1,3 +1,7 @@
+// ==========================================
+// FILE: src/components/Navbar.tsx (COMPLETE UPDATED FILE)
+// ==========================================
+
 "use client";
 
 import React, { useState } from 'react';
@@ -11,6 +15,7 @@ export const Navbar = () => {
     { name: 'Home', href: '/' },
     { name: 'All Firms', href: '/prop-firms' },
     { name: 'Compare', href: '/compare' },
+    { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
     { name: 'How It Works', href: '/how-it-works' },
     { name: 'Contact', href: '/contact' },

@@ -1,5 +1,5 @@
 // ==========================================
-// FILE: src/components/Navbar.tsx (COMPLETE UPDATED FILE)
+// FILE: src/components/Navbar.tsx (UPDATED)
 // ==========================================
 
 "use client";
@@ -16,8 +16,8 @@ export const Navbar = () => {
     { name: 'All Firms', href: '/prop-firms' },
     { name: 'Compare', href: '/compare' },
     { name: 'Blog', href: '/blog' },
+    { name: 'Books', href: '/books' },
     { name: 'About', href: '/about' },
-    { name: 'How It Works', href: '/how-it-works' },
     { name: 'Contact', href: '/contact' },
   ];
 

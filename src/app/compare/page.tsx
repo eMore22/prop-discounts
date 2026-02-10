@@ -15,7 +15,7 @@ export default function ComparePage() {
     document.title = 'Compare Prop Firms Side-by-Side | Best Discount Codes 2026';
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Compare top prop firm discount codes side-by-side. See which prop firm offers the best deals on funded accounts. Updated January 2026.');
+      metaDescription.setAttribute('content', 'Compare top prop firm discount codes side-by-side. See which prop firm offers the best deals on funded accounts. Updated February 2026.');
     }
   }, []);
 

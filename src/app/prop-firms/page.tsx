@@ -61,7 +61,7 @@ export default function FirmsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Compare Top Prop Firms 2026</h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">Discover the best prop trading firms with our detailed reviews, prop scores, rules comparisons, and exclusive discount codes updated for January 2026.</p>
+            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">Discover the best prop trading firms with our detailed reviews, prop scores, rules comparisons, and exclusive discount codes updated for February 2026.</p>
           </div>
         </div>
       </section>

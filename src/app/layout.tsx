@@ -14,7 +14,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Prop Firm Discount Codes January 2026 | Verified Coupons – Prop Firm Discounts",
+  title: "Prop Firm Discount Codes February 2026 | Verified Coupons – Prop Firm Discounts",
   description: "Save on FTMO, FundedNext, The5ers & more with exclusive prop firm promo codes. Best deals updated daily for 2026 challenges.",
   icons: {
     icon: [

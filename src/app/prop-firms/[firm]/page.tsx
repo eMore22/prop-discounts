@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
 import { TraderFeedback } from '@/components/TraderFeedback';
+import { getFirmContent } from '@/lib/firm-content'; // ADDED IMPORT
 
 interface FirmDetail {
   id: string;
@@ -31,6 +32,9 @@ export default function FirmDetailPage() {
   const [firm, setFirm] = useState<FirmDetail | null>(null);
   const [otherFirms, setOtherFirms] = useState<FirmDetail[]>([]);
   const [copied, setCopied] = useState(false);
+  
+  // Get firm content based on slug
+  const firmDetails = getFirmContent(params.firm as string); // ADDED
 
   useEffect(() => {
     async function fetchFirmData() {
@@ -47,7 +51,7 @@ export default function FirmDetailPage() {
         document.title = `${deal.firm} Discount Code 2026 – ${deal.discount} Off | Prop Firm Discounts`;
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
-          metaDescription.setAttribute('content', `Use ${deal.firm} promo code ${deal.code} for ${deal.discount} off challenges. Verified January 2026 deals, reviews, rules, and how to apply.`);
+          metaDescription.setAttribute('content', `Use ${deal.firm} promo code ${deal.code} for ${deal.discount} off challenges. Verified February 2026 deals, reviews, rules, and how to apply.`);
         }
 
         const allDeals = await getDeals();
@@ -80,26 +84,25 @@ export default function FirmDetailPage() {
     );
   }
 
-  const pros = [
-    "High profit splits up to 90%",
-    "Flexible trading rules - weekend holding allowed",
-    "No time limits on challenges",
-    "Fast payout processing (7-14 days)",
-    "Scaling plan up to $200k+"
+  // Use firm-specific content if available, otherwise use generic
+  const pros = firmDetails?.pros || [
+    "Competitive profit splits up to 90%",
+    "Flexible trading rules and strategies allowed",
+    "Reasonable drawdown limits for risk management",
+    "Regular payout processing schedule",
+    "Account scaling opportunities available"
   ];
 
-  const cons = [
-    "Strict 5% daily drawdown limit",
-    "Two-phase evaluation required",
-    "Minimum trading days requirement"
+  const cons = firmDetails?.cons || [
+    "Daily drawdown limits must be carefully managed",
+    "Multi-phase evaluation process required for most accounts",
+    "Specific trading rules and minimum days may apply"
   ];
 
-  const rules = [
-    "Phase 1: 8% profit target, 5% daily loss, 10% max loss",
-    "Phase 2: 5% profit target, same drawdown rules",
-    "Funded: No profit targets, trailing drawdown",
-    "News trading and EAs permitted",
-    "Minimum 4 trading days per phase"
+  const rules = firmDetails?.rules || [
+    `Visit ${firm.firm}'s official website for current rules and requirements`,
+    "Profit targets and drawdown limits apply during evaluation phases",
+    "Check the firm's terms for specific trading style restrictions"
   ];
 
   return (
@@ -108,8 +111,8 @@ export default function FirmDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-  {firm.firm} Discount Code & Complete Review 2026
-		</h1>
+              {firm.firm} Discount Code & Complete Review 2026
+            </h1>
             <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
               Save {firm.discount} with verified promo code {firm.code}
             </p>
@@ -121,7 +124,7 @@ export default function FirmDetailPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none mb-12">
             <p className="text-xl text-gray-700 leading-relaxed mb-8">
-              {firm.firm} is a leading prop trading firm in 2026, offering funded accounts up to $200,000 with flexible trading rules and competitive profit splits. Use our exclusive discount code <strong className="text-blue-600 font-mono bg-blue-50 px-2 py-1 rounded">{firm.code}</strong> to save {firm.discount} on any challenge size. This promotion is verified and active for January 2026{firm.expiry ? `, expiring on ${firm.expiry}` : ''}.
+              {firm.firm} is a leading prop trading firm in 2026, offering funded accounts up to $200,000 with flexible trading rules and competitive profit splits. Use our exclusive discount code <strong className="text-blue-600 font-mono bg-blue-50 px-2 py-1 rounded">{firm.code}</strong> to save {firm.discount} on any challenge size. This promotion is verified and active for February 2026{firm.expiry ? `, expiring on ${firm.expiry}` : ''}.
             </p>
           </div>
 
@@ -186,12 +189,19 @@ export default function FirmDetailPage() {
               <h2 className="text-3xl font-bold mb-6">{firm.firm} Review: Is It Worth It in 2026?</h2>
               
               <p className="text-gray-700 leading-relaxed mb-6">
-                {firm.firm} stands out in the competitive prop trading space for several reasons. With a prop score of {firm.prop_score || 'N/A'}/10 based on trader feedback and our analysis, this firm offers a balanced approach to funded trading. Traders appreciate the high profit splits (up to 90%), reasonable drawdown limits (typically 5% daily, 10% overall), and flexible trading rules that allow strategies like scalping, news trading, and holding positions over weekends.
+                {firmDetails?.detailedReview || 
+                  `${firm.firm} stands out in the competitive prop trading space for several reasons. With a prop score of ${firm.prop_score || 'N/A'}/10 based on trader feedback and our analysis, this firm offers a balanced approach to funded trading. Traders appreciate the high profit splits (up to 90%), reasonable drawdown limits (typically 5% daily, 10% overall), and flexible trading rules that allow strategies like scalping, news trading, and holding positions over weekends.`
+                }
               </p>
 
-              <p className="text-gray-700 leading-relaxed mb-8">
-                The evaluation process is straightforward with clearly defined targets. Phase 1 typically requires an 8% profit target, while Phase 2 requires 5%. Once funded, there are no profit targets—you simply follow the drawdown rules and trade according to your strategy. Payouts are processed within 7-14 business days, which is competitive in the industry.
-              </p>
+              {firmDetails?.detailedReview && (
+                <p className="text-gray-700 leading-relaxed mb-8">
+                  {firmDetails.detailedReview.length > 500 ? 
+                    firmDetails.detailedReview.substring(500) : 
+                    'The evaluation process is straightforward with clearly defined targets. Once funded, there are no profit targets—you simply follow the drawdown rules and trade according to your strategy. Payouts are processed within 7-14 business days, which is competitive in the industry.'
+                  }
+                </p>
+              )}
 
               <h3 className="text-2xl font-bold mb-6">Detailed Pros and Cons Analysis</h3>
             </div>
@@ -246,6 +256,21 @@ export default function FirmDetailPage() {
             </ul>
           </div>
 
+          {firmDetails?.successTips && (
+            <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
+              <h2 className="text-3xl font-bold mb-6">Success Tips for {firm.firm} Challenges</h2>
+              
+              <ul className="space-y-4">
+                {firmDetails.successTips.map((tip, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <TrendingUp className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700 text-lg">{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
             <h2 className="text-3xl font-bold mb-6">How to Use Your {firm.firm} Discount Code</h2>
             
@@ -290,48 +315,6 @@ export default function FirmDetailPage() {
                 </div>
               </li>
             </ol>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-12">
-            <h2 className="text-3xl font-bold mb-6">Success Tips for {firm.firm} Challenges</h2>
-            
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <TrendingUp className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <strong className="text-gray-900 text-lg">Start Conservative:</strong>
-                  <span className="text-gray-700"> Don't rush. You have unlimited time, so focus on quality trades over quantity.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <TrendingUp className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <strong className="text-gray-900 text-lg">Risk 0.5-1% Per Trade:</strong>
-                  <span className="text-gray-700"> Keep risk low to protect against hitting the daily 5% loss limit.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <TrendingUp className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <strong className="text-gray-900 text-lg">Trade During High Liquidity:</strong>
-                  <span className="text-gray-700"> London and New York sessions offer better fills and less slippage.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <TrendingUp className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <strong className="text-gray-900 text-lg">Keep a Trading Journal:</strong>
-                  <span className="text-gray-700"> Document what works and what doesn't for continuous improvement.</span>
-                </div>
-              </li>
-              <li className="flex items-start gap-3">
-                <TrendingUp className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
-                <div>
-                  <strong className="text-gray-900 text-lg">Use Stop Losses Always:</strong>
-                  <span className="text-gray-700"> Protect your account from unexpected volatility or news spikes.</span>
-                </div>
-              </li>
-            </ul>
           </div>
 
           {firm.id && (

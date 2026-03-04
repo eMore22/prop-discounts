@@ -3,18 +3,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken'; // <--- NEW: Import jsonwebtoken for signing
-
-// --- Configuration: Secure Supabase Client ---
-// Create a client using the SECRET service_role key to bypass RLS policies
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!
-);
-// --- Configuration End ---
+import jwt from 'jsonwebtoken';
 
 export async function POST(request: NextRequest) {
     try {
+        // ✅ Create client INSIDE the function so it only runs at request time,
+        // not at build time when env vars aren't available
+        const supabaseAdmin = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY! // ✅ Fixed: was SUPABASE_SERVICE_KEY
+        );
+
         console.log('=== RAW REQUEST ===');
         const body = await request.json();
         console.log('Full body:', body);
@@ -32,7 +31,6 @@ export async function POST(request: NextRequest) {
         console.log('\n=== QUERYING DATABASE (with Service Role) ===');
         console.log('Looking for email:', email);
 
-        // 1. QUERY using the SECURE 'supabaseAdmin' client
         const { data: admin, error } = await supabaseAdmin
             .from('admin_users')
             .select('*')
@@ -44,7 +42,6 @@ export async function POST(request: NextRequest) {
 
         if (error || !admin) {
             console.log('ERROR: Admin not found in database');
-            // Always return generic message for security
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
@@ -52,7 +49,6 @@ export async function POST(request: NextRequest) {
         console.log('Admin email from DB:', JSON.stringify(admin.email));
         console.log('Admin role:', admin.role);
 
-        // 2. SECURE PASSWORD COMPARISON using bcrypt.compare
         console.log('\n=== PASSWORD COMPARISON (Bcrypt) ===');
         const isMatch = await bcrypt.compare(password, admin.password_hash);
 
@@ -63,34 +59,26 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
-        // =======================================================
-        // 🔑 CRITICAL FIX: Replace Base64 token with signed JWT
-        // =======================================================
         console.log('\n=== CREATING SESSION (JWT) ===');
-        
-        // Payload must include the email for /api/admin/check/route.ts
+
         const payload = {
             email: admin.email,
             role: admin.role,
         };
 
         const jwtSecret = process.env.JWT_SECRET;
-        
+
         if (!jwtSecret) {
             console.error('JWT_SECRET is not defined in environment variables.');
             return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
         }
 
-        const token = jwt.sign(
-            payload, 
-            jwtSecret,
-            { expiresIn: '7d' } // Token expires in 7 days
-        );
+        const token = jwt.sign(payload, jwtSecret, { expiresIn: '7d' });
 
-        console.log('Generated JWT:', token.substring(0, 30) + '...'); // Log safely
+        console.log('Generated JWT:', token.substring(0, 30) + '...');
 
-        const response = NextResponse.json({ 
-            success: true, 
+        const response = NextResponse.json({
+            success: true,
             admin: {
                 email: admin.email,
                 role: admin.role
@@ -101,11 +89,12 @@ export async function POST(request: NextRequest) {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 60 * 60 * 24 * 7 // 7 days
+            maxAge: 60 * 60 * 24 * 7
         });
 
         console.log('=== LOGIN SUCCESS ===\n');
         return response;
+
     } catch (error) {
         console.error('\n=== LOGIN ERROR ===');
         console.error('Error:', error);

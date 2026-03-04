@@ -2,150 +2,203 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { blogPosts } from '@/lib/blog';
-import { Calendar, Clock, Tag, Search, TrendingUp } from 'lucide-react';
+import { Newspaper, Clock, TrendingUp, BookOpen, Search, ArrowRight, Flame, Tag } from 'lucide-react';
+
+const POSTS = [
+  {
+    slug: 'ftmo-profit-split-increase-2026',
+    title: 'FTMO Increases Profit Split to 90% for Top Traders',
+    excerpt: 'FTMO has announced an upgrade to its profit sharing structure for consistently profitable funded traders, effective March 2026. Here\'s what this means for you.',
+    category: 'News', firm: 'FTMO', date: 'Mar 1, 2026', readTime: '4 min',
+    tag: 'Breaking', tagColor: 'bg-red-100 text-red-700', featured: true,
+  },
+  {
+    slug: 'fundednext-stellar-model-2026',
+    title: 'FundedNext Launches New Stellar 1-Phase Evaluation',
+    excerpt: 'FundedNext\'s streamlined evaluation model with a single 10% profit target and no time limits could be the best deal for new traders in 2026.',
+    category: 'News', firm: 'FundedNext', date: 'Feb 28, 2026', readTime: '5 min',
+    tag: 'New Model', tagColor: 'bg-purple-100 text-purple-700', featured: true,
+  },
+  {
+    slug: 'prop-firm-regulations-2026',
+    title: 'Prop Firm Regulations: What 2026 Means for Funded Traders',
+    excerpt: 'New financial regulations across the EU and UK could reshape how prop firms operate. We break down the key changes and which firms are affected.',
+    category: 'Industry', firm: null, date: 'Feb 25, 2026', readTime: '8 min',
+    tag: 'Analysis', tagColor: 'bg-blue-100 text-blue-700', featured: false,
+  },
+  {
+    slug: 'best-prop-firm-discounts-2026',
+    title: 'Best Prop Firm Discount Codes in 2026 (Updated Weekly)',
+    excerpt: 'We track and verify every discount code across 20+ prop firms. Here\'s our full updated list for March 2026, ranked by savings potential.',
+    category: 'Deals', firm: null, date: 'Feb 22, 2026', readTime: '6 min',
+    tag: 'Updated', tagColor: 'bg-emerald-100 text-emerald-700', featured: false,
+  },
+  {
+    slug: 'ftmo-vs-fundednext-2026',
+    title: 'FTMO vs FundedNext 2026: Which Prop Firm Should You Choose?',
+    excerpt: 'A detailed, data-driven comparison of the two most popular prop firms. Rules, payouts, community, and discount codes included.',
+    category: 'Compare', firm: null, date: 'Feb 20, 2026', readTime: '10 min',
+    tag: 'Guide', tagColor: 'bg-orange-100 text-orange-700', featured: false,
+  },
+  {
+    slug: 'passing-ftmo-challenge-tips',
+    title: '7 Proven Tips to Pass the FTMO Challenge First Time',
+    excerpt: 'From risk management to trading session timing — the exact strategies that help traders pass the FTMO evaluation without busting.',
+    category: 'Tips', firm: 'FTMO', date: 'Feb 18, 2026', readTime: '7 min',
+    tag: 'Tips', tagColor: 'bg-yellow-100 text-yellow-700', featured: false,
+  },
+  {
+    slug: 'goat-funded-50000-accounts',
+    title: 'Goat Funded Trader Reaches 50,000 Funded Accounts Milestone',
+    excerpt: 'The community favourite hit a major milestone with $10M+ total distributed to traders. We look at what makes it so popular.',
+    category: 'News', firm: 'Goat Funded', date: 'Feb 15, 2026', readTime: '4 min',
+    tag: 'Milestone', tagColor: 'bg-emerald-100 text-emerald-700', featured: false,
+  },
+  {
+    slug: 'prop-firm-payout-reliability-2026',
+    title: 'Which Prop Firms Actually Pay? 2026 Payout Reliability Report',
+    excerpt: 'We analysed trader feedback from 5,000+ funded accounts to rank the most and least reliable prop firms for payouts.',
+    category: 'Research', firm: null, date: 'Feb 10, 2026', readTime: '12 min',
+    tag: 'Research', tagColor: 'bg-indigo-100 text-indigo-700', featured: false,
+  },
+];
+
+const CATEGORIES = ['All', 'News', 'Compare', 'Deals', 'Tips', 'Industry', 'Research'];
 
 export default function BlogPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [category, setCategory] = useState('All');
+  const [search, setSearch] = useState('');
 
-  React.useEffect(() => {
-    document.title = 'Prop Trading Blog - Tips, Strategies & Reviews | Prop Firm Discounts';
-  }, []);
-
-  const categories = ['all', ...Array.from(new Set(blogPosts.map(post => post.category)))];
-
-  const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+  const filtered = POSTS.filter(p => {
+    const matchCat = category === 'All' || p.category === category;
+    const matchSearch = !search || p.title.toLowerCase().includes(search.toLowerCase()) || p.excerpt.toLowerCase().includes(search.toLowerCase());
+    return matchCat && matchSearch;
   });
 
-  const featuredPost = blogPosts[0];
-  const regularPosts = blogPosts.slice(1);
+  const featured = POSTS.filter(p => p.featured);
+  const rest = filtered.filter(p => !p.featured);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Prop Trading Blog</h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
-              Expert guides, strategies, and reviews to help you succeed in prop trading
-            </p>
+    <div className="min-h-screen bg-[#f8fafc]">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-[#060d1f] to-[#0d1f3c] text-white py-16">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 text-blue-300 px-4 py-1.5 rounded-full text-sm font-bold mb-6">
+            <Newspaper className="w-4 h-4" /> Prop Trading News & Guides
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black mb-3">PropCoupons Blog</h1>
+          <p className="text-slate-400 text-lg max-w-xl mx-auto">News, analysis, and guides for funded traders. Updated weekly.</p>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
+
+        {/* Search + Filter */}
+        <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
+          <div className="relative flex-1 max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input type="text" placeholder="Search articles..." value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="pl-9 pr-4 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:border-blue-400 focus:outline-none w-full bg-white" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map(c => (
+              <button key={c} onClick={() => setCategory(c)}
+                className={`px-3.5 py-2 rounded-xl text-sm font-bold transition-all ${category === c ? 'bg-blue-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300 hover:text-blue-600'}`}>
+                {c}
+              </button>
+            ))}
           </div>
         </div>
-      </section>
 
-      {/* Search and Filter */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
-              />
+        {/* Featured Posts */}
+        {category === 'All' && !search && (
+          <div>
+            <div className="flex items-center gap-2 mb-5">
+              <Flame className="w-5 h-5 text-orange-500" />
+              <h2 className="text-xl font-black text-gray-900">Breaking News</h2>
             </div>
-            <div className="flex gap-2 flex-wrap">
-              {categories.map(category => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                    selectedCategory === category
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </button>
+            <div className="grid md:grid-cols-2 gap-5">
+              {featured.map(post => (
+                <Link key={post.slug} href={`/blog/${post.slug}`}
+                  className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all duration-200">
+                  <div className="h-2 bg-gradient-to-r from-blue-500 to-emerald-500" />
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`text-xs font-black px-2.5 py-1 rounded-full ${post.tagColor}`}>{post.tag}</span>
+                      <div className="flex items-center gap-3 text-xs text-gray-400">
+                        {post.firm && <span className="font-bold text-gray-500">{post.firm}</span>}
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-black text-gray-900 mb-2 group-hover:text-blue-600 transition-colors leading-snug">{post.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">{post.excerpt}</p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">{post.date}</span>
+                      <span className="text-xs font-black text-blue-600 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Read more <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Featured Post */}
-        {selectedCategory === 'all' && !searchQuery && (
-          <div className="mb-12">
-            <Link href={`/blog/${featuredPost.slug}`} className="block bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all">
-              <div className="grid md:grid-cols-2 gap-6 p-8">
-                <div className="flex flex-col justify-center">
-                  <div className="inline-flex items-center gap-2 text-sm text-purple-600 font-semibold mb-4">
-                    <TrendingUp className="w-4 h-4" />
-                    FEATURED POST
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 hover:text-blue-600 transition-colors">
-                    {featuredPost.title}
-                  </h2>
-                  <p className="text-gray-600 text-lg mb-6">
-                    {featuredPost.excerpt}
-                  </p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(featuredPost.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {featuredPost.readTime}
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center p-12">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">📈</div>
-                    <p className="text-xl font-bold text-gray-700">{featuredPost.category}</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
         )}
 
-        {/* Regular Posts Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(selectedCategory === 'all' && !searchQuery ? regularPosts : filteredPosts).map(post => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden group">
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-blue-600 font-semibold mb-3">
-                  <Tag className="w-4 h-4" />
-                  {post.category}
+        {/* All Posts Grid */}
+        <div>
+          {category === 'All' && !search && (
+            <div className="flex items-center gap-2 mb-5">
+              <BookOpen className="w-5 h-5 text-blue-600" />
+              <h2 className="text-xl font-black text-gray-900">All Articles</h2>
+              <span className="text-sm text-gray-400 font-medium">({filtered.length} articles)</span>
+            </div>
+          )}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {(category === 'All' && !search ? rest : filtered).map(post => (
+              <Link key={post.slug} href={`/blog/${post.slug}`}
+                className="group bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg hover:border-blue-200 transition-all duration-200 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className={`text-xs font-black px-2.5 py-1 rounded-full ${post.tagColor}`}>{post.tag}</span>
+                  <span className="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-lg">{post.category}</span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  {post.title}
-                </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {post.excerpt}
-                </p>
-                <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                <h3 className="font-black text-gray-900 text-sm leading-snug mb-2 group-hover:text-blue-600 transition-colors flex-1">{post.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 mb-4">{post.excerpt}</p>
+                <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-50">
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <span>{post.date}</span>
+                    <span>·</span>
+                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{post.readTime}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {post.readTime}
-                  </div>
+                  {post.firm && <span className="text-xs font-bold text-blue-600">{post.firm}</span>}
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
+
+          {filtered.length === 0 && (
+            <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
+              <Search className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+              <p className="text-gray-500 font-semibold">No articles found</p>
+              <button onClick={() => { setSearch(''); setCategory('All'); }}
+                className="mt-2 text-blue-600 text-sm font-bold hover:underline">Clear filters</button>
+            </div>
+          )}
         </div>
 
-        {filteredPosts.length === 0 && (
-          <div className="text-center py-12">
-            <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-xl text-gray-600">No articles found matching your search</p>
+        {/* Bottom CTA */}
+        <div className="bg-gradient-to-r from-[#060d1f] to-[#0d1f3c] rounded-2xl p-8 text-white flex flex-col md:flex-row items-center gap-6">
+          <div className="flex-1">
+            <h3 className="text-2xl font-black mb-1">Get Articles In Your Inbox</h3>
+            <p className="text-slate-400 text-sm">Weekly prop trading news + exclusive discount codes. Free forever.</p>
           </div>
-        )}
-      </section>
+          <Link href="/" className="bg-emerald-500 hover:bg-emerald-400 text-black font-black px-7 py-3 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap active:scale-95">
+            Subscribe Free <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+      </div>
     </div>
   );
 }

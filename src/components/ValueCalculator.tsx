@@ -1,85 +1,95 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Calculator, DollarSign, TrendingUp } from 'lucide-react';
-import { discountCodes } from '@/lib/data';
+import React, { useState, useEffect } from 'react';
+import { BarChart2, DollarSign } from 'lucide-react';
+import { getDeals } from '@/lib/getDeals';
+
+interface Deal {
+  firm: string;
+  code: string;
+  discount: string;
+  expiry: string | null;
+}
 
 export const ValueCalculator = () => {
-  const [challengeSize, setChallengeSize] = useState<number>(50000);
+  const [deals, setDeals] = useState<Deal[]>([]);
+  const [challengeSize, setChallengeSize] = useState(50000);
 
-  const calculateSavings = (discount: string, challengeSize: number) => {
-    const percentage = parseInt(discount.replace('%', ''));
-    const typicalCost = challengeSize * 0.01; // Assuming 1% of challenge size as typical cost
-    return (typicalCost * percentage) / 100;
-  };
+  useEffect(() => {
+    getDeals().then(raw => setDeals(
+      raw.map(d => ({ firm: d.firm, code: d.code, discount: d.discount, expiry: d.expiry }))
+    ));
+  }, []);
 
-  const sortedDeals = discountCodes
-    .filter(firm => new Date(firm.expiry) >= new Date())
-    .map(firm => ({
-      ...firm,
-      savings: calculateSavings(firm.discount, challengeSize)
+  const activeDeals = deals.filter(d => !d.expiry || new Date(d.expiry) >= new Date());
+
+  const top5 = [...activeDeals]
+    .map(d => ({
+      ...d,
+      savings: (challengeSize * 0.01 * parseInt(d.discount.replace('%', ''))) / 100
     }))
     .sort((a, b) => b.savings - a.savings)
     .slice(0, 5);
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-8 text-white">
-      <div className="flex items-center gap-3 mb-6">
-        <Calculator className="w-10 h-10" />
+    <div className="bg-gradient-to-br from-[#0a0f1e] to-[#0d1f3c] rounded-2xl p-6 text-white border border-[#1a3a5c]">
+      <div className="flex items-center gap-3 mb-5">
+        <div className="p-2 bg-emerald-500/20 rounded-xl">
+          <BarChart2 className="w-6 h-6 text-emerald-400" />
+        </div>
         <div>
-          <h2 className="text-3xl font-bold">Value Calculator</h2>
-          <p className="text-blue-100">See how much you can save</p>
+          <h2 className="text-xl font-black">Savings Calculator</h2>
+          <p className="text-slate-400 text-xs">Live data · {activeDeals.length} active deals</p>
         </div>
       </div>
 
-      <div className="bg-white/10 backdrop-blur rounded-xl p-6 mb-6">
-        <label className="block text-sm font-semibold mb-3">Challenge Account Size</label>
-        <div className="flex items-center gap-4">
-          <input
-            type="range"
-            min="5000"
-            max="200000"
-            step="5000"
-            value={challengeSize}
-            onChange={(e) => setChallengeSize(Number(e.target.value))}
-            className="flex-1 h-3 bg-white/20 rounded-lg appearance-none cursor-pointer"
-          />
-          <div className="bg-white text-blue-600 px-6 py-3 rounded-lg font-bold text-xl min-w-[140px] text-center">
-            ${challengeSize.toLocaleString()}
-          </div>
+      <div className="bg-white/5 rounded-xl p-4 mb-5 border border-white/10">
+        <div className="flex justify-between items-center mb-2">
+          <label className="text-sm font-semibold text-slate-300">Challenge Account Size</label>
+          <span className="text-emerald-400 font-black text-lg">${challengeSize.toLocaleString()}</span>
+        </div>
+        <input
+          type="range" min="5000" max="200000" step="5000"
+          value={challengeSize} onChange={e => setChallengeSize(Number(e.target.value))}
+          className="w-full h-2 rounded-full appearance-none cursor-pointer accent-emerald-500"
+        />
+        <div className="flex justify-between text-xs text-slate-500 mt-1.5">
+          <span>$5K</span><span>$50K</span><span>$100K</span><span>$200K</span>
         </div>
       </div>
 
-      <div className="space-y-3">
-        <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <TrendingUp className="w-6 h-6" />
-          Top 5 Savings Opportunities
-        </h3>
-        {sortedDeals.map((deal, index) => (
-          <div key={deal.firm} className="bg-white/10 backdrop-blur rounded-lg p-4 flex items-center justify-between hover:bg-white/20 transition-all">
+      <p className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">
+        Top 5 Savings Right Now
+      </p>
+
+      <div className="space-y-2">
+        {top5.map((d, i) => (
+          <div key={d.firm}
+            className="flex items-center justify-between bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 border border-white/5">
             <div className="flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                index === 0 ? 'bg-yellow-400 text-yellow-900' :
-                index === 1 ? 'bg-gray-300 text-gray-800' :
-                index === 2 ? 'bg-orange-400 text-orange-900' :
-                'bg-white/20'
-              }`}>
-                {index + 1}
-              </div>
-              <div>
-                <p className="font-bold">{deal.firm}</p>
-                <p className="text-sm text-blue-100">{deal.discount} discount</p>
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 ${
+                i === 0 ? 'bg-yellow-400 text-black' :
+                i === 1 ? 'bg-slate-300 text-black' :
+                i === 2 ? 'bg-amber-600 text-white' :
+                'bg-white/10 text-white'
+              }`}>{i + 1}</div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm text-white truncate">{d.firm}</p>
+                <p className="text-xs text-slate-400">
+                  {d.discount} off · <span className="font-mono text-emerald-400">{d.code}</span>
+                </p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="flex items-center gap-1 text-2xl font-bold">
-                <DollarSign className="w-5 h-5" />
-                {deal.savings.toFixed(0)}
-              </div>
-              <p className="text-xs text-blue-100">estimated savings</p>
+            <div className="text-right flex-shrink-0 ml-3">
+              <p className="text-lg font-black text-emerald-400">${d.savings.toFixed(0)}</p>
+              <p className="text-xs text-slate-500">saved</p>
             </div>
           </div>
         ))}
+
+        {top5.length === 0 && (
+          <div className="text-center py-4 text-slate-500 text-sm">Loading deals...</div>
+        )}
       </div>
     </div>
   );

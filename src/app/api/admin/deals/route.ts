@@ -1,16 +1,26 @@
-// src/app/api/admin/deals/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import jwt from 'jsonwebtoken';
 
-// Initialize the Secure Client (SERVICE ROLE)
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!
-);
-
+// Check for required environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // ✅ FIXED
 const jwtSecret = process.env.JWT_SECRET;
+
+if (!supabaseUrl) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable');
+}
+
+if (!supabaseServiceKey) {
+  throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
+}
+
+if (!jwtSecret) {
+  throw new Error('Missing JWT_SECRET environment variable');
+}
+
+// Initialize the Secure Client (SERVICE ROLE)
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey); // ✅ FIXED
 
 interface DealPayload {
     id?: string;

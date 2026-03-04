@@ -1,91 +1,103 @@
 import React from 'react';
 import Link from 'next/link';
-import { Tag, Mail, Heart } from 'lucide-react';
+import { Zap, Twitter, Linkedin, Mail, Shield, ExternalLink } from 'lucide-react';
 
 export const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
-  const footerLinks = {
-    company: [
-      { name: 'About', href: '/about' },
-      { name: 'How It Works', href: '/how-it-works' },
-      { name: 'Contact', href: '/contact' }
+  const links = {
+    Deals: [
+      { label: 'All Discount Codes', href: '/' },
+      { label: 'FTMO Coupon', href: '/prop-firms/ftmo' },
+      { label: 'FundedNext Coupon', href: '/prop-firms/funded-next' },
+      { label: 'The5ers Coupon', href: '/prop-firms/the5ers' },
+      { label: 'Topstep Coupon', href: '/prop-firms/topstep' },
     ],
-    resources: [
-      { name: 'All Deals', href: '/' },
-      { name: 'All Firms', href: '/prop-firms' },
-      { name: 'Compare Firms', href: '/compare' },
-      { name: 'Active Codes', href: '/?filter=active' }
-    ]
+    Tools: [
+      { label: 'Compare Firms', href: '/compare' },
+      { label: 'Savings Calculator', href: '/#calculator' },
+      { label: 'Prop Scores', href: '/prop-firms' },
+      { label: 'Trading Books', href: '/books' },
+    ],
+    Company: [
+      { label: 'About', href: '/about' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Contact', href: '/contact' },
+      { label: 'Submit a Deal', href: '/contact' },
+    ],
+    Legal: [
+      { label: 'Privacy Policy', href: '/privacy' },
+      { label: 'Terms of Service', href: '/terms' },
+      { label: 'Affiliate Disclosure', href: '/affiliate-disclosure' },
+    ],
   };
 
   return (
-    <footer className="bg-gray-900 text-white mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
-          <div className="md:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4 group">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg group-hover:scale-110 transition-transform">
-                <Tag className="w-6 h-6 text-white" />
+    <footer className="bg-[#060d1f] text-white border-t border-[#1a3a5c]">
+      {/* Main footer */}
+      <div className="max-w-6xl mx-auto px-4 py-14">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
+          {/* Brand */}
+          <div className="col-span-2">
+            <Link href="/" className="flex items-center gap-2.5 mb-4">
+              <div className="bg-gradient-to-br from-blue-500 to-emerald-500 p-2 rounded-xl">
+                <Zap className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">Prop Firm Discounts</span>
+              <div>
+                <span className="text-base font-black">PropCoupons</span>
+                <p className="text-slate-500 text-xs leading-none mt-0.5">Prop Firm Discounts</p>
+              </div>
             </Link>
-            <p className="text-gray-400 mb-4 max-w-md">
-              Your trusted source for verified prop firm discount codes. Save money on prop trading evaluations with exclusive deals from top firms.
+            <p className="text-slate-400 text-sm leading-relaxed mb-5 max-w-xs">
+              Verified discount codes for 20+ top prop trading firms. Helping traders save since 2023.
             </p>
-            <div className="flex items-center gap-2 text-gray-400">
-              <Mail className="w-4 h-4" />
-              <a href="mailto:contact@propcoupouns.com" className="hover:text-white transition-colors">
-                contact@propcoupouns.com
+            <div className="flex items-center gap-3 mb-5">
+              <a href="https://twitter.com/propcoupouns" target="_blank" rel="noopener noreferrer"
+                className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                <Twitter className="w-4 h-4 text-slate-400 hover:text-white" />
               </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+                className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                <Linkedin className="w-4 h-4 text-slate-400 hover:text-white" />
+              </a>
+              <a href="mailto:hello@propcoupouns.com"
+                className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                <Mail className="w-4 h-4 text-slate-400 hover:text-white" />
+              </a>
+            </div>
+            {/* Trust badge */}
+            <div className="inline-flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg text-xs font-bold">
+              <Shield className="w-3.5 h-3.5" /> Codes Verified Weekly
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-bold mb-4">Company</h3>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-bold mb-4">Resources</h3>
-            <ul className="space-y-2">
-              {footerLinks.resources.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Link columns */}
+          {Object.entries(links).map(([title, items]) => (
+            <div key={title}>
+              <h4 className="text-xs font-black text-slate-300 uppercase tracking-wider mb-4">{title}</h4>
+              <ul className="space-y-2.5">
+                {items.map(item => (
+                  <li key={item.href}>
+                    <Link href={item.href}
+                      className="text-sm text-slate-500 hover:text-white transition-colors">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
+      </div>
 
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm text-center md:text-left">
-              © {currentYear} Prop Firm Discounts. All rights reserved.
-            </p>
-            <p className="text-gray-500 text-xs text-center md:text-right flex items-center gap-1">
-              Made with <Heart className="w-3 h-3 text-red-500 fill-current" /> for traders worldwide
-            </p>
-          </div>
-          <p className="text-gray-500 text-xs mt-4 text-center">
-            Disclaimer: Discount codes are updated regularly. Please verify terms with each prop firm. We may earn commissions through affiliate partnerships.
+      {/* Bottom bar */}
+      <div className="border-t border-[#1a3a5c]">
+        <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <p>© {year} PropCoupons. All rights reserved.</p>
+          <p className="text-center max-w-md">
+            Affiliate Disclosure: We may earn commissions from prop firms when you use our links. This does not affect our reviews. <Link href="/affiliate-disclosure" className="underline hover:text-slate-300">Learn more.</Link>
           </p>
+          <p>Not financial advice. Trade responsibly.</p>
         </div>
       </div>
     </footer>

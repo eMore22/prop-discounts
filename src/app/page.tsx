@@ -11,6 +11,7 @@ import {
 import { getDeals } from '@/lib/getDeals';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
+import DealPopup from '@/components/DealPopup';
 
 export interface DiscountCode {
   id?: string;
@@ -664,6 +665,7 @@ export default function PropDiscountsApp() {
       </div>
 
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+      <DealPopup />
     </div>
   );
 }

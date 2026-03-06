@@ -2,26 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import jwt from 'jsonwebtoken';
 
-// Check for required environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // ✅ FIXED
-const jwtSecret = process.env.JWT_SECRET;
-
-if (!supabaseUrl) {
-  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable');
-}
-
-if (!supabaseServiceKey) {
-  throw new Error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable');
-}
-
-if (!jwtSecret) {
-  throw new Error('Missing JWT_SECRET environment variable');
-}
-
-// Initialize the Secure Client (SERVICE ROLE)
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey); // ✅ FIXED
-
 interface DealPayload {
     id?: string;
     firm: string;
@@ -35,15 +15,24 @@ interface DealPayload {
     verification_status: string;
 }
 
+// ✅ Helper - creates client inside request context, never at build time
+function getSupabaseAdmin() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !supabaseServiceKey) {
+        throw new Error('Missing Supabase environment variables');
+    }
+    return createClient(supabaseUrl, supabaseServiceKey);
+}
+
 function verifyAdminToken(request: NextRequest): boolean {
     const tokenCookie = request.cookies.get('admin_token');
-    if (!tokenCookie || !tokenCookie.value || !jwtSecret) {
-        return false;
-    }
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!tokenCookie || !tokenCookie.value || !jwtSecret) return false;
     try {
         jwt.verify(tokenCookie.value, jwtSecret);
         return true;
-    } catch (error) {
+    } catch {
         return false;
     }
 }
@@ -52,13 +41,12 @@ export async function GET(request: NextRequest) {
     if (!verifyAdminToken(request)) {
         return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
     }
-
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { data, error } = await supabaseAdmin
             .from('prop_deals')
             .select('*')
             .order('created_at', { ascending: false });
-
         if (error) throw error;
         return NextResponse.json(data);
     } catch (error: any) {
@@ -71,37 +59,21 @@ export async function POST(request: NextRequest) {
     if (!verifyAdminToken(request)) {
         return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
     }
-
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const body: DealPayload = await request.json();
-        console.log('Received POST data:', body);
-
         const { firm, code, discount, expiry, slug, prop_score, description, link, verification_status } = body;
 
-        // Validate required fields
-        if (!firm || !firm.trim()) {
-            return NextResponse.json({ error: 'Firm name is required' }, { status: 400 });
-        }
-        if (!code || !code.trim()) {
-            return NextResponse.json({ error: 'Discount code is required' }, { status: 400 });
-        }
-        if (!discount || !discount.trim()) {
-            return NextResponse.json({ error: 'Discount amount is required' }, { status: 400 });
-        }
-        if (!link || !link.trim()) {
-            return NextResponse.json({ error: 'Affiliate link is required' }, { status: 400 });
-        }
+        if (!firm || !firm.trim()) return NextResponse.json({ error: 'Firm name is required' }, { status: 400 });
+        if (!code || !code.trim()) return NextResponse.json({ error: 'Discount code is required' }, { status: 400 });
+        if (!discount || !discount.trim()) return NextResponse.json({ error: 'Discount amount is required' }, { status: 400 });
+        if (!link || !link.trim()) return NextResponse.json({ error: 'Affiliate link is required' }, { status: 400 });
 
-        // Normalize discount (add % if not present)
         let normalizedDiscount = discount.trim();
-        if (!normalizedDiscount.includes('%')) {
-            normalizedDiscount = normalizedDiscount + '%';
-        }
+        if (!normalizedDiscount.includes('%')) normalizedDiscount = normalizedDiscount + '%';
 
-        // Generate slug if not provided
         const finalSlug = slug?.trim() || firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
-        // Check if slug already exists
         const { data: existingDeal, error: checkError } = await supabaseAdmin
             .from('prop_deals')
             .select('slug')
@@ -109,14 +81,10 @@ export async function POST(request: NextRequest) {
             .maybeSingle();
 
         if (checkError && checkError.code !== 'PGRST116') {
-            console.error('Error checking slug:', checkError);
             return NextResponse.json({ error: 'Database error: ' + checkError.message }, { status: 500 });
         }
-
         if (existingDeal) {
-            return NextResponse.json({ 
-                error: `A deal with slug "${finalSlug}" already exists. Please use a different firm name or slug.` 
-            }, { status: 409 });
+            return NextResponse.json({ error: `A deal with slug "${finalSlug}" already exists.` }, { status: 409 });
         }
 
         const dealToInsert = {
@@ -131,8 +99,6 @@ export async function POST(request: NextRequest) {
             verification_status: verification_status || 'verified',
         };
 
-        console.log('Inserting deal:', dealToInsert);
-
         const { data, error } = await supabaseAdmin
             .from('prop_deals')
             .insert(dealToInsert)
@@ -140,20 +106,13 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (error) {
-            console.error('Supabase insert error:', error);
-            return NextResponse.json({ 
-                error: `Database error: ${error.message}. ${error.hint || ''}` 
-            }, { status: 500 });
+            return NextResponse.json({ error: `Database error: ${error.message}. ${error.hint || ''}` }, { status: 500 });
         }
-
-        console.log('Deal created successfully:', data);
         return NextResponse.json(data, { status: 201 });
 
     } catch (error: any) {
         console.error('Create deal error:', error);
-        return NextResponse.json({ 
-            error: error.message || 'An unexpected error occurred while creating the deal' 
-        }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'An unexpected error occurred' }, { status: 500 });
     }
 }
 
@@ -161,33 +120,22 @@ export async function PUT(request: NextRequest) {
     if (!verifyAdminToken(request)) {
         return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
     }
-
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const body: Partial<DealPayload> = await request.json();
         const { id, ...updates } = body;
 
-        if (!id) {
-            return NextResponse.json({ error: 'Deal ID required for update' }, { status: 400 });
-        }
-        
-        // Normalize discount
+        if (!id) return NextResponse.json({ error: 'Deal ID required for update' }, { status: 400 });
+
         if (updates.discount) {
             let normalizedDiscount = updates.discount.trim();
-            if (!normalizedDiscount.includes('%')) {
-                normalizedDiscount = normalizedDiscount + '%';
-            }
+            if (!normalizedDiscount.includes('%')) normalizedDiscount = normalizedDiscount + '%';
             updates.discount = normalizedDiscount;
         }
-
         if (updates.prop_score !== undefined && updates.prop_score !== null) {
             updates.prop_score = parseFloat(updates.prop_score.toString());
         }
-
-        if (updates.expiry === "") {
-             updates.expiry = null;
-        }
-
-        // Trim string fields
+        if (updates.expiry === '') updates.expiry = null;
         if (updates.firm) updates.firm = updates.firm.trim();
         if (updates.code) updates.code = updates.code.trim();
         if (updates.slug) updates.slug = updates.slug.trim();
@@ -202,18 +150,13 @@ export async function PUT(request: NextRequest) {
             .single();
 
         if (error) {
-            console.error('Supabase update error:', error);
-            return NextResponse.json({ 
-                error: `Database error: ${error.message}` 
-            }, { status: 500 });
+            return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
         }
-
         return NextResponse.json(data);
+
     } catch (error: any) {
         console.error('Update deal error:', error);
-        return NextResponse.json({ 
-            error: error.message || 'Failed to update deal' 
-        }, { status: 500 });
+        return NextResponse.json({ error: error.message || 'Failed to update deal' }, { status: 500 });
     }
 }
 
@@ -221,14 +164,12 @@ export async function DELETE(request: NextRequest) {
     if (!verifyAdminToken(request)) {
         return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
     }
-
     try {
+        const supabaseAdmin = getSupabaseAdmin();
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
-        if (!id) {
-            return NextResponse.json({ error: 'Deal ID required for delete' }, { status: 400 });
-        }
+        if (!id) return NextResponse.json({ error: 'Deal ID required for delete' }, { status: 400 });
 
         const { error } = await supabaseAdmin
             .from('prop_deals')
@@ -236,11 +177,10 @@ export async function DELETE(request: NextRequest) {
             .eq('id', id);
 
         if (error) {
-            console.error('Delete error:', error);
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
-
         return NextResponse.json({ success: true });
+
     } catch (error: any) {
         console.error('Delete deal error:', error);
         return NextResponse.json({ error: error.message || 'Failed to delete deal' }, { status: 500 });

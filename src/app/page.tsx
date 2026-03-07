@@ -12,6 +12,7 @@ import { getDeals } from '@/lib/getDeals';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
 import DealPopup from '@/components/DealPopup';
+import ForexCalendar from '@/components/ForexCalendar';
 
 export interface DiscountCode {
   id?: string;
@@ -500,6 +501,9 @@ export default function PropDiscountsApp() {
             </div>
           </div>
         )}
+
+        {/* Forex Economic Calendar */}
+        <ForexCalendar />
 
         {/* Expiring Soon Banner */}
         {expiringDeals.length > 0 && (

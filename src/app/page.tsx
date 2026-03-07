@@ -435,7 +435,7 @@ export default function PropDiscountsApp() {
         {/* Grid overlay */}
         <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
-        <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-28">
+        <div className="relative max-w-6xl mx-auto px-4 py-10 md:py-14">
           <div className="text-center">
             {/* Live badge */}
             <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 px-4 py-2 rounded-full text-sm font-bold mb-8">
@@ -455,7 +455,7 @@ export default function PropDiscountsApp() {
               Verified discount codes for 20+ top prop firms. Updated weekly. Used by 10,000+ traders.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-14">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
               <a href="#deals"
                 className="bg-emerald-500 hover:bg-emerald-400 text-black font-black px-8 py-4 rounded-xl transition-all active:scale-95 text-base shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2">
                 <Flame className="w-5 h-5" /> View All Deals
@@ -505,36 +505,6 @@ export default function PropDiscountsApp() {
         {/* Forex Economic Calendar */}
         <ForexCalendar />
 
-        {/* Expiring Soon Banner */}
-        {expiringDeals.length > 0 && (
-          <div className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <Flame className="w-5 h-5 text-orange-500 animate-pulse" />
-              <h3 className="font-black text-orange-900 text-sm">⚠️ Expiring Within 7 Days — Act Now</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {expiringDeals.map(d => (
-                <button key={d.firm} onClick={() => copyCode(d.code, d.firm)}
-                  className="group bg-white hover:bg-orange-100 border border-orange-200 hover:border-orange-400 text-orange-800 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
-                  <Copy className="w-3 h-3" />
-                  <span>{d.firm}</span>
-                  <span className="text-emerald-600 font-black">{d.discount} off</span>
-                  <CountdownTimer expiryDate={d.expiry} compact />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 2-col: Calculator + News */}
-        <div className="grid lg:grid-cols-2 gap-6">
-          <ValueCalculator deals={deals} />
-          <NewsSection />
-        </div>
-
-        {/* Newsletter */}
-        <NewsletterStrip />
-
         {/* ── All Deals Table ───────────────────────────────────── */}
         <div id="deals">
           {/* Controls */}
@@ -568,8 +538,28 @@ export default function PropDiscountsApp() {
             </div>
           </div>
 
+          {/* Expiring Soon Banner */}
+          {expiringDeals.length > 0 && (
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 border-2 border-orange-200 rounded-2xl p-5 mb-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Flame className="w-5 h-5 text-orange-500 animate-pulse" />
+              <h3 className="font-black text-orange-900 text-sm">⚠️ Expiring Within 7 Days — Act Now</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {expiringDeals.map(d => (
+                <button key={d.firm} onClick={() => copyCode(d.code, d.firm)}
+                  className="group bg-white hover:bg-orange-100 border border-orange-200 hover:border-orange-400 text-orange-800 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2">
+                  <Copy className="w-3 h-3" />
+                  <span>{d.firm}</span>
+                  <span className="text-emerald-600 font-black">{d.discount} off</span>
+                  <CountdownTimer expiryDate={d.expiry} compact />
+                </button>
+              ))}
+            </div>
+          </div>
+          )}
+
           {/* Desktop Table */}
-          <div className="hidden lg:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-[#060d1f] to-[#0d1f3c] text-white">
@@ -647,6 +637,15 @@ export default function PropDiscountsApp() {
             </div>
           )}
         </div>
+
+        {/* 2-col: Calculator + News */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          <ValueCalculator deals={deals} />
+          <NewsSection />
+        </div>
+
+        {/* Newsletter */}
+        <NewsletterStrip />
 
         {/* Bottom CTA */}
         <div className="grid md:grid-cols-2 gap-4">

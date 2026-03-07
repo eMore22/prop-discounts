@@ -12,7 +12,6 @@ import { getDeals } from '@/lib/getDeals';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
 import DealPopup from '@/components/DealPopup';
-import ForexCalendar from '@/components/ForexCalendar';
 
 export interface DiscountCode {
   id?: string;
@@ -502,8 +501,22 @@ export default function PropDiscountsApp() {
           </div>
         )}
 
-        {/* Forex Economic Calendar */}
-        <ForexCalendar />
+        {/* Forex Calendar Teaser */}
+        <Link href="/calendar"
+          className="group flex items-center justify-between bg-gradient-to-r from-[#060d1f] to-[#0d1f3c] border border-blue-900/50 rounded-2xl px-6 py-4 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center gap-4">
+            <div className="p-2.5 bg-blue-500/15 rounded-xl border border-blue-500/20">
+              <Activity className="w-5 h-5 text-blue-400" />
+            </div>
+            <div>
+              <p className="text-white font-black text-sm">Forex Economic Calendar</p>
+              <p className="text-slate-400 text-xs mt-0.5">Track high-impact events that move prop firm markets this week</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-blue-400 font-black text-sm group-hover:gap-3 transition-all whitespace-nowrap">
+            View Calendar <ArrowRight className="w-4 h-4" />
+          </div>
+        </Link>
 
         {/* ── All Deals Table ───────────────────────────────────── */}
         <div id="deals">

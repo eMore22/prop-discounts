@@ -560,6 +560,7 @@ export default function PropDiscountsApp() {
           )}
 
           {/* Desktop Table */}
+          <div className="hidden lg:block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-[#060d1f] to-[#0d1f3c] text-white">

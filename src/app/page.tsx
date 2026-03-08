@@ -434,15 +434,15 @@ export default function PropDiscountsApp() {
         {/* Grid overlay */}
         <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
-        <div className="relative max-w-6xl mx-auto px-4 py-10 md:py-14">
+        <div className="relative max-w-6xl mx-auto px-4 py-6 md:py-8">
           <div className="text-center">
             {/* Live badge */}
-            <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 px-4 py-2 rounded-full text-sm font-bold mb-8">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-full text-xs font-bold mb-4">
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
               {activeDeals.length} Live Deals — Verified Today
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-black text-white mb-5 leading-[1.05] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-[1.05] tracking-tight">
               Save Big on<br />
               <span className="relative">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400">
@@ -450,23 +450,23 @@ export default function PropDiscountsApp() {
                 </span>
               </span>
             </h1>
-            <p className="text-slate-400 text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed">
+            <p className="text-slate-400 text-base max-w-lg mx-auto mb-6 leading-relaxed">
               Verified discount codes for 20+ top prop firms. Updated weekly. Used by 10,000+ traders.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-2.5 justify-center mb-6">
               <a href="#deals"
-                className="bg-emerald-500 hover:bg-emerald-400 text-black font-black px-8 py-4 rounded-xl transition-all active:scale-95 text-base shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2">
-                <Flame className="w-5 h-5" /> View All Deals
+                className="bg-emerald-500 hover:bg-emerald-400 text-black font-black px-7 py-3 rounded-xl transition-all active:scale-95 text-sm shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2">
+                <Flame className="w-4 h-4" /> View All Deals
               </a>
               <Link href="/compare"
-                className="bg-white/8 hover:bg-white/15 border border-white/15 text-white font-bold px-8 py-4 rounded-xl transition-all text-base flex items-center justify-center gap-2">
+                className="bg-white/8 hover:bg-white/15 border border-white/15 text-white font-bold px-7 py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2">
                 Compare Firms <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* Stats row */}
-            <div className="flex flex-wrap justify-center gap-8 text-center">
+            <div className="flex flex-wrap justify-center gap-6 text-center">
               {[
                 { icon: Flame, val: activeDeals.length, suf: '', label: 'Active Deals', color: 'text-orange-400' },
                 { icon: Users, val: 10000, suf: '+', label: 'Traders Helped', color: 'text-blue-400' },
@@ -474,8 +474,8 @@ export default function PropDiscountsApp() {
                 { icon: Shield, val: deals.length, suf: '', label: 'Verified Firms', color: 'text-purple-400' },
               ].map(({ icon: Icon, val, suf, label, color }) => (
                 <div key={label} className="text-center">
-                  <Icon className={`w-5 h-5 mx-auto mb-1 ${color}`} />
-                  <div className="text-2xl font-black text-white"><AnimatedCounter target={val} suffix={suf} /></div>
+                  <Icon className={`w-4 h-4 mx-auto mb-0.5 ${color}`} />
+                  <div className="text-xl font-black text-white"><AnimatedCounter target={val} suffix={suf} /></div>
                   <div className="text-xs text-slate-500 font-medium">{label}</div>
                 </div>
               ))}

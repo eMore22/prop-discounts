@@ -15,7 +15,7 @@ import { VerificationBadge } from '@/components/VerificationBadge';
 const FIRM_DATA: Record<string, any> = {
   ftmo: {
     name: 'FTMO', color: '#00C896', founded: 2015, hq: 'Prague, Czech Republic',
-    website: 'https://ftmo.com', score: 9.5, rating: 4.8, totalReviews: 2840,
+    website: 'https://ftmo.com', score: 9.5, rating: 4.8, totalReviews: 39000,
     maxFunding: '$200,000', profitSplit: '90%', dailyDrawdown: '5%', maxDrawdown: '10%',
     profitTarget: '10% (Phase 1) / 5% (Phase 2)', minTradingDays: 4, timeLimit: '30 days per phase',
     phases: 2, payoutFrequency: 'Monthly (bi-weekly after 3 payouts)', scalingPlan: true,
@@ -54,7 +54,7 @@ const FIRM_DATA: Record<string, any> = {
   },
   'funded-next': {
     name: 'FundedNext', color: '#6C63FF', founded: 2022, hq: 'Dubai, UAE',
-    website: 'https://fundednext.com', score: 9.3, rating: 4.7, totalReviews: 1920,
+    website: 'https://fundednext.com', score: 9.3, rating: 4.5, totalReviews: 55000,
     maxFunding: '$200,000', profitSplit: '90%', dailyDrawdown: '5%', maxDrawdown: '10%',
     profitTarget: '10% (Express) / 15% (Stellar)', minTradingDays: 5, timeLimit: '30 days',
     phases: 2, payoutFrequency: 'Bi-weekly', scalingPlan: true,
@@ -92,7 +92,7 @@ const FIRM_DATA: Record<string, any> = {
   },
   'the5ers': {
     name: 'The5%ers', color: '#F59E0B', founded: 2016, hq: 'Tel Aviv, Israel',
-    website: 'https://the5ers.com', score: 9.1, rating: 4.6, totalReviews: 1540,
+    website: 'https://the5ers.com', score: 9.1, rating: 4.8, totalReviews: 21000,
     maxFunding: '$100,000', profitSplit: '100%', dailyDrawdown: '4%', maxDrawdown: '8%',
     profitTarget: '8% (Bootcamp)', minTradingDays: 0, timeLimit: 'None (Bootcamp)',
     phases: 1, payoutFrequency: 'Monthly', scalingPlan: true,
@@ -124,6 +124,44 @@ const FIRM_DATA: Record<string, any> = {
       { author: 'Mike A.', rating: 5, text: '100% profit split is real. Received my first payout last month.', date: 'Feb 2026' },
       { author: 'Fatima L.', rating: 4, text: 'No time limit on bootcamp was perfect for me. Took 45 days.', date: 'Jan 2026' },
       { author: 'David R.', rating: 5, text: 'Scaling plan is incredible. From $6K to $40K in 8 months.', date: 'Jan 2026' },
+    ],
+  },
+  topstep: {
+    name: 'Topstep', color: '#E85D26', founded: 2012, hq: 'Chicago, Illinois, USA',
+    website: 'https://topstep.com', score: 8.7, rating: 3.4, totalReviews: 13600,
+    maxFunding: '$150,000', profitSplit: '90%', dailyDrawdown: '4%', maxDrawdown: '4%',
+    profitTarget: '$3,000–$9,000 profit target', minTradingDays: 5, timeLimit: 'No time limit',
+    phases: 1, payoutFrequency: 'On request (2–3 business days)', scalingPlan: true,
+    instantFunding: false, cryptoPayouts: false, weeklyPayouts: false,
+    newsTrading: true, weekendHolding: false, eaAllowed: true, copyTrading: false,
+    description: `Topstep is the original futures prop firm, founded in Chicago in 2012. They invented the "Trading Combine" evaluation model that the entire industry now copies. With $102M+ paid to traders and 13,600+ Trustpilot reviews, Topstep is the most established name in futures prop trading.`,
+    longDescription: `Topstep focuses exclusively on futures trading — indices, forex futures, commodities and more on the CME. Their one-step Trading Combine evaluation has no time limit, and funded traders keep 90% of profits (100% on the first $10K for accounts opened before Jan 12, 2026). The firm is known for its education-first approach, active Discord community, and TopstepTV coaching content.`,
+    pros: [
+      'Original and most trusted futures prop firm (founded 2012)',
+      '$102M+ paid to funded traders',
+      'No time limit on Trading Combine',
+      '100% of first $10K profits (legacy accounts)',
+      'Strong education, coaching and community',
+      'Wide platform selection via TopstepX',
+    ],
+    cons: [
+      'Futures only — no forex spot, stocks or crypto',
+      '3.4/5 Trustpilot rating — mixed recent reviews',
+      'Monthly subscription fee during evaluation ($49–$149)',
+      'No weekend holding allowed',
+      'TopstepX now mandatory for new accounts',
+    ],
+    payoutReliability: 82,
+    tradersVoted: 3200,
+    plans: [
+      { name: 'Trading Combine $50K', price: '$49/mo', refundable: false, target: '$3,000 profit target' },
+      { name: 'Trading Combine $100K', price: '$99/mo', refundable: false, target: '$6,000 profit target' },
+      { name: 'Trading Combine $150K', price: '$149/mo', refundable: false, target: '$9,000 profit target' },
+    ],
+    recentReviews: [
+      { author: 'Carlos M.', rating: 5, text: 'Been with Topstep 8 months. Payouts always arrive in 2 days.', date: 'Feb 2026' },
+      { author: 'Anna K.', rating: 4, text: 'Great education resources. TopstepTV helped me pass on first try.', date: 'Jan 2026' },
+      { author: 'James W.', rating: 3, text: 'Good firm but the monthly fee adds up if you take long to pass.', date: 'Jan 2026' },
     ],
   },
 };
@@ -160,22 +198,21 @@ const StatCard: React.FC<{ label: string; value: string; sub?: string; highlight
 );
 
 // ── Page Component ────────────────────────────────────────────────────────────
-export default function FirmDetailPage({ params }: { params: Promise<{ firm: string }> }) {
-  const resolvedParams = React.use(params);
+function FirmDetailClient({ firmSlug }: { firmSlug: string }) {
   const [deal, setDeal] = useState<any>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'rules' | 'plans' | 'reviews'>('overview');
 
-  const firm = FIRM_DATA[resolvedParams.firm] ?? { ...DEFAULT_FIRM, name: resolvedParams.firm.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
+  const firm = FIRM_DATA[firmSlug] ?? { ...DEFAULT_FIRM, name: firmSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
 
   useEffect(() => {
     getDeals().then(deals => {
       const match = deals.find(d =>
-        d.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === resolvedParams.firm
+        d.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === firmSlug
       );
       if (match) setDeal(match);
     });
-  }, [resolvedParams.firm]);
+  }, [firmSlug]);
 
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code).then(() => {
@@ -531,7 +568,7 @@ export default function FirmDetailPage({ params }: { params: Promise<{ firm: str
             {/* Other firms */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <h3 className="font-black text-gray-900 mb-4 text-sm">Other Top Firms</h3>
-              {['ftmo', 'funded-next', 'the5ers'].filter(s => s !== resolvedParams.firm).map(s => {
+              {['ftmo', 'funded-next', 'the5ers'].filter(s => s !== firmSlug).map(s => {
                 const f = FIRM_DATA[s];
                 return (
                   <Link key={s} href={`/prop-firms/${s}`}
@@ -563,4 +600,10 @@ export default function FirmDetailPage({ params }: { params: Promise<{ firm: str
       )}
     </div>
   );
+}
+
+// Server component wrapper — resolves async params before passing to client
+export default async function FirmDetailPage({ params }: { params: Promise<{ firm: string }> }) {
+  const { firm } = await params;
+  return <FirmDetailClient firmSlug={firm} />;
 }

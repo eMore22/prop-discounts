@@ -1,19 +1,23 @@
-// FILE 6: src/app/prop-firms/[firm]/layout.tsx
-// ==========================================
-export async function generateMetadata({ params }: { params: { firm: string } }) {
-  const firmName = params.firm.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-  
+import type { Metadata } from 'next';
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ firm: string }> }
+): Promise<Metadata> {
+  const { firm } = await params;
+  const name = firm.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   return {
-    title: `${firmName} Discount Code 2026 – Save Up To 50% | Prop Firm Discounts`,
-    description: `Get the latest ${firmName} promo codes and discount codes for 2026. Save up to 50% on prop trading challenges. Verified codes updated daily.`,
-    keywords: `${firmName} discount code, ${firmName} promo code, ${firmName} coupon, ${firmName} discount 2026`,
+    title: `${name} Discount Code & Review | PropCoupons`,
+    description: `Get the latest verified ${name} promo code. Save on your challenge fee and read our full ${name} review.`,
   };
 }
 
-export default function FirmLayout({
+export default async function FirmLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ firm: string }>;
 }) {
-  return children;
+  await params; // resolve to satisfy Next.js 15
+  return <>{children}</>;
 }

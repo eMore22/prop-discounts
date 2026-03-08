@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
-import { jwtVerify } from 'jose';
+import jwt from 'jsonwebtoken';
 
 function getSupabaseAdmin() {
   return createClient(
@@ -15,8 +15,7 @@ async function isAuthorized(): Promise<boolean> {
     const cookieStore = await cookies();
     const token = cookieStore.get('admin_token')?.value;
     if (!token) return false;
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-    await jwtVerify(token, secret);
+    jwt.verify(token, process.env.JWT_SECRET!);
     return true;
   } catch {
     return false;

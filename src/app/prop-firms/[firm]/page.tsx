@@ -160,21 +160,22 @@ const StatCard: React.FC<{ label: string; value: string; sub?: string; highlight
 );
 
 // ── Page Component ────────────────────────────────────────────────────────────
-export default function FirmDetailPage({ params }: { params: { firm: string } }) {
+export default function FirmDetailPage({ params }: { params: Promise<{ firm: string }> }) {
+  const resolvedParams = React.use(params);
   const [deal, setDeal] = useState<any>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'rules' | 'plans' | 'reviews'>('overview');
 
-  const firm = FIRM_DATA[params.firm] ?? { ...DEFAULT_FIRM, name: params.firm.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
+  const firm = FIRM_DATA[resolvedParams.firm] ?? { ...DEFAULT_FIRM, name: resolvedParams.firm.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
 
   useEffect(() => {
     getDeals().then(deals => {
       const match = deals.find(d =>
-        d.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === params.firm
+        d.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === resolvedParams.firm
       );
       if (match) setDeal(match);
     });
-  }, [params.firm]);
+  }, [resolvedParams.firm]);
 
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code).then(() => {
@@ -530,7 +531,7 @@ export default function FirmDetailPage({ params }: { params: { firm: string } })
             {/* Other firms */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <h3 className="font-black text-gray-900 mb-4 text-sm">Other Top Firms</h3>
-              {['ftmo', 'funded-next', 'the5ers'].filter(s => s !== params.firm).map(s => {
+              {['ftmo', 'funded-next', 'the5ers'].filter(s => s !== resolvedParams.firm).map(s => {
                 const f = FIRM_DATA[s];
                 return (
                   <Link key={s} href={`/prop-firms/${s}`}

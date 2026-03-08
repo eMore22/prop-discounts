@@ -56,7 +56,7 @@ export const Footer = () => {
                 className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
                 <Twitter className="w-4 h-4 text-slate-400 hover:text-white" />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/company/prop-firm-discount/" target="_blank" rel="noopener noreferrer"
                 className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
                 <Linkedin className="w-4 h-4 text-slate-400 hover:text-white" />
               </a>

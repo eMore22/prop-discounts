@@ -1,5 +1,5 @@
 // ==========================================
-// FILE: src/app/layout.tsx (COMPLETE UPDATED FILE)
+// FILE: src/app/layout.tsx
 // ==========================================
 
 import type { Metadata } from "next";
@@ -14,13 +14,15 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Prop Firm Discount Codes February 2026 | Verified Coupons – Prop Firm Discounts",
-  description: "Save on FTMO, FundedNext, The5ers & more with exclusive prop firm promo codes. Best deals updated daily for 2026 challenges.",
+  title: "Prop Firm Discount Codes 2026 | Verified Coupons – PropCoupons",
+  description: "Save on FTMO, FundedNext, The5%ers & more with exclusive prop firm promo codes. Best deals updated daily for 2026 challenges.",
   icons: {
     icon: [
       { url: '/favicon.ico' },
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-128x128.png', sizes: '128x128', type: 'image/png' },
     ],
     apple: [
       { url: '/apple-touch-icon.png' },
@@ -37,7 +39,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>

@@ -4,213 +4,60 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Star, Shield, Copy, ExternalLink, CheckCircle, XCircle, Clock,
-  TrendingUp, Users, DollarSign, ArrowLeft, ChevronRight, ThumbsUp,
-  ThumbsDown, Minus, Award, Zap, AlertCircle, BarChart2, Check, X
+  TrendingUp, Users, DollarSign, ArrowLeft, ChevronRight,
+  ThumbsUp, ThumbsDown, Zap, AlertCircle, BarChart2, Check, X
 } from 'lucide-react';
 import { getDeals } from '@/lib/getDeals';
 import { PropScoreBadge } from '@/components/PropScoreBadge';
 import { VerificationBadge } from '@/components/VerificationBadge';
+import { createClient } from '@supabase/supabase-js';
 
-// ── Static firm data (augment with Supabase deal data at runtime) ─────────────
-const FIRM_DATA: Record<string, any> = {
-  ftmo: {
-    name: 'FTMO', color: '#00C896', founded: 2015, hq: 'Prague, Czech Republic',
-    website: 'https://ftmo.com', score: 9.5, rating: 4.8, totalReviews: 39000,
-    maxFunding: '$200,000', profitSplit: '90%', dailyDrawdown: '5%', maxDrawdown: '10%',
-    profitTarget: '10% (Phase 1) / 5% (Phase 2)', minTradingDays: 4, timeLimit: '30 days per phase',
-    phases: 2, payoutFrequency: 'Monthly (bi-weekly after 3 payouts)', scalingPlan: true,
-    instantFunding: false, cryptoPayouts: true, weeklyPayouts: false,
-    newsTrading: true, weekendHolding: true, eaAllowed: true, copyTrading: true,
-    description: `FTMO is the world's most trusted prop trading firm, founded in Prague in 2015. With over $100M paid out to traders and a proven track record, FTMO sets the gold standard for evaluation-based prop trading. Their two-phase evaluation tests traders under real market conditions before granting access to funded accounts up to $200,000.`,
-    longDescription: `What makes FTMO stand out is their trader-first approach. The FTMO Account comes with a 90% profit split, industry-leading customer support available 24/5, and a scaling plan that can take your account up to $2,000,000. FTMO also provides free trading tools including a performance coach, equity simulator, and trade analyser.`,
-    pros: [
-      'Most trusted brand in prop trading',
-      '90% profit split from day one',
-      'Scaling plan up to $2,000,000',
-      'Excellent 24/5 customer support',
-      'Free trading tools included',
-      'Crypto payouts available',
-    ],
-    cons: [
-      '2-phase evaluation required',
-      'No instant funding option',
-      'Monthly payouts (not weekly)',
-      'Strict daily loss limit of 5%',
-    ],
-    payoutReliability: 96,
-    tradersVoted: 2840,
-    plans: [
-      { name: 'FTMO Challenge $10K', price: '$155', refundable: true, target: '10%/$1,000' },
-      { name: 'FTMO Challenge $25K', price: '$250', refundable: true, target: '10%/$2,500' },
-      { name: 'FTMO Challenge $50K', price: '$345', refundable: true, target: '10%/$5,000' },
-      { name: 'FTMO Challenge $100K', price: '$540', refundable: true, target: '10%/$10,000' },
-      { name: 'FTMO Challenge $200K', price: '$1,080', refundable: true, target: '10%/$20,000' },
-    ],
-    recentReviews: [
-      { author: 'Ahmad K.', rating: 5, text: 'Got my first payout in 6 weeks. Fast and professional.', date: 'Feb 2026' },
-      { author: 'Sarah M.', rating: 5, text: 'Best prop firm hands down. Support team is incredible.', date: 'Jan 2026' },
-      { author: 'James O.', rating: 4, text: 'Passed on second attempt. The rules are strict but fair.', date: 'Jan 2026' },
-    ],
-  },
-  'funded-next': {
-    name: 'FundedNext', color: '#6C63FF', founded: 2022, hq: 'Dubai, UAE',
-    website: 'https://fundednext.com', score: 9.3, rating: 4.5, totalReviews: 55000,
-    maxFunding: '$200,000', profitSplit: '90%', dailyDrawdown: '5%', maxDrawdown: '10%',
-    profitTarget: '10% (Express) / 15% (Stellar)', minTradingDays: 5, timeLimit: '30 days',
-    phases: 2, payoutFrequency: 'Bi-weekly', scalingPlan: true,
-    instantFunding: true, cryptoPayouts: true, weeklyPayouts: true,
-    newsTrading: true, weekendHolding: true, eaAllowed: true, copyTrading: false,
-    description: `FundedNext burst onto the scene in 2022 and quickly became one of the top choices for funded traders globally. Known for having the highest discount codes in the industry (up to 20%), FundedNext offers two main models — Express (2-phase) and Stellar (1-phase) — giving traders flexibility.`,
-    longDescription: `FundedNext's Stellar model is a game-changer for traders who want fast funding. With a single 10% profit target and no time limit, it's one of the most accessible evaluation models available. Traders also receive 15% profit share even during the evaluation phase, which is unique in the industry.`,
-    pros: [
-      'Best discount codes (up to 20%)',
-      '1-phase Stellar model available',
-      'Profit share during evaluation',
-      'Bi-weekly and weekly payouts',
-      'Instant funding option',
-      'Crypto payouts supported',
-    ],
-    cons: [
-      'Newer platform (founded 2022)',
-      'No copy trading allowed',
-      'Smaller community than FTMO',
-    ],
-    payoutReliability: 93,
-    tradersVoted: 1920,
-    plans: [
-      { name: 'Express $15K', price: '$99', refundable: true, target: '10%/$1,500' },
-      { name: 'Express $25K', price: '$159', refundable: true, target: '10%/$2,500' },
-      { name: 'Express $50K', price: '$299', refundable: true, target: '10%/$5,000' },
-      { name: 'Stellar $25K', price: '$199', refundable: true, target: '15%/$3,750 (1 phase)' },
-      { name: 'Stellar $100K', price: '$599', refundable: true, target: '15%/$15,000 (1 phase)' },
-    ],
-    recentReviews: [
-      { author: 'Chidi E.', rating: 5, text: 'Passed Stellar in 12 days. Payout arrived in 3 business days.', date: 'Feb 2026' },
-      { author: 'Priya S.', rating: 5, text: '20% discount code saved me $60. Best value in prop trading.', date: 'Feb 2026' },
-      { author: 'Tom B.', rating: 4, text: 'Solid firm. Support could be faster but overall very good.', date: 'Jan 2026' },
-    ],
-  },
-  'the5ers': {
-    name: 'The5%ers', color: '#F59E0B', founded: 2016, hq: 'Tel Aviv, Israel',
-    website: 'https://the5ers.com', score: 9.1, rating: 4.8, totalReviews: 21000,
-    maxFunding: '$100,000', profitSplit: '100%', dailyDrawdown: '4%', maxDrawdown: '8%',
-    profitTarget: '8% (Bootcamp)', minTradingDays: 0, timeLimit: 'None (Bootcamp)',
-    phases: 1, payoutFrequency: 'Monthly', scalingPlan: true,
-    instantFunding: false, cryptoPayouts: false, weeklyPayouts: false,
-    newsTrading: false, weekendHolding: true, eaAllowed: true, copyTrading: false,
-    description: `The5%ers is one of the most respected prop firms for serious forex traders. Founded in 2016, they offer a 100% profit split — the best in the industry — and a unique Bootcamp model with no time limit. Their aggressive scaling plan can take traders to $4,000,000.`,
-    longDescription: `The5%ers focuses on developing long-term funded traders rather than quick evaluation passes. Their High Stakes model starts you at $100K and scales aggressively. The 100% profit split model means traders keep every dollar of profit, which is unmatched anywhere in the industry.`,
-    pros: [
-      '100% profit split — best in industry',
-      'No time limit on Bootcamp',
-      'Scaling plan to $4,000,000',
-      'Strong trader development focus',
-      'EA/Bot trading allowed',
-    ],
-    cons: [
-      'News trading restricted',
-      'No crypto payouts',
-      'Monthly payouts only',
-      'Lower max funding than competitors',
-    ],
-    payoutReliability: 91,
-    tradersVoted: 1540,
-    plans: [
-      { name: 'Bootcamp $6K', price: '$39', refundable: false, target: '8%/$480' },
-      { name: 'Bootcamp $20K', price: '$119', refundable: false, target: '8%/$1,600' },
-      { name: 'High Stakes $100K', price: '$299', refundable: true, target: '10%/$10,000' },
-    ],
-    recentReviews: [
-      { author: 'Mike A.', rating: 5, text: '100% profit split is real. Received my first payout last month.', date: 'Feb 2026' },
-      { author: 'Fatima L.', rating: 4, text: 'No time limit on bootcamp was perfect for me. Took 45 days.', date: 'Jan 2026' },
-      { author: 'David R.', rating: 5, text: 'Scaling plan is incredible. From $6K to $40K in 8 months.', date: 'Jan 2026' },
-    ],
-  },
-  topstep: {
-    name: 'Topstep', color: '#E85D26', founded: 2012, hq: 'Chicago, Illinois, USA',
-    website: 'https://topstep.com', score: 8.7, rating: 3.4, totalReviews: 13600,
-    maxFunding: '$150,000', profitSplit: '90%', dailyDrawdown: '4%', maxDrawdown: '4%',
-    profitTarget: '$3,000–$9,000 profit target', minTradingDays: 5, timeLimit: 'No time limit',
-    phases: 1, payoutFrequency: 'On request (2–3 business days)', scalingPlan: true,
-    instantFunding: false, cryptoPayouts: false, weeklyPayouts: false,
-    newsTrading: true, weekendHolding: false, eaAllowed: true, copyTrading: false,
-    description: `Topstep is the original futures prop firm, founded in Chicago in 2012. They invented the "Trading Combine" evaluation model that the entire industry now copies. With $102M+ paid to traders and 13,600+ Trustpilot reviews, Topstep is the most established name in futures prop trading.`,
-    longDescription: `Topstep focuses exclusively on futures trading — indices, forex futures, commodities and more on the CME. Their one-step Trading Combine evaluation has no time limit, and funded traders keep 90% of profits (100% on the first $10K for accounts opened before Jan 12, 2026). The firm is known for its education-first approach, active Discord community, and TopstepTV coaching content.`,
-    pros: [
-      'Original and most trusted futures prop firm (founded 2012)',
-      '$102M+ paid to funded traders',
-      'No time limit on Trading Combine',
-      '100% of first $10K profits (legacy accounts)',
-      'Strong education, coaching and community',
-      'Wide platform selection via TopstepX',
-    ],
-    cons: [
-      'Futures only — no forex spot, stocks or crypto',
-      '3.4/5 Trustpilot rating — mixed recent reviews',
-      'Monthly subscription fee during evaluation ($49–$149)',
-      'No weekend holding allowed',
-      'TopstepX now mandatory for new accounts',
-    ],
-    payoutReliability: 82,
-    tradersVoted: 3200,
-    plans: [
-      { name: 'Trading Combine $50K', price: '$49/mo', refundable: false, target: '$3,000 profit target' },
-      { name: 'Trading Combine $100K', price: '$99/mo', refundable: false, target: '$6,000 profit target' },
-      { name: 'Trading Combine $150K', price: '$149/mo', refundable: false, target: '$9,000 profit target' },
-    ],
-    recentReviews: [
-      { author: 'Carlos M.', rating: 5, text: 'Been with Topstep 8 months. Payouts always arrive in 2 days.', date: 'Feb 2026' },
-      { author: 'Anna K.', rating: 4, text: 'Great education resources. TopstepTV helped me pass on first try.', date: 'Jan 2026' },
-      { author: 'James W.', rating: 3, text: 'Good firm but the monthly fee adds up if you take long to pass.', date: 'Jan 2026' },
-    ],
-  },
-};
-
-// Fallback for unknown slugs
-const DEFAULT_FIRM = {
-  name: 'Prop Firm', color: '#3B82F6', founded: 2020, hq: 'Unknown',
-  website: '#', score: 8.0, rating: 4.0, totalReviews: 100,
-  maxFunding: '$100,000', profitSplit: '80%', dailyDrawdown: '5%', maxDrawdown: '10%',
-  profitTarget: '10%', minTradingDays: 5, timeLimit: '30 days',
-  phases: 2, payoutFrequency: 'Monthly', scalingPlan: false,
-  instantFunding: false, cryptoPayouts: false, weeklyPayouts: false,
-  newsTrading: false, weekendHolding: false, eaAllowed: true, copyTrading: false,
-  description: 'Detailed review coming soon.', longDescription: '',
-  pros: [], cons: [], payoutReliability: 80, tradersVoted: 0, plans: [], recentReviews: [],
-};
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 const BoolRow: React.FC<{ label: string; val: boolean }> = ({ label, val }) => (
   <div className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-    <span className="text-sm text-gray-600 font-medium">{label}</span>
+    <span className="text-sm text-gray-600">{label}</span>
     {val
-      ? <span className="flex items-center gap-1 text-emerald-600 font-bold text-xs"><Check className="w-3.5 h-3.5" />Yes</span>
-      : <span className="flex items-center gap-1 text-red-400 font-bold text-xs"><X className="w-3.5 h-3.5" />No</span>
-    }
+      ? <span className="flex items-center gap-1 text-emerald-600 text-xs font-black"><Check className="w-3.5 h-3.5" /> Yes</span>
+      : <span className="flex items-center gap-1 text-red-400 text-xs font-black"><X className="w-3.5 h-3.5" /> No</span>}
   </div>
 );
 
-const StatCard: React.FC<{ label: string; value: string; sub?: string; highlight?: boolean }> = ({ label, value, sub, highlight }) => (
-  <div className={`rounded-xl p-4 text-center ${highlight ? 'bg-emerald-50 border-2 border-emerald-200' : 'bg-gray-50 border border-gray-100'}`}>
-    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">{label}</p>
-    <p className={`text-xl font-black ${highlight ? 'text-emerald-700' : 'text-gray-900'}`}>{value}</p>
-    {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
-  </div>
-);
+const StarRating: React.FC<{ rating: number; size?: 'sm' | 'md' }> = ({ rating, size = 'md' }) => {
+  const w = size === 'sm' ? 'w-3.5 h-3.5' : 'w-5 h-5';
+  return (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map(i => (
+        <Star key={i} className={`${w} ${i <= Math.round(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'}`} />
+      ))}
+    </div>
+  );
+};
 
-// ── Page Component ────────────────────────────────────────────────────────────
 function FirmDetailClient({ firmSlug }: { firmSlug: string }) {
+  const [firm, setFirm] = useState<any>(null);
   const [deal, setDeal] = useState<any>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'rules' | 'plans' | 'reviews'>('overview');
-
-  const firm = FIRM_DATA[firmSlug] ?? { ...DEFAULT_FIRM, name: firmSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getDeals().then(deals => {
-      const match = deals.find(d =>
+    const supabase = getSupabase();
+    Promise.all([
+      supabase.from('prop_firms').select('*').eq('slug', firmSlug).single(),
+      getDeals(),
+    ]).then(([{ data: firmData }, deals]) => {
+      if (firmData) setFirm(firmData);
+      const match = deals.find((d: any) =>
         d.firm.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === firmSlug
       );
       if (match) setDeal(match);
+      setLoading(false);
     });
   }, [firmSlug]);
 
@@ -221,74 +68,102 @@ function FirmDetailClient({ firmSlug }: { firmSlug: string }) {
     });
   };
 
+  if (loading) return (
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-10 h-10 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+        <p className="text-gray-500 text-sm">Loading firm data...</p>
+      </div>
+    </div>
+  );
+
+  if (!firm) return (
+    <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
+      <div className="text-center">
+        <AlertCircle className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+        <h1 className="text-xl font-black text-gray-700 mb-2">Firm Not Found</h1>
+        <p className="text-gray-500 text-sm mb-4">We don't have a page for this firm yet.</p>
+        <Link href="/" className="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-700 transition-colors">
+          Back to All Deals
+        </Link>
+      </div>
+    </div>
+  );
+
+  const discountCode = deal?.code ?? null;
+  const discountAmount = deal?.discount ?? null;
+  const dealLink = deal?.link ?? firm.website;
+  const propScore = deal?.prop_score ?? null;
+  const plans: any[] = firm.plans ?? [];
+  const recentReviews: any[] = firm.recent_reviews ?? [];
+  const pros: string[] = firm.pros ?? [];
+  const cons: string[] = firm.cons ?? [];
+
   const tabs = [
     { id: 'overview', label: 'Overview' },
-    { id: 'rules', label: 'Rules & Conditions' },
-    { id: 'plans', label: 'Pricing Plans' },
-    { id: 'reviews', label: `Reviews (${firm.totalReviews.toLocaleString()})` },
-  ] as const;
+    { id: 'rules', label: 'Trading Rules' },
+    { id: 'plans', label: `Plans (${plans.length})` },
+    { id: 'reviews', label: `Reviews (${(firm.tp_reviews ?? 0).toLocaleString()})` },
+  ];
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-[#060d1f] to-[#0d1f3c] text-white">
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          <Link href="/prop-firms" className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm font-semibold mb-7 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> All Prop Firms
-          </Link>
 
-          <div className="flex flex-col md:flex-row gap-8 items-start">
-            {/* Left: brand */}
-            <div className="flex items-start gap-5 flex-1">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-xl flex-shrink-0"
-                style={{ background: firm.color }}>{firm.name.slice(0, 2).toUpperCase()}</div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-black mb-1">{firm.name}</h1>
-                <p className="text-slate-400 text-sm mb-3">Founded {firm.founded} · {firm.hq}</p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    {[1,2,3,4,5].map(s => (
-                      <Star key={s} className={`w-4 h-4 ${s <= Math.floor(firm.rating) ? 'text-yellow-400 fill-current' : 'text-slate-600'}`} />
-                    ))}
-                    <span className="text-sm font-bold text-white ml-1">{firm.rating}</span>
-                    <span className="text-slate-400 text-sm">({firm.totalReviews.toLocaleString()} reviews)</span>
-                  </div>
-                  <div className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold">
-                    PropScore: {firm.score}/10
-                  </div>
+      {/* Hero */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#060d1f] via-[#0a1628] to-[#060d1f]">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-72 h-72 rounded-full blur-3xl"
+            style={{ background: `${firm.color ?? '#3B82F6'}25` }} />
+        </div>
+        <div className="relative max-w-6xl mx-auto px-4 py-8">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white text-sm font-bold mb-5 transition-colors">
+            <ArrowLeft className="w-4 h-4" /> All Deals
+          </Link>
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black text-lg shadow-lg"
+                  style={{ background: `linear-gradient(135deg, ${firm.color ?? '#3B82F6'}, ${firm.color ?? '#3B82F6'}88)` }}>
+                  {firm.name.charAt(0)}
                 </div>
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-black text-white">{firm.name}</h1>
+                  <p className="text-slate-400 text-xs mt-0.5">
+                    {firm.hq}{firm.founded ? ` · Est. ${firm.founded}` : ''}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                {firm.tp_rating && (
+                  <div className="flex items-center gap-1.5 bg-white/10 rounded-lg px-3 py-1.5">
+                    <StarRating rating={firm.tp_rating} size="sm" />
+                    <span className="text-white font-black text-sm">{firm.tp_rating}</span>
+                    <span className="text-slate-400 text-xs">({(firm.tp_reviews ?? 0).toLocaleString()} Trustpilot)</span>
+                  </div>
+                )}
+                {propScore && <PropScoreBadge score={propScore} />}
+                {deal?.verificationStatus && <VerificationBadge status={deal.verificationStatus} />}
               </div>
             </div>
 
-            {/* Right: discount card */}
-            {deal && (
-              <div className="bg-white/5 border border-white/15 rounded-2xl p-5 min-w-64 backdrop-blur-sm">
-                <p className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">Current Best Discount</p>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <p className="text-xs text-slate-400 mb-0.5">Code</p>
-                    <code className="text-blue-300 font-black font-mono text-lg tracking-wider">{deal.code}</code>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-slate-400 mb-0.5">Save</p>
-                    <p className="text-3xl font-black text-emerald-400">{deal.discount}</p>
-                  </div>
+            {discountCode && (
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-5 min-w-[260px]">
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-wide mb-2">Exclusive Discount</p>
+                <div className="flex items-center justify-between mb-3">
+                  <code className="text-blue-300 font-black font-mono text-lg">{discountCode}</code>
+                  <span className="text-3xl font-black text-emerald-400">{discountAmount}</span>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => copyCode(deal.code)}
-                    className="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 hover:bg-blue-400 text-white font-black text-sm py-2.5 rounded-xl transition-all active:scale-95">
-                    <Copy className="w-3.5 h-3.5" /> Copy
+                  <button onClick={() => copyCode(discountCode)}
+                    className="flex-1 flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-black py-2.5 rounded-xl text-sm transition-all active:scale-95">
+                    <Copy className="w-4 h-4" /> Copy Code
                   </button>
-                  <a href={deal.link || firm.website} target="_blank" rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm py-2.5 rounded-xl transition-all active:scale-95">
-                    <ExternalLink className="w-3.5 h-3.5" /> Visit
+                  <a href={dealLink} target="_blank" rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 rounded-xl text-sm transition-all active:scale-95">
+                    <ExternalLink className="w-4 h-4" /> Visit
                   </a>
                 </div>
-                {deal.expiry && (
-                  <p className="text-center text-xs text-slate-500 mt-2 flex items-center justify-center gap-1">
-                    <Clock className="w-3 h-3" /> Expires {deal.expiry}
-                  </p>
-                )}
               </div>
             )}
           </div>
@@ -296,12 +171,14 @@ function FirmDetailClient({ firmSlug }: { firmSlug: string }) {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-100 sticky top-16 z-30">
+      <div className="sticky top-16 z-30 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex gap-1 overflow-x-auto">
+          <div className="flex gap-0 overflow-x-auto">
             {tabs.map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-4 text-sm font-bold whitespace-nowrap border-b-2 transition-all ${activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>
+              <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
+                className={`px-5 py-3.5 text-sm font-black whitespace-nowrap border-b-2 transition-all ${
+                  activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}>
                 {tab.label}
               </button>
             ))}
@@ -309,289 +186,283 @@ function FirmDetailClient({ firmSlug }: { firmSlug: string }) {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <div className="grid lg:grid-cols-3 gap-8">
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-6">
 
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          {/* Main */}
+          <div className="lg:col-span-2 space-y-6">
 
-            {/* Overview Tab */}
             {activeTab === 'overview' && (
               <>
-                {/* Key Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <StatCard label="Max Funding" value={firm.maxFunding} />
-                  <StatCard label="Profit Split" value={firm.profitSplit} highlight />
-                  <StatCard label="Max Drawdown" value={firm.maxDrawdown} />
-                  <StatCard label="Payout Rate" value={`${firm.payoutReliability}%`} sub={`${firm.tradersVoted.toLocaleString()} votes`} highlight />
-                </div>
-
-                {/* Description */}
-                <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                <div className="bg-white rounded-2xl border border-gray-100 p-6">
                   <h2 className="text-lg font-black text-gray-900 mb-3">About {firm.name}</h2>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4">{firm.description}</p>
-                  {firm.longDescription && <p className="text-gray-500 text-sm leading-relaxed">{firm.longDescription}</p>}
+                  <p className="text-gray-600 text-sm leading-relaxed mb-3">{firm.description}</p>
+                  {firm.long_description && (
+                    <p className="text-gray-500 text-sm leading-relaxed">{firm.long_description}</p>
+                  )}
                 </div>
 
-                {/* Pros & Cons */}
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
-                    <h3 className="font-black text-emerald-800 mb-4 flex items-center gap-2"><CheckCircle className="w-5 h-5" />Pros</h3>
-                    <ul className="space-y-2.5">
-                      {firm.pros.map((p: string, i: number) => (
-                        <li key={i} className="flex items-start gap-2.5 text-sm text-emerald-700">
-                          <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-emerald-500" />{p}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
-                    <h3 className="font-black text-red-800 mb-4 flex items-center gap-2"><XCircle className="w-5 h-5" />Cons</h3>
-                    <ul className="space-y-2.5">
-                      {firm.cons.map((c: string, i: number) => (
-                        <li key={i} className="flex items-start gap-2.5 text-sm text-red-700">
-                          <XCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-red-400" />{c}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Payout Reliability */}
-                {deal?.votes && (
-                  <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                    <h2 className="text-lg font-black text-gray-900 mb-4 flex items-center gap-2">
-                      <BarChart2 className="w-5 h-5 text-blue-600" /> Trader Payout Votes
-                    </h2>
-                    {[
-                      { label: '✅ Got Paid', val: deal.votes_got_paid || 0, color: 'bg-emerald-500' },
-                      { label: '⏳ Still Waiting', val: deal.votes_still_waiting || 0, color: 'bg-yellow-400' },
-                      { label: '❌ Issues', val: deal.votes_failed || 0, color: 'bg-red-400' },
-                    ].map(item => {
-                      const total = (deal.votes_got_paid || 0) + (deal.votes_still_waiting || 0) + (deal.votes_failed || 0);
-                      const pct = total > 0 ? Math.round((item.val / total) * 100) : 0;
-                      return (
-                        <div key={item.label} className="flex items-center gap-3 mb-3">
-                          <span className="text-sm font-semibold text-gray-600 w-32 flex-shrink-0">{item.label}</span>
-                          <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
-                            <div className={`h-full rounded-full ${item.color} transition-all`} style={{ width: `${pct}%` }} />
-                          </div>
-                          <span className="text-sm font-black text-gray-700 w-12 text-right">{pct}%</span>
-                          <span className="text-xs text-gray-400 w-14 text-right">{item.val.toLocaleString()} votes</span>
-                        </div>
-                      );
-                    })}
+                {(pros.length > 0 || cons.length > 0) && (
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-emerald-50 rounded-2xl border border-emerald-100 p-5">
+                      <h3 className="font-black text-emerald-900 text-sm mb-3 flex items-center gap-1.5">
+                        <ThumbsUp className="w-4 h-4" /> Pros
+                      </h3>
+                      <ul className="space-y-2">
+                        {pros.map((p, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-emerald-800">
+                            <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" /> {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="bg-red-50 rounded-2xl border border-red-100 p-5">
+                      <h3 className="font-black text-red-900 text-sm mb-3 flex items-center gap-1.5">
+                        <ThumbsDown className="w-4 h-4" /> Cons
+                      </h3>
+                      <ul className="space-y-2">
+                        {cons.map((c, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-red-800">
+                            <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" /> {c}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 )}
+
+                {deal && (() => {
+                  const total = (deal.votes?.gotPaid || 0) + (deal.votes?.stillWaiting || 0) + (deal.votes?.failed || 0);
+                  return total > 0 ? (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                      <h3 className="font-black text-gray-900 mb-4 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-blue-600" /> Trader Payout Votes
+                      </h3>
+                      <div className="space-y-3">
+                        {[
+                          { label: 'Got Paid', val: deal.votes.gotPaid || 0, color: 'bg-emerald-500', text: 'text-emerald-700' },
+                          { label: 'Still Waiting', val: deal.votes.stillWaiting || 0, color: 'bg-yellow-400', text: 'text-yellow-700' },
+                          { label: 'Failed / Denied', val: deal.votes.failed || 0, color: 'bg-red-400', text: 'text-red-700' },
+                        ].map(({ label, val, color, text }) => (
+                          <div key={label}>
+                            <div className="flex justify-between text-xs font-bold mb-1">
+                              <span className={text}>{label}</span>
+                              <span className="text-gray-500">{val} votes ({Math.round((val / total) * 100)}%)</span>
+                            </div>
+                            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                              <div className={`h-full ${color} rounded-full`} style={{ width: `${Math.round((val / total) * 100)}%` }} />
+                            </div>
+                          </div>
+                        ))}
+                        <p className="text-xs text-gray-400">{total} total votes from PropCoupons community</p>
+                      </div>
+                    </div>
+                  ) : null;
+                })()}
               </>
             )}
 
-            {/* Rules Tab */}
             {activeTab === 'rules' && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-1">
-                <h2 className="text-lg font-black text-gray-900 mb-5">Trading Rules & Conditions</h2>
-                {[
-                  { label: 'Profit Target', value: firm.profitTarget },
-                  { label: 'Daily Drawdown Limit', value: firm.dailyDrawdown },
-                  { label: 'Max Overall Drawdown', value: firm.maxDrawdown },
-                  { label: 'Minimum Trading Days', value: firm.minTradingDays === 0 ? 'None' : `${firm.minTradingDays} days` },
-                  { label: 'Time Limit', value: firm.timeLimit },
-                  { label: 'Evaluation Phases', value: `${firm.phases} phase${firm.phases > 1 ? 's' : ''}` },
-                  { label: 'Payout Frequency', value: firm.payoutFrequency },
-                ].map(row => (
-                  <div key={row.label} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
-                    <span className="text-sm text-gray-600 font-medium">{row.label}</span>
-                    <span className="text-sm font-black text-gray-900">{row.value}</span>
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <h2 className="text-lg font-black text-gray-900 mb-5">Trading Rules</h2>
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-wide mb-3">Evaluation</h3>
+                    {[
+                      { label: 'Phases', val: firm.phases ? `${firm.phases}-Step` : '—' },
+                      { label: 'Profit Target', val: firm.profit_target || '—' },
+                      { label: 'Min Trading Days', val: firm.min_trading_days ? `${firm.min_trading_days} days` : '—' },
+                      { label: 'Time Limit', val: firm.time_limit || '—' },
+                    ].map(({ label, val }) => (
+                      <div key={label} className="flex justify-between py-2 border-b border-gray-50 text-sm">
+                        <span className="text-gray-500">{label}</span>
+                        <span className="font-bold text-gray-900 text-right max-w-[55%]">{val}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-                <div className="pt-4 space-y-1">
-                  <BoolRow label="News Trading Allowed" val={firm.newsTrading} />
-                  <BoolRow label="Weekend Holding Allowed" val={firm.weekendHolding} />
-                  <BoolRow label="EA / Bot Trading Allowed" val={firm.eaAllowed} />
-                  <BoolRow label="Copy Trading Allowed" val={firm.copyTrading} />
-                  <BoolRow label="Instant Funding Available" val={firm.instantFunding} />
-                  <BoolRow label="Scaling Plan Available" val={firm.scalingPlan} />
-                  <BoolRow label="Crypto Payouts" val={firm.cryptoPayouts} />
-                  <BoolRow label="Weekly Payouts" val={firm.weeklyPayouts} />
+                  <div>
+                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-wide mb-3">Funded Account</h3>
+                    {[
+                      { label: 'Daily Drawdown', val: firm.daily_drawdown || '—' },
+                      { label: 'Max Drawdown', val: firm.max_drawdown || '—' },
+                      { label: 'Max Funding', val: firm.max_funding || '—' },
+                      { label: 'Profit Split', val: firm.profit_split || '—' },
+                      { label: 'Payouts', val: firm.payout_frequency || '—' },
+                    ].map(({ label, val }) => (
+                      <div key={label} className="flex justify-between py-2 border-b border-gray-50 text-sm">
+                        <span className="text-gray-500">{label}</span>
+                        <span className="font-bold text-gray-900 text-right max-w-[55%]">{val}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <h3 className="text-xs font-black text-gray-400 uppercase tracking-wide mb-3">Permissions</h3>
+                <div className="grid md:grid-cols-2 gap-x-8">
+                  <div>
+                    <BoolRow label="Scaling Plan" val={firm.scaling_plan} />
+                    <BoolRow label="Instant Funding" val={firm.instant_funding} />
+                    <BoolRow label="News Trading" val={firm.news_trading} />
+                    <BoolRow label="Weekend Holding" val={firm.weekend_holding} />
+                  </div>
+                  <div>
+                    <BoolRow label="EA / Bots Allowed" val={firm.ea_allowed} />
+                    <BoolRow label="Copy Trading" val={firm.copy_trading} />
+                    <BoolRow label="Crypto Payouts" val={firm.crypto_payouts} />
+                    <BoolRow label="Weekly Payouts" val={firm.weekly_payouts} />
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Plans Tab */}
             {activeTab === 'plans' && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-black text-gray-900">Pricing Plans</h2>
-                {firm.plans.length > 0 ? firm.plans.map((plan: any, i: number) => (
-                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between gap-4">
-                    <div className="flex-1">
-                      <p className="font-black text-gray-900 text-sm">{plan.name}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">Profit Target: {plan.target}</p>
-                      {plan.refundable && (
-                        <span className="inline-block mt-1.5 text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">Fee Refundable</span>
-                      )}
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-2xl font-black text-gray-900">{plan.price}</p>
-                      {deal && (
-                        <p className="text-xs text-emerald-600 font-bold mt-0.5">
-                          Save {deal.discount} with <span className="font-mono">{deal.code}</span>
-                        </p>
-                      )}
-                    </div>
-                    {deal && (
-                      <a href={deal.link || firm.website} target="_blank" rel="noopener noreferrer"
-                        className="flex-shrink-0 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs px-4 py-2.5 rounded-xl transition-all active:scale-95 flex items-center gap-1">
-                        Get Deal <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <h2 className="text-lg font-black text-gray-900 mb-4">Account Plans</h2>
+                {plans.length > 0 ? (
+                  <div className="space-y-3">
+                    {plans.map((plan, i) => (
+                      <div key={i} className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-100 hover:border-blue-200 transition-colors">
+                        <div>
+                          <p className="font-black text-gray-900 text-sm">{plan.name}</p>
+                          <p className="text-xs text-gray-400 mt-0.5">Target: {plan.target}</p>
+                          {plan.refundable && <span className="text-xs text-emerald-600 font-bold">Fee refundable ✓</span>}
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xl font-black text-blue-600">{plan.price}</p>
+                          <a href={dealLink} target="_blank" rel="noopener noreferrer"
+                            className="text-xs text-emerald-600 font-bold hover:underline flex items-center gap-0.5 justify-end mt-1">
+                            Get Started <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                )) : (
-                  <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center text-gray-400">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-2 text-gray-200" />
-                    <p className="font-semibold text-sm">Pricing details coming soon</p>
-                    <a href={firm.website} target="_blank" rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-1 text-blue-600 text-sm font-bold hover:underline">
-                      Visit {firm.name} <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
+                ) : (
+                  <p className="text-gray-400 text-sm">Plan details coming soon. Visit the firm's website for current pricing.</p>
+                )}
+                {discountCode && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-bold text-blue-600 uppercase tracking-wide mb-0.5">Save {discountAmount}</p>
+                      <p className="text-sm text-blue-800">Use code <code className="font-black">{discountCode}</code> at checkout</p>
+                    </div>
+                    <button onClick={() => copyCode(discountCode)}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-black hover:bg-blue-700 transition-colors flex items-center gap-1.5">
+                      <Copy className="w-3.5 h-3.5" /> Copy
+                    </button>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Reviews Tab */}
             {activeTab === 'reviews' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-lg font-black text-gray-900">Trader Reviews</h2>
-                  <div className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                    <span className="font-black text-gray-900 text-lg">{firm.rating}</span>
-                    <span className="text-gray-400 text-sm">/ 5.0</span>
+                {firm.tp_rating && (
+                  <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                    <div className="flex items-center gap-4">
+                      <div className="text-center">
+                        <div className="text-5xl font-black text-gray-900">{firm.tp_rating}</div>
+                        <StarRating rating={firm.tp_rating} />
+                        <p className="text-xs text-gray-400 mt-1">{(firm.tp_reviews ?? 0).toLocaleString()} reviews</p>
+                      </div>
+                      <div className="flex-1 pl-4 border-l border-gray-100">
+                        <p className="font-black text-gray-700 mb-1">Trustpilot Rating</p>
+                        <p className="text-sm text-gray-500">Independently verified trader reviews from Trustpilot.com</p>
+                        <a href={`https://www.trustpilot.com/review/${firm.website?.replace('https://', '')}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-blue-600 text-sm font-bold hover:underline mt-2">
+                          See all reviews <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                {firm.recentReviews.map((r: any, i: number) => (
-                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-white font-black text-sm flex-shrink-0">
-                          {r.author.slice(0, 1)}
+                )}
+                {recentReviews.map((r, i) => (
+                  <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-black text-xs">
+                          {r.author.charAt(0)}
                         </div>
                         <div>
                           <p className="font-black text-gray-900 text-sm">{r.author}</p>
                           <p className="text-xs text-gray-400">{r.date}</p>
                         </div>
                       </div>
-                      <div className="flex gap-0.5">
-                        {[1,2,3,4,5].map(s => (
-                          <Star key={s} className={`w-3.5 h-3.5 ${s <= r.rating ? 'text-yellow-400 fill-current' : 'text-gray-200'}`} />
-                        ))}
-                      </div>
+                      <StarRating rating={r.rating} size="sm" />
                     </div>
                     <p className="text-sm text-gray-600 leading-relaxed">{r.text}</p>
                   </div>
                 ))}
-                <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-center">
-                  <p className="text-sm font-bold text-blue-700 mb-1">Have you traded with {firm.name}?</p>
-                  <p className="text-xs text-blue-500 mb-3">Help other traders by sharing your payout experience.</p>
-                  <Link href="/" className="inline-flex items-center gap-1.5 bg-blue-600 text-white font-black text-sm px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-all">
-                    Leave Feedback
-                  </Link>
-                </div>
               </div>
             )}
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-5">
-            {/* Discount CTA */}
-            {deal ? (
-              <div className="bg-gradient-to-br from-[#060d1f] to-[#0d1f3c] rounded-2xl p-5 text-white border border-[#1a3a5c]">
-                <p className="text-xs font-black text-emerald-400 uppercase tracking-wider mb-3">🔥 Current Discount</p>
-                <div className="bg-white/5 rounded-xl p-4 mb-4 border border-white/10">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-xs text-slate-400 mb-1">Code</p>
-                      <code className="text-blue-300 font-black font-mono text-lg">{deal.code}</code>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-slate-400 mb-1">Save</p>
-                      <p className="text-3xl font-black text-emerald-400">{deal.discount}</p>
-                    </div>
-                  </div>
-                </div>
-                <button onClick={() => copyCode(deal.code)}
-                  className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-3 rounded-xl transition-all active:scale-95 mb-2 flex items-center justify-center gap-2">
-                  <Copy className="w-4 h-4" /> Copy Code
-                </button>
-                <a href={deal.link || firm.website} target="_blank" rel="noopener noreferrer"
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-black py-3 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2">
-                  <ExternalLink className="w-4 h-4" /> Visit {firm.name}
-                </a>
-              </div>
-            ) : (
-              <a href={firm.website} target="_blank" rel="noopener noreferrer"
-                className="block bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl text-center transition-all">
-                Visit {firm.name} →
-              </a>
-            )}
-
-            {/* Quick Stats */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <h3 className="font-black text-gray-900 mb-4 text-sm">Quick Facts</h3>
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-gray-100 p-5">
+              <h3 className="font-black text-gray-900 text-sm mb-4">Quick Stats</h3>
               {[
-                { label: 'Founded', val: firm.founded },
-                { label: 'Headquarters', val: firm.hq },
-                { label: 'Max Account', val: firm.maxFunding },
-                { label: 'Profit Split', val: firm.profitSplit },
-                { label: 'Payout Frequency', val: firm.payoutFrequency },
-              ].map(row => (
-                <div key={row.label} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
-                  <span className="text-xs text-gray-500">{row.label}</span>
-                  <span className="text-xs font-black text-gray-900">{row.val}</span>
+                { icon: DollarSign, label: 'Max Funding', val: firm.max_funding || '—', color: 'text-emerald-600' },
+                { icon: TrendingUp, label: 'Profit Split', val: firm.profit_split || '—', color: 'text-blue-600' },
+                { icon: Shield, label: 'Max Drawdown', val: firm.max_drawdown || '—', color: 'text-orange-500' },
+                { icon: Clock, label: 'Payouts', val: firm.payout_frequency || '—', color: 'text-purple-500' },
+                { icon: BarChart2, label: 'Phases', val: firm.phases ? `${firm.phases}-Step` : '—', color: 'text-slate-600' },
+              ].map(({ icon: Icon, label, val, color }) => (
+                <div key={label} className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0">
+                  <Icon className={`w-4 h-4 ${color} flex-shrink-0`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-gray-400">{label}</p>
+                    <p className="text-sm font-black text-gray-900 truncate">{val}</p>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Compare CTA */}
-            <Link href="/compare"
-              className="block bg-white border-2 border-blue-200 hover:border-blue-400 rounded-2xl p-5 transition-all group">
-              <div className="flex items-center gap-3">
-                <TrendingUp className="w-8 h-8 text-blue-500" />
-                <div>
-                  <p className="font-black text-gray-900 text-sm">Compare {firm.name}</p>
-                  <p className="text-xs text-gray-400">vs other top firms</p>
+            {firm.payout_reliability && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-5">
+                <h3 className="font-black text-gray-900 text-sm mb-3">Payout Reliability</h3>
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl font-black text-emerald-600">{firm.payout_reliability}%</div>
+                  <div className="flex-1">
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${firm.payout_reliability}%` }} />
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">Based on community votes</p>
+                  </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 ml-auto transition-colors" />
+              </div>
+            )}
+
+            <div className="bg-gradient-to-br from-[#060d1f] to-[#0d1f3c] rounded-2xl p-5">
+              <p className="text-slate-400 text-xs font-bold uppercase tracking-wide mb-1">Ready to start?</p>
+              <p className="text-white font-black mb-3">{firm.name}</p>
+              {discountCode && (
+                <div className="bg-white/10 rounded-xl p-3 mb-3">
+                  <p className="text-emerald-400 text-xs font-bold">Use code for {discountAmount} off</p>
+                  <code className="text-white font-black font-mono">{discountCode}</code>
+                </div>
+              )}
+              <a href={dealLink} target="_blank" rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-black py-3 rounded-xl text-sm transition-all active:scale-95">
+                <Zap className="w-4 h-4" /> Get Funded Now
+              </a>
+            </div>
+
+            <Link href="/compare" className="block bg-white rounded-2xl border border-gray-100 p-5 hover:border-blue-200 transition-colors">
+              <div className="flex items-center gap-3">
+                <BarChart2 className="w-5 h-5 text-blue-600" />
+                <div>
+                  <p className="font-black text-gray-900 text-sm">Compare Firms</p>
+                  <p className="text-xs text-gray-400">Side-by-side comparison tool</p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-400 ml-auto" />
               </div>
             </Link>
-
-            {/* Other firms */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <h3 className="font-black text-gray-900 mb-4 text-sm">Other Top Firms</h3>
-              {['ftmo', 'funded-next', 'the5ers'].filter(s => s !== firmSlug).map(s => {
-                const f = FIRM_DATA[s];
-                return (
-                  <Link key={s} href={`/prop-firms/${s}`}
-                    className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0 hover:bg-gray-50 rounded-lg px-2 -mx-2 transition-colors group">
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-black text-xs flex-shrink-0"
-                      style={{ background: f.color }}>{f.name.slice(0, 2).toUpperCase()}</div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-gray-800 truncate">{f.name}</p>
-                      <p className="text-xs text-gray-400">Score: {f.score}/10</p>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-blue-500 flex-shrink-0 transition-colors" />
-                  </Link>
-                );
-              })}
-              <Link href="/prop-firms" className="block text-center text-xs font-bold text-blue-600 hover:underline mt-3">
-                View All Firms →
-              </Link>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Toast */}
       {toast && (
         <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-2">
           <CheckCircle className="w-5 h-5" />
@@ -602,7 +473,6 @@ function FirmDetailClient({ firmSlug }: { firmSlug: string }) {
   );
 }
 
-// Server component wrapper — resolves async params before passing to client
 export default async function FirmDetailPage({ params }: { params: Promise<{ firm: string }> }) {
   const { firm } = await params;
   return <FirmDetailClient firmSlug={firm} />;

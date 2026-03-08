@@ -58,7 +58,40 @@ interface Popup {
   created_at: string;
 }
 
-type ActiveTab = 'deals' | 'books' | 'popups';
+type ActiveTab = 'deals' | 'books' | 'popups' | 'firms';
+
+interface Firm {
+  id: string;
+  slug: string;
+  name: string;
+  hq?: string;
+  founded?: number;
+  website?: string;
+  color?: string;
+  tp_rating?: number;
+  tp_reviews?: number;
+  prop_score?: number;
+  max_funding?: string;
+  profit_split?: string;
+  daily_drawdown?: string;
+  max_drawdown?: string;
+  profit_target?: string;
+  min_trading_days?: number;
+  time_limit?: string;
+  phases?: number;
+  payout_frequency?: string;
+  scaling_plan?: boolean;
+  instant_funding?: boolean;
+  crypto_payouts?: boolean;
+  weekly_payouts?: boolean;
+  news_trading?: boolean;
+  weekend_holding?: boolean;
+  ea_allowed?: boolean;
+  copy_trading?: boolean;
+  description?: string;
+  payout_reliability?: number;
+  updated_at?: string;
+}
 
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function AdminDashboard() {
@@ -108,6 +141,24 @@ export default function AdminDashboard() {
   const [popupError, setPopupError] = useState('');
   const [popupSubmitting, setPopupSubmitting] = useState(false);
 
+  // ── Firms state ──────────────────────────────────────────────────────────────
+  const [firms, setFirms] = useState<Firm[]>([]);
+  const [isEditingFirm, setIsEditingFirm] = useState(false);
+  const [editingFirm, setEditingFirm] = useState<Firm | null>(null);
+  const [firmError, setFirmError] = useState('');
+  const [firmSubmitting, setFirmSubmitting] = useState(false);
+  const emptyFirmForm = {
+    slug: '', name: '', hq: '', founded: '', website: '', color: '#3B82F6',
+    tp_rating: '', tp_reviews: '', prop_score: '',
+    max_funding: '', profit_split: '', daily_drawdown: '', max_drawdown: '',
+    profit_target: '', min_trading_days: '', time_limit: '', phases: '2',
+    payout_frequency: '', description: '', payout_reliability: '',
+    scaling_plan: false, instant_funding: false, crypto_payouts: false,
+    weekly_payouts: false, news_trading: false, weekend_holding: false,
+    ea_allowed: true, copy_trading: false,
+  };
+  const [firmForm, setFirmForm] = useState<any>(emptyFirmForm);
+
   // ── Auth ──────────────────────────────────────────────────────────────────────
   useEffect(() => { checkAuth(); }, []);
   useEffect(() => {
@@ -115,6 +166,7 @@ export default function AdminDashboard() {
       fetchDeals();
       fetchBooks();
       fetchPopups();
+      fetchFirms();
     }
   }, [isAuthenticated]);
 
@@ -227,6 +279,95 @@ export default function AdminDashboard() {
     const a = document.createElement('a');
     a.href = url; a.download = `prop-deals-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
+  };
+
+  // ── Firms ─────────────────────────────────────────────────────────────────────
+  const fetchFirms = async () => {
+    try {
+      const res = await fetch('/api/admin/firms');
+      if (res.ok) setFirms(await res.json());
+    } catch (e) { console.error(e); }
+  };
+
+  const handleSaveFirm = async () => {
+    setFirmError('');
+    if (!firmForm.name.trim()) return setFirmError('Firm name is required');
+    if (!firmForm.slug.trim()) return setFirmError('Slug is required');
+    setFirmSubmitting(true);
+    try {
+      const body = {
+        slug: firmForm.slug.trim(),
+        name: firmForm.name.trim(),
+        hq: firmForm.hq.trim() || null,
+        founded: firmForm.founded ? parseInt(firmForm.founded) : null,
+        website: firmForm.website.trim() || null,
+        color: firmForm.color || '#3B82F6',
+        tp_rating: firmForm.tp_rating ? parseFloat(firmForm.tp_rating) : null,
+        tp_reviews: firmForm.tp_reviews ? parseInt(firmForm.tp_reviews) : null,
+        prop_score: firmForm.prop_score ? parseFloat(firmForm.prop_score) : null,
+        max_funding: firmForm.max_funding.trim() || null,
+        profit_split: firmForm.profit_split.trim() || null,
+        daily_drawdown: firmForm.daily_drawdown.trim() || null,
+        max_drawdown: firmForm.max_drawdown.trim() || null,
+        profit_target: firmForm.profit_target.trim() || null,
+        min_trading_days: firmForm.min_trading_days ? parseInt(firmForm.min_trading_days) : null,
+        time_limit: firmForm.time_limit.trim() || null,
+        phases: firmForm.phases ? parseInt(firmForm.phases) : 2,
+        payout_frequency: firmForm.payout_frequency.trim() || null,
+        description: firmForm.description.trim() || null,
+        payout_reliability: firmForm.payout_reliability ? parseInt(firmForm.payout_reliability) : null,
+        scaling_plan: firmForm.scaling_plan,
+        instant_funding: firmForm.instant_funding,
+        crypto_payouts: firmForm.crypto_payouts,
+        weekly_payouts: firmForm.weekly_payouts,
+        news_trading: firmForm.news_trading,
+        weekend_holding: firmForm.weekend_holding,
+        ea_allowed: firmForm.ea_allowed,
+        copy_trading: firmForm.copy_trading,
+      };
+      const url = editingFirm ? `/api/admin/firms?id=${editingFirm.id}` : '/api/admin/firms';
+      const res = await fetch(url, {
+        method: editingFirm ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error || 'Failed to save'); }
+      await fetchFirms();
+      setIsEditingFirm(false);
+      setEditingFirm(null);
+      setFirmForm(emptyFirmForm);
+    } catch (err: any) {
+      setFirmError(err.message || 'Failed to save firm');
+    } finally { setFirmSubmitting(false); }
+  };
+
+  const handleDeleteFirm = async (id: string) => {
+    if (!confirm('Delete this firm? This will also remove its detail page data.')) return;
+    const res = await fetch(`/api/admin/firms?id=${id}`, { method: 'DELETE' });
+    if (res.ok) fetchFirms();
+    else alert('Failed to delete firm');
+  };
+
+  const handleEditFirm = (f: Firm) => {
+    setIsEditingFirm(true);
+    setEditingFirm(f);
+    setFirmError('');
+    setFirmForm({
+      slug: f.slug, name: f.name, hq: f.hq || '', founded: f.founded?.toString() || '',
+      website: f.website || '', color: f.color || '#3B82F6',
+      tp_rating: f.tp_rating?.toString() || '', tp_reviews: f.tp_reviews?.toString() || '',
+      prop_score: f.prop_score?.toString() || '',
+      max_funding: f.max_funding || '', profit_split: f.profit_split || '',
+      daily_drawdown: f.daily_drawdown || '', max_drawdown: f.max_drawdown || '',
+      profit_target: f.profit_target || '', min_trading_days: f.min_trading_days?.toString() || '',
+      time_limit: f.time_limit || '', phases: f.phases?.toString() || '2',
+      payout_frequency: f.payout_frequency || '', description: f.description || '',
+      payout_reliability: f.payout_reliability?.toString() || '',
+      scaling_plan: f.scaling_plan ?? false, instant_funding: f.instant_funding ?? false,
+      crypto_payouts: f.crypto_payouts ?? false, weekly_payouts: f.weekly_payouts ?? false,
+      news_trading: f.news_trading ?? false, weekend_holding: f.weekend_holding ?? false,
+      ea_allowed: f.ea_allowed ?? true, copy_trading: f.copy_trading ?? false,
+    });
   };
 
   // ── Books ─────────────────────────────────────────────────────────────────────
@@ -452,6 +593,7 @@ export default function AdminDashboard() {
             { id: 'deals', label: 'Deals', icon: Tag },
             { id: 'books', label: 'Books', icon: BookOpen },
             { id: 'popups', label: 'Deal Popups', icon: Bell },
+            { id: 'firms', label: 'Firm Profiles', icon: Settings },
           ] as const).map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${activeTab === id ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow' : 'text-gray-600 hover:bg-gray-100'}`}>
@@ -878,6 +1020,220 @@ export default function AdminDashboard() {
                 </div>
               )
             )}
+          </div>
+        )}
+
+        {/* ── FIRMS TAB ──────────────────────────────────────────────────────────── */}
+        {activeTab === 'firms' && (
+          <div className="space-y-6">
+            {!isEditingFirm && (
+              <div className="flex items-center justify-between">
+                <button onClick={() => { setIsEditingFirm(true); setEditingFirm(null); setFirmForm(emptyFirmForm); setFirmError(''); }}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:shadow-lg transition-all">
+                  <Plus className="w-5 h-5" /> Add New Firm
+                </button>
+                <p className="text-sm text-gray-400">{firms.length} firms — all detail pages pull from this data</p>
+              </div>
+            )}
+
+            {isEditingFirm && (
+              <div className="bg-white rounded-xl shadow-xl p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  {editingFirm ? `Edit ${editingFirm.name}` : 'Add New Firm'}
+                </h2>
+                <p className="text-sm text-gray-400 mb-6">
+                  This data powers the <code className="bg-gray-100 px-1 rounded">/prop-firms/[slug]</code> detail pages.
+                </p>
+                {firmError && (
+                  <div className="mb-5 p-4 bg-red-50 border-2 border-red-300 rounded-lg flex gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                    <p className="text-sm text-red-700 font-semibold">{firmError}</p>
+                  </div>
+                )}
+
+                {/* Identity */}
+                <h3 className="text-sm font-black text-gray-400 uppercase tracking-wide mb-3">Identity</h3>
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
+                  {[
+                    { label: 'Firm Name *', key: 'name', placeholder: 'FTMO' },
+                    { label: 'Slug * (URL key)', key: 'slug', placeholder: 'ftmo' },
+                    { label: 'HQ Location', key: 'hq', placeholder: 'Prague, Czech Republic' },
+                    { label: 'Founded Year', key: 'founded', placeholder: '2015', type: 'number' },
+                    { label: 'Website URL', key: 'website', placeholder: 'https://ftmo.com' },
+                    { label: 'Brand Colour (hex)', key: 'color', type: 'color' },
+                  ].map(f => (
+                    <div key={f.key}>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">{f.label}</label>
+                      <input type={f.type || 'text'} value={firmForm[f.key]}
+                        onChange={e => setFirmForm({ ...firmForm, [f.key]: e.target.value })}
+                        placeholder={f.placeholder}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none transition-all" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Ratings */}
+                <h3 className="text-sm font-black text-gray-400 uppercase tracking-wide mb-3">Ratings</h3>
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
+                  {[
+                    { label: 'Trustpilot Rating', key: 'tp_rating', placeholder: '4.8' },
+                    { label: 'Trustpilot Reviews', key: 'tp_reviews', placeholder: '40000', type: 'number' },
+                    { label: 'Prop Score (0-10)', key: 'prop_score', placeholder: '9.5' },
+                    { label: 'Payout Reliability %', key: 'payout_reliability', placeholder: '96', type: 'number' },
+                  ].map(f => (
+                    <div key={f.key}>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">{f.label}</label>
+                      <input type={f.type || 'number'} step="0.1" value={firmForm[f.key]}
+                        onChange={e => setFirmForm({ ...firmForm, [f.key]: e.target.value })}
+                        placeholder={f.placeholder}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none transition-all" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Rules */}
+                <h3 className="text-sm font-black text-gray-400 uppercase tracking-wide mb-3">Trading Rules</h3>
+                <div className="grid md:grid-cols-3 gap-4 mb-6">
+                  {[
+                    { label: 'Max Funding', key: 'max_funding', placeholder: '$200,000' },
+                    { label: 'Profit Split', key: 'profit_split', placeholder: '80–90%' },
+                    { label: 'Daily Drawdown', key: 'daily_drawdown', placeholder: '5%' },
+                    { label: 'Max Drawdown', key: 'max_drawdown', placeholder: '10%' },
+                    { label: 'Profit Target', key: 'profit_target', placeholder: '10% Phase 1 / 5% Phase 2' },
+                    { label: 'Min Trading Days', key: 'min_trading_days', placeholder: '4', type: 'number' },
+                    { label: 'Phases', key: 'phases', placeholder: '2', type: 'number' },
+                    { label: 'Time Limit', key: 'time_limit', placeholder: 'No time limit' },
+                    { label: 'Payout Frequency', key: 'payout_frequency', placeholder: 'Bi-weekly' },
+                  ].map(f => (
+                    <div key={f.key}>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">{f.label}</label>
+                      <input type={f.type || 'text'} value={firmForm[f.key]}
+                        onChange={e => setFirmForm({ ...firmForm, [f.key]: e.target.value })}
+                        placeholder={f.placeholder}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none transition-all" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Permissions */}
+                <h3 className="text-sm font-black text-gray-400 uppercase tracking-wide mb-3">Permissions</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                  {[
+                    { label: 'Scaling Plan', key: 'scaling_plan' },
+                    { label: 'Instant Funding', key: 'instant_funding' },
+                    { label: 'News Trading', key: 'news_trading' },
+                    { label: 'Weekend Holding', key: 'weekend_holding' },
+                    { label: 'EA / Bots', key: 'ea_allowed' },
+                    { label: 'Copy Trading', key: 'copy_trading' },
+                    { label: 'Crypto Payouts', key: 'crypto_payouts' },
+                    { label: 'Weekly Payouts', key: 'weekly_payouts' },
+                  ].map(({ label, key }) => (
+                    <button key={key} onClick={() => setFirmForm({ ...firmForm, [key]: !firmForm[key] })}
+                      className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 font-semibold text-sm transition-all ${
+                        firmForm[key] ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 bg-white text-gray-500'
+                      }`}>
+                      <span className={`w-4 h-4 rounded flex items-center justify-center text-xs font-black ${
+                        firmForm[key] ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-400'
+                      }`}>{firmForm[key] ? '✓' : '✗'}</span>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Description */}
+                <h3 className="text-sm font-black text-gray-400 uppercase tracking-wide mb-3">Description</h3>
+                <textarea value={firmForm.description} rows={3}
+                  onChange={e => setFirmForm({ ...firmForm, description: e.target.value })}
+                  placeholder="Short summary shown on the firm detail page..."
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 outline-none resize-none mb-6" />
+
+                <div className="flex gap-4">
+                  <button onClick={handleSaveFirm} disabled={firmSubmitting}
+                    className={`flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all ${
+                      firmSubmitting ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-green-600 hover:bg-green-700 text-white'
+                    }`}>
+                    <Save className="w-5 h-5" /> {firmSubmitting ? 'Saving...' : 'Save Firm'}
+                  </button>
+                  <button onClick={() => { setIsEditingFirm(false); setEditingFirm(null); }} disabled={firmSubmitting}
+                    className="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+                    <X className="w-5 h-5" /> Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Firms list */}
+            <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gradient-to-r from-blue-600 to-purple-600">
+                    <tr>
+                      {['Firm', 'Slug / URL', 'Trustpilot', 'Prop Score', 'Max Funding', 'Payouts', 'Updated', 'Actions'].map(h => (
+                        <th key={h} className="px-5 py-4 text-left text-xs font-bold text-white uppercase">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {firms.map(f => (
+                      <tr key={f.id} className="hover:bg-blue-50 transition-colors">
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-black flex-shrink-0"
+                              style={{ background: f.color || '#3B82F6' }}>
+                              {f.name.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="text-sm font-bold text-gray-900">{f.name}</p>
+                              <p className="text-xs text-gray-400">{f.hq || '—'}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-5 py-4">
+                          <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono">/{f.slug}</code>
+                        </td>
+                        <td className="px-5 py-4">
+                          {f.tp_rating ? (
+                            <div>
+                              <span className="text-sm font-black text-yellow-500">★ {f.tp_rating}</span>
+                              <p className="text-xs text-gray-400">{(f.tp_reviews || 0).toLocaleString()} reviews</p>
+                            </div>
+                          ) : <span className="text-gray-300 text-xs">—</span>}
+                        </td>
+                        <td className="px-5 py-4">
+                          {f.prop_score ? (
+                            <span className="text-sm font-black text-purple-600">{f.prop_score}/10</span>
+                          ) : <span className="text-gray-300 text-xs">—</span>}
+                        </td>
+                        <td className="px-5 py-4 text-sm text-gray-700">{f.max_funding || '—'}</td>
+                        <td className="px-5 py-4 text-sm text-gray-700 max-w-[120px] truncate">{f.payout_frequency || '—'}</td>
+                        <td className="px-5 py-4 text-xs text-gray-400">
+                          {f.updated_at ? new Date(f.updated_at).toLocaleDateString('en-GB') : '—'}
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => handleEditFirm(f)}
+                              className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-all">
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => handleDeleteFirm(f.id)}
+                              className="p-2 bg-red-100 text-red-500 rounded-lg hover:bg-red-200 transition-all">
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {firms.length === 0 && (
+                <div className="text-center py-12">
+                  <Settings className="w-12 h-12 text-gray-200 mx-auto mb-3" />
+                  <p className="text-gray-500 font-semibold">No firm profiles yet.</p>
+                  <p className="text-gray-400 text-sm mt-1">Run the SQL migration first, then refresh.</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 

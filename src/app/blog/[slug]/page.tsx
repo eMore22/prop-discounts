@@ -10,6 +10,34 @@ import {
 
 // ── Static article content (in production, fetch from CMS/Supabase) ──────────
 const ARTICLES: Record<string, any> = {
+  'mubite-review-2026': {
+    title: 'Mubite Review 2026 | Crypto Prop Firm with 750+ Pairs & No Restrictions',
+    category: 'Review', firm: 'Mubite', date: 'April 15, 2026', readTime: '6 min',
+    tag: 'Sponsored', tagColor: 'bg-indigo-100 text-indigo-700',
+    excerpt: 'Mubite is a crypto-focused prop firm offering 750+ pairs, 100x leverage, and zero trading restrictions on Bybit and Cleo platforms. Use code PROPMUB for 20% off.',
+    content: [
+      { type: 'lead', text: 'Mubite is one of the few prop firms built exclusively for crypto traders. With access to 750+ crypto pairs, 100x leverage, and zero trading restrictions across Bybit and Cleo platforms, it\'s a compelling option for serious crypto traders looking to scale with funded capital.' },
+      { type: 'h2', text: 'What is Mubite?' },
+      { type: 'p', text: 'Mubite is a cryptocurrency-focused proprietary trading firm that provides funded accounts to traders who can demonstrate consistent performance. Unlike most prop firms that focus on forex and indices, Mubite specialises entirely in crypto markets — giving traders access to over 750 pairs across both Bybit and Cleo trading platforms.' },
+      { type: 'h2', text: 'Key Features' },
+      { type: 'p', text: '750+ crypto pairs including Bitcoin, Ethereum and hundreds of altcoins. Two platform options — Bybit and Cleo. Leverage up to 100x. Instant Funding available with no evaluation required.' },
+      { type: 'callout', text: '✅ Zero restrictions — news trading, weekend holding, scalping, EAs, and copy trading are all permitted at Mubite.' },
+      { type: 'h2', text: 'Challenge Types' },
+      { type: 'p', text: '1-Step Challenge: Single phase evaluation — hit your profit target once and move to funded. Fastest path for confident traders.' },
+      { type: 'p', text: '2-Step Challenge: Two phase evaluation with standard drawdown rules. Good for traders who prefer a structured approach.' },
+      { type: 'p', text: 'Instant Funding: Skip the evaluation entirely. Start trading with funded capital from day one — no waiting, no phases.' },
+      { type: 'h2', text: 'Who is Mubite For?' },
+      { type: 'p', text: 'Mubite is built for crypto traders. If forex or indices are your primary markets, firms like FTMO or FundedNext are a better fit. But if you trade Bitcoin, altcoins, or any of the 750+ pairs on Bybit or Cleo, Mubite gives you funded capital with the flexibility to trade exactly how you want.' },
+      { type: 'callout', text: '💡 Algorithmic traders and EA users are fully welcome at Mubite — no strategy bans of any kind.' },
+      { type: 'h2', text: 'Pros & Cons' },
+      { type: 'p', text: 'Pros: 750+ crypto pairs, zero trading restrictions, 100x leverage, Bybit and Cleo platforms supported, Instant Funding available, crypto payouts, EAs and copy trading allowed.' },
+      { type: 'p', text: 'Cons: Crypto only — no forex or indices. Newer firm with fewer community reviews than established players.' },
+      { type: 'h2', text: 'Get 20% Off Your Mubite Challenge' },
+      { type: 'p', text: 'Use our exclusive code PROPMUB at checkout to get 20% off any Mubite challenge or Instant Funding account. Verified and active as of April 2026.' },
+      { type: 'cta', firm: 'Mubite', code: 'PROPMUB', discount: '20%', link: 'https://www.mubite.com/register?ref=PROPMUB' },
+    ],
+    relatedSlugs: ['best-prop-firm-discounts-2026', 'ftmo-vs-fundednext-2026', 'prop-firm-payout-reliability-2026'],
+  },
   'ftmo-profit-split-increase-2026': {
     title: 'FTMO Increases Profit Split to 90% for Top Traders',
     category: 'News', firm: 'FTMO', date: 'March 1, 2026', readTime: '4 min',
@@ -119,6 +147,7 @@ const ARTICLES: Record<string, any> = {
 };
 
 const RELATED_META: Record<string, { title: string; category: string; date: string; readTime: string }> = {
+  'mubite-review-2026': { title: 'Mubite Review 2026 | Crypto Prop Firm', category: 'Review', date: 'Apr 15, 2026', readTime: '6 min' },
   'ftmo-profit-split-increase-2026': { title: 'FTMO Increases Profit Split to 90%', category: 'News', date: 'Mar 1, 2026', readTime: '4 min' },
   'fundednext-stellar-model-2026': { title: 'FundedNext Launches Stellar 1-Phase Model', category: 'News', date: 'Feb 28, 2026', readTime: '5 min' },
   'best-prop-firm-discounts-2026': { title: 'Best Prop Firm Discount Codes in 2026', category: 'Deals', date: 'Feb 22, 2026', readTime: '6 min' },

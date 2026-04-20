@@ -6,6 +6,13 @@ import { Newspaper, Clock, TrendingUp, BookOpen, Search, ArrowRight, Flame, Tag 
 
 const POSTS = [
   {
+    slug: 'mubite-review-2026',
+    title: 'Mubite Review 2026 | Crypto Prop Firm with 750+ Pairs & No Restrictions',
+    excerpt: 'Mubite offers 750+ crypto pairs, 100x leverage, and zero trading restrictions on Bybit and Cleo platforms. Is it the best crypto prop firm in 2026? Use code PROPMUB for 20% off.',
+    category: 'Review', firm: 'Mubite', date: 'Apr 15, 2026', readTime: '6 min',
+    tag: 'Sponsored', tagColor: 'bg-indigo-100 text-indigo-700', featured: true,
+  },
+  {
     slug: 'ftmo-profit-split-increase-2026',
     title: 'FTMO Increases Profit Split to 90% for Top Traders',
     excerpt: 'FTMO has announced an upgrade to its profit sharing structure for consistently profitable funded traders, effective March 2026. Here\'s what this means for you.',

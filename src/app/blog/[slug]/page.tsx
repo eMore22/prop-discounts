@@ -217,17 +217,12 @@ const ContentBlock: React.FC<{ block: any; onCopy: (code: string) => void }> = (
 };
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const [toast, setToast] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'done'>('idle');
-  const [slug, setSlug] = useState<string>('');
 
-  React.useEffect(() => {
-    Promise.resolve(params).then(p => setSlug(p.slug));
-  }, [params]);
-
-  const article = ARTICLES[slug] ?? {
+  const article = ARTICLES[params.slug] ?? {
     title: 'Article Not Found',
     category: 'Blog', firm: null, date: '', readTime: '',
     tag: 'Article', tagColor: 'bg-gray-100 text-gray-600',

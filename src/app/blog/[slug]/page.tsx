@@ -10,44 +10,6 @@ import {
 } from 'lucide-react';
 import { blogPosts } from '@/lib/blog';
 
-const ContentBlock = ({ block, onCopy }: { block: any; onCopy: (code: string) => void }) => {
-  switch (block.type) {
-    case 'lead':
-      return <p className="text-lg text-gray-700 font-medium border-l-4 border-blue-500 pl-5 bg-blue-50/40 py-3 rounded-r-xl mb-6">{block.text}</p>;
-    case 'h2':
-      return <h2 className="text-xl font-black text-gray-900 mt-8 mb-3">{block.text}</h2>;
-    case 'p':
-      return <p className="text-gray-600 leading-relaxed mb-4 text-sm">{block.text}</p>;
-    case 'callout':
-      return <div className="bg-amber-50 border-2 border-amber-200 rounded-xl p-4 my-5"><p className="text-sm font-bold text-amber-800">{block.text}</p></div>;
-    case 'cta':
-      return (
-        <div className="bg-gradient-to-br from-[#060d1f] to-[#0d1f3c] rounded-2xl p-6 my-6 text-white">
-          {block.firm && block.code ? (
-            <>
-              <p className="text-xs font-black text-emerald-400 uppercase mb-2">🔥 Best {block.firm} Discount</p>
-              <div className="flex items-center gap-4 mb-4">
-                <div><p className="text-xs text-slate-400">Discount Code</p><code className="text-blue-300 font-mono text-xl">{block.code}</code></div>
-                <div><p className="text-xs text-slate-400">Save</p><p className="text-4xl font-black text-emerald-400">{block.discount}</p></div>
-              </div>
-              <div className="flex gap-2">
-                <button onClick={() => onCopy(block.code)} className="flex-1 bg-blue-500 hover:bg-blue-400 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2"><Copy className="w-4 h-4" /> Copy Code</button>
-                <a href={block.link} target="_blank" rel="noopener noreferrer" className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black py-3 rounded-xl flex items-center justify-center gap-2"><ExternalLink className="w-4 h-4" /> Visit {block.firm}</a>
-              </div>
-            </>
-          ) : (
-            <>
-              <p className="font-black text-lg mb-1">See All Live Discount Codes</p>
-              <p className="text-slate-400 text-sm mb-4">Verified codes for 20+ prop firms, updated weekly.</p>
-              <Link href={block.link} className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-black px-6 py-3 rounded-xl">View All Deals <ArrowRight className="w-4 h-4" /></Link>
-            </>
-          )}
-        </div>
-      );
-    default: return null;
-  }
-};
-
 export default function BlogPostPage() {
   const params = useParams();
   let slug: string | null = null;
@@ -86,12 +48,8 @@ export default function BlogPostPage() {
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 
-  // Convert plain text content to paragraphs (split by double newline)
-  const contentBlocks = post.content.split(/\n\n+/).map((para, idx) => ({
-    type: 'p',
-    text: para.trim(),
-    key: idx
-  }));
+  // Split plain text content into paragraphs (by double newline)
+  const paragraphs = post.content.split(/\n\n+/).map(p => p.trim()).filter(p => p.length > 0);
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
@@ -120,8 +78,8 @@ export default function BlogPostPage() {
         <div className="grid lg:grid-cols-3 gap-10">
           <article className="lg:col-span-2">
             <div className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm">
-              {contentBlocks.map((block, idx) => (
-                <p key={idx} className="text-gray-600 leading-relaxed mb-4 text-sm">{block.text}</p>
+              {paragraphs.map((para, idx) => (
+                <p key={idx} className="text-gray-600 leading-relaxed mb-4 text-sm whitespace-pre-wrap">{para}</p>
               ))}
             </div>
             <div className="mt-6 bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">

@@ -13,7 +13,7 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
-  // ========== MUBITE REVIEW (NEW, SPONSORED) ==========
+  // ========== MUBITE REVIEW (NEW – SPONSORED) ==========
   {
     slug: "mubite-review-2026",
     title: "Mubite Review 2026 | Crypto Prop Firm with 750+ Pairs & No Restrictions",
@@ -48,10 +48,10 @@ Use our exclusive code **PROPMUB** at checkout to get 20% off any Mubite challen
     date: "2026-04-15",
     category: "Review",
     tags: ["Mubite", "Crypto", "Review", "Sponsored"],
-    image: "",
     readTime: "6 min read"
   },
-  // ========== ORIGINAL POSTS (ALL RETAINED) ==========
+
+  // ========== ORIGINAL POSTS (UNCHANGED) ==========
   {
     slug: "best-prop-firms-2026",
     title: "Top 10 Best Prop Firms for 2026: Complete Guide",

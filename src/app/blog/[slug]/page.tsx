@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, use } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft, Clock, Calendar, Tag, Copy, ExternalLink, CheckCircle,
@@ -217,12 +217,13 @@ const ContentBlock: React.FC<{ block: any; onCopy: (code: string) => void }> = (
 };
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const [toast, setToast] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'done'>('idle');
 
-  const article = ARTICLES[params.slug] ?? {
+  const { slug } = use(params);
+  const article = ARTICLES[slug] ?? {
     title: 'Article Not Found',
     category: 'Blog', firm: null, date: '', readTime: '',
     tag: 'Article', tagColor: 'bg-gray-100 text-gray-600',

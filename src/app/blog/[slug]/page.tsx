@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Clock, Calendar, Tag, Copy, ExternalLink, CheckCircle,
   ChevronRight, Share2, BookOpen, Flame, Bell, ArrowRight, Twitter,
@@ -217,11 +218,13 @@ const ContentBlock: React.FC<{ block: any; onCopy: (code: string) => void }> = (
 };
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default function BlogPostPage({ params }: { params: any }) {
+export default function BlogPostPage() {
+  const params = useParams();
+  const slug = params.slug as string;
   const [toast, setToast] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'done'>('idle');
-  const article = ARTICLES[params.slug] ?? {
+  const article = ARTICLES[slug] ?? {
     title: 'Article Not Found',
     category: 'Blog', firm: null, date: '', readTime: '',
     tag: 'Article', tagColor: 'bg-gray-100 text-gray-600',

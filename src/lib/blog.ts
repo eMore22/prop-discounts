@@ -1,6 +1,4 @@
 // src/lib/blog.ts
-// [UPDATE EXISTING FILE] - Replace your entire current blog.ts with this
-
 export interface BlogPost {
   slug: string;
   title: string;
@@ -15,7 +13,45 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
-  // POST 1: Main comparison article
+  // ========== MUBITE REVIEW (NEW) ==========
+  {
+    slug: "mubite-review-2026",
+    title: "Mubite Review 2026 | Crypto Prop Firm with 750+ Pairs & No Restrictions",
+    excerpt: "Mubite offers 750+ crypto pairs, 100x leverage, and zero trading restrictions on Bybit and Cleo platforms. Use code PROPMUB for 20% off.",
+    content: `Mubite is one of the few prop firms built exclusively for crypto traders. With access to 750+ crypto pairs, 100x leverage, and zero trading restrictions across Bybit and Cleo platforms, it's a compelling option for serious crypto traders.
+
+**What is Mubite?**
+Mubite is a cryptocurrency-focused proprietary trading firm that provides funded accounts to traders who can demonstrate consistent performance. Unlike most prop firms that focus on forex and indices, Mubite specialises entirely in crypto markets — giving traders access to over 750 pairs across both Bybit and Cleo trading platforms.
+
+**Key Features**
+- 750+ crypto pairs including Bitcoin, Ethereum and hundreds of altcoins.
+- Two platform options — Bybit and Cleo.
+- Leverage up to 100x.
+- Instant Funding available with no evaluation required.
+- Zero restrictions — news trading, weekend holding, scalping, EAs, and copy trading are all permitted.
+
+**Challenge Types**
+- **1-Step Challenge:** Single phase evaluation — hit your profit target once and move to funded.
+- **2-Step Challenge:** Two phase evaluation with standard drawdown rules.
+- **Instant Funding:** Skip the evaluation entirely. Start trading with funded capital from day one.
+
+**Who is Mubite For?**
+Mubite is built for crypto traders. If forex or indices are your primary markets, firms like FTMO or FundedNext are a better fit. But if you trade Bitcoin, altcoins, or any of the 750+ pairs on Bybit or Cleo, Mubite gives you funded capital with the flexibility to trade exactly how you want.
+
+**Pros & Cons**
+- **Pros:** 750+ crypto pairs, zero trading restrictions, 100x leverage, Bybit and Cleo platforms supported, Instant Funding available, crypto payouts, EAs and copy trading allowed.
+- **Cons:** Crypto only — no forex or indices. Newer firm with fewer community reviews than established players.
+
+**Get 20% Off Your Mubite Challenge**
+Use our exclusive code **PROPMUB** at checkout to get 20% off any Mubite challenge or Instant Funding account. Verified and active as of April 2026.`,
+    author: "Mike Chen",
+    date: "2026-04-15",
+    category: "Review",
+    tags: ["Mubite", "Crypto", "Review", "Sponsored"],
+    readTime: "6 min read"
+  },
+
+  // ========== YOUR EXISTING POSTS (UNCHANGED) ==========
   {
     slug: "best-prop-firms-2026",
     title: "Top 10 Best Prop Firms for 2026: Complete Guide",
@@ -153,8 +189,6 @@ Good luck. You got this.`,
     tags: ["FTMO", "FundedNext", "The5%ers", "Prop Trading", "Reviews"],
     readTime: "10 min read"
   },
-
-  // POST 2: Personal failure story
   {
     slug: "i-failed-10-prop-challenges",
     title: "I Failed 10 Prop Firm Challenges Before Passing. Here's What I Learned.",
@@ -323,8 +357,6 @@ Trust me. I know.`,
     tags: ["Challenges", "Mistakes", "Success Stories", "Trading Psychology"],
     readTime: "8 min read"
   },
-
-  // POST 3: Daily loss limit guide
   {
     slug: "prop-firm-daily-loss-limit-guide",
     title: "How to Never Hit Your Daily Loss Limit Again (Complete Guide)",
@@ -511,8 +543,6 @@ I've failed enough to know what doesn't work. This is what does.`,
     tags: ["Risk Management", "Daily Loss Limit", "Trading Rules", "Strategy"],
     readTime: "9 min read"
   },
-
-  // POST 4: FTMO vs FundedNext
   {
     slug: "ftmo-vs-fundednext-2026",
     title: "FTMO vs FundedNext: Which Prop Firm is Better in 2026?",
@@ -707,8 +737,6 @@ You'll get funded either way if you follow the rules.`,
     tags: ["FTMO", "FundedNext", "Comparison", "Reviews"],
     readTime: "7 min read"
   },
-
-  // Keep your original 3 posts, but improve them slightly
   {
     slug: "how-to-pass-prop-firm-challenge",
     title: "How to Pass Any Prop Firm Challenge: 10 Proven Strategies",
@@ -854,7 +882,6 @@ Good luck. You got this.`,
     tags: ["Challenge Tips", "Risk Management", "Trading Psychology", "Education"],
     readTime: "8 min read"
   },
-
   {
     slug: "prop-firm-scams-avoid",
     title: "5 Prop Firm Scams to Avoid in 2026 (Red Flags & Warning Signs)",
@@ -1017,7 +1044,6 @@ Stay safe out there.`,
     tags: ["Scams", "Warning Signs", "Due Diligence", "Safety Tips"],
     readTime: "9 min read"
   },
-
   {
     slug: "best-prop-firms-for-beginners-2026",
     title: "5 Best Prop Firms for Beginners in 2026 (Actually Easy to Pass)",
@@ -1202,7 +1228,6 @@ You got this.`,
     tags: ["Beginners", "Prop Firms", "Recommendations", "Getting Started"],
     readTime: "10 min read"
   },
-
   {
     slug: "prop-firm-payout-proof-ftmo-fundednext",
     title: "Prop Firm Payout Proof: My First $8,500 From FTMO + FundedNext",
@@ -1381,7 +1406,7 @@ If you pass, you WILL get paid. I've now received 6 payouts combined from both f
 
 Discount Codes to Save Money
 
-- FTMO: Code CHALLENGE (10% off)
+- FTMO: Follow the link on the website (8% off)
 - FundedNext: Code PROPFIRMS (20% off)
 - The 5%ers: Code 5ERS15 (15% off)
 

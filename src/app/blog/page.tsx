@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Newspaper, Clock, BookOpen, Search, ArrowRight, Flame } from 'lucide-react';
 
 const POSTS = [
-  // Only slugs that exist in src/lib/blog.ts
+  // ========== MUBITE (NEW) ==========
   {
     slug: 'mubite-review-2026',
     title: 'Mubite Review 2026 | Crypto Prop Firm with 750+ Pairs & No Restrictions',
@@ -15,6 +15,7 @@ const POSTS = [
     category: 'Review', firm: 'Mubite', date: 'Apr 15, 2026', readTime: '6 min',
     tag: 'Sponsored', tagColor: 'bg-indigo-100 text-indigo-700', featured: true,
   },
+  // ========== EXISTING ARTICLES (ALL SLUGS MATCH blog.ts) ==========
   {
     slug: 'best-prop-firms-2026',
     title: 'Top 10 Best Prop Firms for 2026: Complete Guide',
@@ -101,6 +102,7 @@ export default function BlogPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
+        {/* Search + Filters */}
         <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
           <div className="relative flex-1 max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -117,6 +119,7 @@ export default function BlogPage() {
           </div>
         </div>
 
+        {/* Featured Posts (Breaking News) */}
         {category === 'All' && !search && (
           <div>
             <div className="flex items-center gap-2 mb-5"><Flame className="w-5 h-5 text-orange-500" /><h2 className="text-xl font-black text-gray-900">Breaking News</h2></div>
@@ -145,6 +148,7 @@ export default function BlogPage() {
           </div>
         )}
 
+        {/* All Articles Grid */}
         <div>
           {category === 'All' && !search && (
             <div className="flex items-center gap-2 mb-5">

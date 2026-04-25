@@ -24,6 +24,7 @@ export default function BlogPostPage() {
   const [subStatus, setSubStatus] = useState<'idle' | 'done'>('idle');
 
   if (!post) {
+    // Fallback – show error and link back to blog
     return (
       <div className="min-h-screen bg-[#f8fafc] py-20 text-center">
         <h1 className="text-2xl font-black">Article Not Found</h1>
@@ -50,7 +51,7 @@ export default function BlogPostPage() {
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
 
-  // Split plain text content into paragraphs (by double newline)
+  // Split plain text content into paragraphs
   const paragraphs = post.content.split(/\n\n+/).map(p => p.trim()).filter(p => p.length > 0);
 
   return (

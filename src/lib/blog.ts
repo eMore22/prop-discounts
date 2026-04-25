@@ -1427,4 +1427,4 @@ Go get funded.`,
     tags: ["Payouts", "Proof", "FTMO", "FundedNext", "Success"],
     readTime: "8 min read"
   }
-];
+];// cache-bust: Sat Apr 25 11:00:34 USMST 2026

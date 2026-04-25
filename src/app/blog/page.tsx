@@ -1,10 +1,13 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Newspaper, Clock, BookOpen, Search, ArrowRight, Flame } from 'lucide-react';
 
 const POSTS = [
+  // Only slugs that exist in src/lib/blog.ts
   {
     slug: 'mubite-review-2026',
     title: 'Mubite Review 2026 | Crypto Prop Firm with 750+ Pairs & No Restrictions',
@@ -13,64 +16,64 @@ const POSTS = [
     tag: 'Sponsored', tagColor: 'bg-indigo-100 text-indigo-700', featured: true,
   },
   {
-    slug: 'ftmo-profit-split-increase-2026',
-    title: 'FTMO Increases Profit Split to 90% for Top Traders',
-    excerpt: 'FTMO has announced an upgrade to its profit sharing structure for consistently profitable funded traders, effective March 2026.',
-    category: 'News', firm: 'FTMO', date: 'Mar 1, 2026', readTime: '4 min',
-    tag: 'Breaking', tagColor: 'bg-red-100 text-red-700', featured: true,
+    slug: 'best-prop-firms-2026',
+    title: 'Top 10 Best Prop Firms for 2026: Complete Guide',
+    excerpt: 'Discover the best prop trading firms of 2026. We review FTMO, FundedNext, The5%ers, and more.',
+    category: 'Prop Firm Reviews', firm: null, date: 'Jan 12, 2026', readTime: '10 min',
+    tag: 'Guide', tagColor: 'bg-blue-100 text-blue-700', featured: true,
   },
   {
-    slug: 'fundednext-stellar-model-2026',
-    title: 'FundedNext Launches New Stellar 1-Phase Evaluation',
-    excerpt: 'FundedNext\'s streamlined evaluation model with a single 10% profit target and no time limits.',
-    category: 'News', firm: 'FundedNext', date: 'Feb 28, 2026', readTime: '5 min',
-    tag: 'New Model', tagColor: 'bg-purple-100 text-purple-700', featured: true,
+    slug: 'i-failed-10-prop-challenges',
+    title: 'I Failed 10 Prop Firm Challenges Before Passing. Here\'s What I Learned.',
+    excerpt: 'Ten failed challenges. $4,200 wasted. The 5 mistakes that kept me from getting funded.',
+    category: 'Personal Stories', firm: null, date: 'Jan 11, 2026', readTime: '8 min',
+    tag: 'Lessons', tagColor: 'bg-yellow-100 text-yellow-700', featured: false,
   },
   {
-    slug: 'prop-firm-regulations-2026',
-    title: 'Prop Firm Regulations: What 2026 Means for Funded Traders',
-    excerpt: 'New financial regulations across the EU and UK could reshape how prop firms operate.',
-    category: 'Industry', firm: null, date: 'Feb 25, 2026', readTime: '8 min',
-    tag: 'Analysis', tagColor: 'bg-blue-100 text-blue-700', featured: false,
-  },
-  {
-    slug: 'best-prop-firm-discounts-2026',
-    title: 'Best Prop Firm Discount Codes in 2026 (Updated Weekly)',
-    excerpt: 'We track and verify every discount code across 20+ prop firms. Here\'s our full updated list.',
-    category: 'Deals', firm: null, date: 'Feb 22, 2026', readTime: '6 min',
-    tag: 'Updated', tagColor: 'bg-emerald-100 text-emerald-700', featured: false,
+    slug: 'prop-firm-daily-loss-limit-guide',
+    title: 'How to Never Hit Your Daily Loss Limit Again (Complete Guide)',
+    excerpt: 'The daily loss limit kills more challenges than anything else. Here\'s the exact system I use.',
+    category: 'Risk Management', firm: null, date: 'Jan 9, 2026', readTime: '9 min',
+    tag: 'Strategy', tagColor: 'bg-green-100 text-green-700', featured: false,
   },
   {
     slug: 'ftmo-vs-fundednext-2026',
-    title: 'FTMO vs FundedNext 2026: Which Prop Firm Should You Choose?',
-    excerpt: 'A detailed, data-driven comparison of the two most popular prop firms.',
-    category: 'Compare', firm: null, date: 'Feb 20, 2026', readTime: '10 min',
-    tag: 'Guide', tagColor: 'bg-orange-100 text-orange-700', featured: false,
+    title: 'FTMO vs FundedNext: Which Prop Firm is Better in 2026?',
+    excerpt: 'I\'ve traded with both FTMO and FundedNext. Here\'s my honest comparison of rules, payouts, and value.',
+    category: 'Comparisons', firm: null, date: 'Jan 10, 2026', readTime: '7 min',
+    tag: 'Comparison', tagColor: 'bg-purple-100 text-purple-700', featured: false,
   },
   {
-    slug: 'passing-ftmo-challenge-tips',
-    title: '7 Proven Tips to Pass the FTMO Challenge First Time',
-    excerpt: 'The exact strategies that help traders pass the FTMO evaluation without busting.',
-    category: 'Tips', firm: 'FTMO', date: 'Feb 18, 2026', readTime: '7 min',
-    tag: 'Tips', tagColor: 'bg-yellow-100 text-yellow-700', featured: false,
+    slug: 'how-to-pass-prop-firm-challenge',
+    title: 'How to Pass Any Prop Firm Challenge: 10 Proven Strategies',
+    excerpt: 'Learn the exact strategies professional traders use to pass prop firm challenges on their first attempt.',
+    category: 'Trading Strategies', firm: null, date: 'Jan 8, 2026', readTime: '8 min',
+    tag: 'Tips', tagColor: 'bg-indigo-100 text-indigo-700', featured: false,
   },
   {
-    slug: 'goat-funded-50000-accounts',
-    title: 'Goat Funded Trader Reaches 50,000 Funded Accounts Milestone',
-    excerpt: 'The community favourite hit a major milestone with $10M+ total distributed to traders.',
-    category: 'News', firm: 'Goat Funded', date: 'Feb 15, 2026', readTime: '4 min',
-    tag: 'Milestone', tagColor: 'bg-emerald-100 text-emerald-700', featured: false,
+    slug: 'prop-firm-scams-avoid',
+    title: '5 Prop Firm Scams to Avoid in 2026 (Red Flags & Warning Signs)',
+    excerpt: 'Not all prop firms are legitimate. Learn how to identify scam prop firms before wasting your money.',
+    category: 'Safety & Security', firm: null, date: 'Jan 5, 2026', readTime: '9 min',
+    tag: 'Warning', tagColor: 'bg-red-100 text-red-700', featured: false,
   },
   {
-    slug: 'prop-firm-payout-reliability-2026',
-    title: 'Which Prop Firms Actually Pay? 2026 Payout Reliability Report',
-    excerpt: 'We analysed trader feedback from 5,000+ funded accounts to rank reliability.',
-    category: 'Research', firm: null, date: 'Feb 10, 2026', readTime: '12 min',
-    tag: 'Research', tagColor: 'bg-indigo-100 text-indigo-700', featured: false,
+    slug: 'best-prop-firms-for-beginners-2026',
+    title: '5 Best Prop Firms for Beginners in 2026 (Actually Easy to Pass)',
+    excerpt: 'Not all prop firms are beginner-friendly. These 5 have the most forgiving rules and highest pass rates.',
+    category: 'Beginner Guides', firm: null, date: 'Jan 7, 2026', readTime: '10 min',
+    tag: 'Beginner', tagColor: 'bg-emerald-100 text-emerald-700', featured: false,
+  },
+  {
+    slug: 'prop-firm-payout-proof-ftmo-fundednext',
+    title: 'Prop Firm Payout Proof: My First $8,500 From FTMO + FundedNext',
+    excerpt: 'Screenshots included. Here\'s exactly how long it took to get paid, how much I made, and whether these firms actually pay out.',
+    category: 'Success Stories', firm: null, date: 'Jan 6, 2026', readTime: '8 min',
+    tag: 'Proof', tagColor: 'bg-teal-100 text-teal-700', featured: false,
   },
 ];
 
-const CATEGORIES = ['All', 'News', 'Compare', 'Deals', 'Tips', 'Industry', 'Research'];
+const CATEGORIES = ['All', 'Prop Firm Reviews', 'Personal Stories', 'Risk Management', 'Comparisons', 'Trading Strategies', 'Safety & Security', 'Beginner Guides', 'Success Stories'];
 
 export default function BlogPage() {
   const [category, setCategory] = useState('All');

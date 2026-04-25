@@ -1,7 +1,6 @@
 "use client";
-// src/app/admin/books/page.tsx
-// Books are now managed directly in the main admin dashboard under the Books tab.
-// This page redirects there automatically.
+
+export const dynamic = 'force-dynamic';
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';

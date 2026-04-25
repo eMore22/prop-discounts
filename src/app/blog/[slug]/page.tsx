@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -13,10 +15,10 @@ import { blogPosts } from '@/lib/blog';
 export default function BlogPostPage() {
   const params = useParams();
   let slug: string | null = null;
-  if (typeof params.slug === 'string') slug = params.slug;
-  else if (Array.isArray(params.slug) && params.slug.length > 0) slug = params.slug[0];
+  if (typeof params.slug === 'string') slug = params.slug.trim().toLowerCase();
+  else if (Array.isArray(params.slug) && params.slug.length > 0) slug = params.slug[0].trim().toLowerCase();
 
-  const post = blogPosts.find(p => p.slug === slug);
+  const post = blogPosts.find(p => p.slug.toLowerCase() === slug);
   const [toast, setToast] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'idle' | 'done'>('idle');

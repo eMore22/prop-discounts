@@ -1,11 +1,7 @@
-// rebuilt: force fresh deploy - no cache
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
-  },
-  generateBuildId: async () => {
-    return 'build-' + Date.now()
   },
 }
 module.exports = nextConfig

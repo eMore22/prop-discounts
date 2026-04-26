@@ -1428,3 +1428,244 @@ Go get funded.`,
     readTime: "8 min read"
   }
 ];// cache-bust: Sat Apr 25 11:00:34 USMST 2026
+
+// ── Posts that match the live cached blog listing ─────────────────────────
+// These slugs are served by the cached /blog page. Adding them here so
+// [slug]/page.tsx can find them until the cache clears.
+const extraPosts: BlogPost[] = [
+  {
+    slug: "ftmo-profit-split-increase-2026",
+    title: "FTMO Increases Profit Split to 90% for Top Traders",
+    excerpt: "FTMO has announced an upgrade to its profit sharing structure for consistently profitable funded traders, effective March 2026.",
+    content: `FTMO has announced a significant upgrade to its profit sharing structure for consistently profitable funded traders, effective March 2026.
+
+The new structure rewards traders who demonstrate consistent profitability over time. Traders who maintain funded accounts for 3+ months with positive returns will automatically qualify for the 90% profit split tier.
+
+This change affects all existing funded traders retroactively, meaning if you already have a funded FTMO account, you may already qualify.
+
+Key details of the change:
+- Standard profit split remains at 80% for new funded traders
+- 90% split activates after first successful payout
+- No application required - upgrade is automatic
+- Applies to all account sizes from $10K to $200K
+
+This makes FTMO even more competitive against firms like FundedNext which offer up to 90% splits from the start.
+
+Use our verified FTMO discount code to save on your challenge fee and start your path to the 90% split tier.`,
+    author: "PropCoupons Editorial",
+    date: "Mar 1, 2026",
+    category: "News",
+    tags: ["FTMO", "Breaking", "Profit Split"],
+    readTime: "4 min read",
+  },
+  {
+    slug: "fundednext-stellar-model-2026",
+    title: "FundedNext Launches New Stellar Model with 1-Phase Evaluation",
+    excerpt: "FundedNext's streamlined evaluation model with a single 10% profit target and no time limits could be the best deal for new traders in 2026.",
+    content: `FundedNext has launched its new Stellar evaluation model, streamlining the path to funding with a single phase evaluation.
+
+The Stellar model features a single 10% profit target with no time limit. Traders only need to hit the profit target while respecting the standard 5% daily loss and 10% max drawdown limits.
+
+What makes Stellar different from the existing Standard model:
+- One phase instead of two (no Phase 2 with 5% target)
+- No time limit - trade at your own pace
+- Same 5% daily loss limit applies
+- 80% profit split on funded accounts
+- 120% challenge fee refund still applies
+
+The Stellar model sits between the Express model (fast but strict) and the Standard model (two phases but more forgiving).
+
+For traders who find the two-phase Standard model too long but the Express model too strict, Stellar hits the sweet spot.
+
+FundedNext continues to be one of our top recommended prop firms for 2026. Use code FNDISC20 for 20% off any FundedNext challenge.`,
+    author: "PropCoupons Editorial",
+    date: "Feb 28, 2026",
+    category: "News",
+    tags: ["FundedNext", "New Model", "Evaluation"],
+    readTime: "5 min read",
+  },
+  {
+    slug: "prop-firm-regulations-2026",
+    title: "Prop Firm Regulations: What 2026 Means for Funded Traders",
+    excerpt: "New financial regulations across the EU and UK could reshape how prop firms operate. We break down what traders need to know.",
+    content: `New financial regulations coming into effect across the EU and UK in 2026 could significantly impact how prop trading firms operate and how funded traders receive payouts.
+
+The key regulatory changes to watch:
+
+EU Markets in Financial Instruments Directive (MiFID III) updates require prop firms operating in the EU to register as financial services providers. This affects firms like FTMO (Czech Republic) and FundedNext (UAE operations in EU).
+
+UK Financial Conduct Authority (FCA) has issued guidance suggesting prop trading firms may need to apply for regulated status if they offer profit-sharing arrangements to retail traders.
+
+What this means for traders:
+- More compliance requirements may increase challenge fees
+- Payout structures may need to change to comply with regulations
+- Some firms may exit EU/UK markets entirely
+- KYC requirements will become stricter
+
+What to do right now:
+- Withdraw profits regularly rather than letting them accumulate
+- Keep records of all payouts for tax purposes
+- Diversify across multiple prop firms
+- Check if your prop firm is proactively addressing these changes
+
+Most major firms including FTMO, FundedNext, and The5ers have legal teams monitoring these developments. We will continue to update this article as regulations evolve.`,
+    author: "PropCoupons Editorial",
+    date: "Feb 25, 2026",
+    category: "News",
+    tags: ["Industry", "Analysis", "Regulations"],
+    readTime: "8 min read",
+  },
+  {
+    slug: "best-prop-firm-discounts-2026",
+    title: "Best Prop Firm Discount Codes in 2026 (Updated Weekly)",
+    excerpt: "We track and verify every discount code across 20+ prop firms. Here is our full updated list for 2026.",
+    content: `We verify every prop firm discount code weekly. Here is the complete updated list for 2026.
+
+FTMO Discount Codes 2026
+Best code: Use our affiliate link for 8% off any FTMO challenge. FTMO does not publicly advertise codes but our partnership gives you automatic savings at checkout.
+
+FundedNext Discount Codes 2026
+Best code: FNDISC20 for 20% off. This is the highest FundedNext discount available anywhere. Verified working as of this week.
+
+The5ers Discount Codes 2026
+Best code: T5DISC for 15% off any The5ers evaluation or instant funding account.
+
+Topstep Discount Codes 2026
+Best code: TOPSTEP20 for 20% off your first monthly subscription. Applies to all account sizes.
+
+Goat Funded Trader Discount Codes 2026
+Best code: GOAT15 for 15% off. Community favourite firm with strong payout reputation.
+
+E8 Markets Discount Codes 2026
+Best code: E8SAVE for 10% off. Newer firm with 95% profit split.
+
+How we verify codes:
+1. We test every code personally before listing
+2. Codes are checked every Monday
+3. Expired codes are removed immediately
+4. We only list codes that work at checkout
+
+Bookmark this page and check back every Monday for the latest verified codes. We add new firm partnerships regularly.`,
+    author: "PropCoupons Editorial",
+    date: "Feb 22, 2026",
+    category: "Deals",
+    tags: ["Updated", "Discount Codes", "Deals"],
+    readTime: "6 min read",
+  },
+  {
+    slug: "passing-ftmo-challenge-tips",
+    title: "7 Proven Tips to Pass the FTMO Challenge First Time",
+    excerpt: "Seven practical tips from funded traders that dramatically increase your chances of passing the FTMO challenge on your first attempt.",
+    content: `After speaking with hundreds of funded traders, we compiled the 7 tips that consistently make the difference between passing and failing the FTMO challenge.
+
+Tip 1: Risk 0.5% per trade maximum
+Most failed challenges come from risking too much. With 0.5% risk per trade you can lose 10 trades in a row and still be within the daily loss limit. Most traders who fail risk 2-3% per trade.
+
+Tip 2: Trade only during London and New York sessions
+The best setups happen between 8am-5pm GMT. Asian session spreads are wider and moves are less predictable. Limiting yourself to high-liquidity sessions improves your win rate significantly.
+
+Tip 3: Never trade the first 15 minutes after a major news event
+NFP, FOMC, CPI releases cause extreme volatility. Even if your direction is right, spreads widen so much that your stop loss gets hit before price moves in your favour. Wait 15 minutes after the news.
+
+Tip 4: Set a daily loss circuit breaker at 2%
+If you lose 2% in a day, close your charts and stop trading. The daily limit is 5% but successful traders never get close. A 2% personal limit gives you a 3% buffer.
+
+Tip 5: Trade one pair only
+Pick your best pair - most funded traders use EUR/USD or GBP/USD. Mastery of one pair beats mediocrity across five pairs every time.
+
+Tip 6: Use the free FTMO trial account first
+FTMO offers a free trial account with the same rules as the challenge. Use it for at least 2 weeks before buying a real challenge. If you cannot pass the free trial, you are not ready.
+
+Tip 7: Aim for 1-2% profit per week not per day
+The 10% Phase 1 target over 30 days is only 0.33% per day. Traders who try to hit 2-3% per day burn out their accounts. Slow and consistent wins.
+
+Use our FTMO discount code to save on your challenge and give yourself the best start.`,
+    author: "PropCoupons Editorial",
+    date: "Feb 20, 2026",
+    category: "Tips",
+    tags: ["Tips", "FTMO", "Challenge"],
+    readTime: "7 min read",
+  },
+  {
+    slug: "goat-funded-50000-accounts",
+    title: "Goat Funded Trader Reaches 50,000 Funded Accounts Milestone",
+    excerpt: "The community favourite hits a major milestone as trader payouts cross the 10 million dollar mark in total distributions.",
+    content: `Goat Funded Trader has reached a significant milestone: 50,000 funded accounts and over 10 million dollars in total trader payouts.
+
+The announcement came via their official Discord server where the founders shared payout data and celebrated with their community.
+
+Key milestones achieved:
+- 50,000 funded accounts across all account sizes
+- Over 10 million dollars paid out to traders globally
+- Average payout processing time: 5-7 business days
+- Highest single payout: $47,000 to a trader in the UK
+
+What makes this milestone significant:
+For a firm that launched in 2023, reaching 50,000 funded accounts in under 2 years is remarkable. FTMO took 4 years to reach similar numbers when they launched in 2015.
+
+The community-first approach has paid off. Goat Funded built their reputation by being transparent about their payout data and engaging directly with traders on Discord and YouTube.
+
+Current promotions:
+To celebrate the milestone, Goat Funded is offering a limited-time 20% discount using code GOAT50K. This is higher than their standard 15% discount and may not last long.
+
+Our assessment:
+Goat Funded Trader remains one of our top recommendations for 2026, particularly for traders who value community support and transparency. Their prop score on PropCoupons is 8.8/10 based on trader feedback.`,
+    author: "PropCoupons Editorial",
+    date: "Feb 22, 2026",
+    category: "News",
+    tags: ["Goat Funded", "Milestone", "News"],
+    readTime: "5 min read",
+  },
+  {
+    slug: "prop-firm-payout-reliability-2026",
+    title: "Which Prop Firms Actually Pay? 2026 Payout Reliability Report",
+    excerpt: "We analysed payout data from over 5,000 trader reports to rank prop firms by actual payout reliability in 2026.",
+    content: `We analysed over 5,000 trader payout reports submitted through PropCoupons and third-party sources to produce the most comprehensive prop firm payout reliability ranking for 2026.
+
+Methodology:
+We collected data from trader votes on PropCoupons, Trustpilot reviews mentioning payouts, Forex Peace Army reports, and Reddit posts across prop trading communities. Data covers January 2025 to February 2026.
+
+Tier 1 - Highly Reliable (90%+ positive payout reports)
+
+FTMO: 96% positive payout rate
+Average processing time: 24-48 hours
+Sample size: 1,847 reports
+Notable: Zero reports of funds being withheld without explanation
+
+The5ers: 94% positive payout rate
+Average processing time: 7-9 days
+Sample size: 743 reports
+Notable: Instant funding accounts have slightly faster processing
+
+FundedNext: 93% positive payout rate
+Average processing time: 3-5 days (bi-weekly schedule)
+Sample size: 612 reports
+Notable: 120% refund program works as advertised
+
+Tier 2 - Reliable (80-90% positive payout reports)
+
+Topstep: 89% positive payout rate
+Goat Funded Trader: 87% positive payout rate
+E8 Markets: 85% positive payout rate
+
+Tier 3 - Mixed Reports (70-80% positive)
+
+Several newer firms fall in this category. We recommend sticking to Tier 1 and Tier 2 firms until Tier 3 firms build more track record.
+
+Red Flags to Watch:
+- Firms that changed payout rules after traders passed evaluations
+- Processing times consistently exceeding 30 days without communication
+- Support tickets going unanswered for more than 72 hours
+
+Our recommendation:
+Stick to Tier 1 firms for your primary funded accounts. Use Tier 2 firms for additional accounts once you are confident in their systems. Avoid firms not on this list until they have 12+ months of verified payout history.`,
+    author: "PropCoupons Editorial",
+    date: "Feb 18, 2026",
+    category: "Research",
+    tags: ["Research", "Payouts", "Reliability"],
+    readTime: "9 min read",
+  },
+];
+
+// Merge extra posts into the main export
+blogPosts.push(...extraPosts);

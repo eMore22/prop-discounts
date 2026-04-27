@@ -13,14 +13,12 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
-  // ========== MUBITE REVIEW (UPDATED with full details & affiliate link) ==========
+  // ========== MUBITE REVIEW (UPDATED with full details & affiliate link, no markdown) ==========
   {
     slug: "mubite-review-2026",
     title: "Mubite Review 2026: The Instant‑Fund Crypto Prop Firm with 90% Splits (Full Breakdown)",
     excerpt: "Mubite offers 700+ crypto pairs, 100x leverage, and a unique instant‑funding model. Read our complete review – rules, platforms, payouts, and a 20% discount code.",
-    content: `Mubite is one of the few proprietary trading firms built exclusively for cryptocurrency markets. Launched in late 2024 and based in the Czech Republic, it has quickly gained attention with its flexible **instant‑funding** model, competitive profit splits (up to 90%), and a strong early reputation (Trustpilot 4.8/5).
-
-Mubite is one of the few proprietary trading firms built exclusively for cryptocurrency markets. Launched in late 2024 and based in the Czech Republic, it has quickly gained attention with its flexible instant‑funding model, competitive profit splits (up to 90%), and a strong early reputation (Trustpilot 4.8/5).
+    content: `Mubite is one of the few proprietary trading firms built exclusively for cryptocurrency markets. Launched in late 2024 and based in the Czech Republic, it has quickly gained attention with its flexible instant‑funding model, competitive profit splits (up to 90%), and a strong early reputation (Trustpilot 4.8/5).
 
 What makes Mubite different?
 Unlike most prop firms that require multi‑phase evaluations, Mubite offers Instant Funding – you pay a one‑time fee and start trading a funded demo account immediately. There is no evaluation phase, no profit targets to hit before being funded, and you can start trading on the day you sign up.
@@ -119,7 +117,12 @@ Get 20% Off Your Mubite Challenge
 
 We have secured an exclusive 20% discount for PropCoupons readers. Use the code PROPMUB at checkout to save on any Mubite challenge or instant funding account.
 
-Claim your 20% discount at Mubite: https://mubite.com/en/register?ref=PROPMUB
+Claim your 20% discount at Mubite: https://mubite.com/en/register?ref=PROPMUB`,
+    author: "PropCoupons Editorial",
+    date: "2026-04-15",
+    category: "Review",
+    tags: ["Mubite", "Crypto", "Review", "Sponsored"],
+    readTime: "8 min read"
   },
 
   // ========== YOUR EXISTING POSTS (UNCHANGED) ==========
@@ -254,7 +257,7 @@ Use discount codes:
 - The 5%ers: 5ERS15 (15% off)
 
 Good luck. You got this.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-12",
     category: "Prop Firm Reviews",
     tags: ["FTMO", "FundedNext", "The5%ers", "Prop Trading", "Reviews"],
@@ -422,7 +425,7 @@ I thought I needed to be an amazing trader. I just needed to stop being stupid.
 If you're on attempt #3, #4, or #5... you probably don't need to learn new strategies. You need to fix your behavior.
 
 Trust me. I know.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-11",
     category: "Personal Stories",
     tags: ["Challenges", "Mistakes", "Success Stories", "Trading Psychology"],
@@ -608,7 +611,7 @@ My system:
 Follow this and you'll pass more challenges.
 
 I've failed enough to know what doesn't work. This is what does.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-09",
     category: "Risk Management",
     tags: ["Risk Management", "Daily Loss Limit", "Trading Rules", "Strategy"],
@@ -802,7 +805,7 @@ FundedNext is easier and cheaper. FTMO is faster and more prestigious.
 Pick based on your priorities. Or do both like me.
 
 You'll get funded either way if you follow the rules.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-10",
     category: "Comparisons",
     tags: ["FTMO", "FundedNext", "Comparison", "Reviews"],
@@ -947,7 +950,7 @@ Use These Discount Codes
 - The 5%ers: 5ERS15 (15% off)
 
 Good luck. You got this.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-08",
     category: "Trading Strategies",
     tags: ["Challenge Tips", "Risk Management", "Trading Psychology", "Education"],
@@ -1109,7 +1112,7 @@ If a firm isn't on this list, research extensively before sending money.
 The rule: If you haven't heard of them, they need to PROVE they're legit. It's not your job to trust them.
 
 Stay safe out there.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-05",
     category: "Safety & Security",
     tags: ["Scams", "Warning Signs", "Due Diligence", "Safety Tips"],
@@ -1293,7 +1296,7 @@ Once you pass that, you can decide if you want to try FTMO or scale up with more
 Don't start with the hardest firm. Build confidence first.
 
 You got this.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-07",
     category: "Beginner Guides",
     tags: ["Beginners", "Prop Firms", "Recommendations", "Getting Started"],
@@ -1492,7 +1495,7 @@ If you can pass their challenges, you will get paid. Period.
 I'm living proof. So are thousands of other traders.
 
 Go get funded.`,
-    author: "Mike Chen",
+    author: "PropCoupons Editorial",
     date: "2026-01-06",
     category: "Success Stories",
     tags: ["Payouts", "Proof", "FTMO", "FundedNext", "Success"],

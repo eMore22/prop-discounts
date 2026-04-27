@@ -20,128 +20,106 @@ export const blogPosts: BlogPost[] = [
     excerpt: "Mubite offers 700+ crypto pairs, 100x leverage, and a unique instant‑funding model. Read our complete review – rules, platforms, payouts, and a 20% discount code.",
     content: `Mubite is one of the few proprietary trading firms built exclusively for cryptocurrency markets. Launched in late 2024 and based in the Czech Republic, it has quickly gained attention with its flexible **instant‑funding** model, competitive profit splits (up to 90%), and a strong early reputation (Trustpilot 4.8/5).
 
-**What makes Mubite different?**  
-Unlike most prop firms that require multi‑phase evaluations, Mubite offers **Instant Funding** – you pay a one‑time fee and start trading a funded demo account immediately. There is no evaluation phase, no profit targets to hit before being funded, and you can start trading on the day you sign up.
+Mubite is one of the few proprietary trading firms built exclusively for cryptocurrency markets. Launched in late 2024 and based in the Czech Republic, it has quickly gained attention with its flexible instant‑funding model, competitive profit splits (up to 90%), and a strong early reputation (Trustpilot 4.8/5).
 
----
+What makes Mubite different?
+Unlike most prop firms that require multi‑phase evaluations, Mubite offers Instant Funding – you pay a one‑time fee and start trading a funded demo account immediately. There is no evaluation phase, no profit targets to hit before being funded, and you can start trading on the day you sign up.
 
-**Key Features at a Glance**
+Key Features at a Glance
 
-- **Asset Focus:** Crypto only (no forex or indices)  
-- **Platforms:** Bybit (700+ pairs) & Cleo (tokenised stocks, commodities, 560+ crypto pairs)  
-- **Leverage:** Up to 100x on crypto  
-- **Maximum Account Size:** $200,000  
-- **Profit Split:** Starts at 70% (can upgrade to 80% or 90% with optional add‑ons)  
-- **Payout Frequency:** Every 14 days (min $50, max 5% of account per request)  
-- **Evaluation Options:** None (Instant Funding), 1‑Step Challenge, or 2‑Step Challenge  
-- **Discount Code:** **PROPMUB** for 20% off any challenge or instant account
+Asset Focus: Crypto only (no forex or indices)
+Platforms: Bybit (700+ pairs) & Cleo (tokenised stocks, commodities, 560+ crypto pairs)
+Leverage: Up to 100x on crypto
+Maximum Account Size: $200,000
+Profit Split: Starts at 70% (can upgrade to 80% or 90% with optional add‑ons)
+Payout Frequency: Every 14 days (min $50, max 5% of account per request)
+Evaluation Options: None (Instant Funding), 1‑Step Challenge, or 2‑Step Challenge
+Discount Code: PROPMUB for 20% off any challenge or instant account
 
----
+Challenge & Account Types
 
-**Challenge & Account Types**
+1. Instant Funding (Most Popular)
+No evaluation – you trade from day one.
+First payout available after 14 days and hitting a 5% profit target.
+Profit split: 70% (upgradable to 80% or 90% with a one‑time fee).
+Drawdown: 10% maximum (tightens to 5% after reaching 5% profit).
+Account sizes: $1,250 to $40,000.
 
-**1. Instant Funding (Most Popular)**  
-- No evaluation – you trade from day one.  
-- First payout available after 14 days and hitting a 5% profit target.  
-- Profit split: 70% (upgradable to 80% or 90% with a one‑time fee).  
-- Drawdown: 10% maximum (tightens to 5% after reaching 5% profit).  
-- Account sizes: $1,250 to $40,000.
+2. 1‑Step Challenge
+Single phase with a 10% profit target.
+Lower entry fee than Instant Funding.
+Same payout rules as funded accounts.
 
-**2. 1‑Step Challenge**  
-- Single phase with a 10% profit target.  
-- Lower entry fee than Instant Funding.  
-- Same payout rules as funded accounts.
+3. 2‑Step Challenge
+Traditional two‑phase evaluation (10% + 10% profit targets).
+For traders who prefer a structured, paced approach.
 
-**3. 2‑Step Challenge**  
-- Traditional two‑phase evaluation (10% + 10% profit targets).  
-- For traders who prefer a structured, paced approach.
+All funded accounts share the same payout rules and the Mubite Funded Score system.
 
-All funded accounts share the same payout rules and the **Mubite Funded Score** system.
-
----
-
-**Trading Platforms & Instruments**
+Trading Platforms & Instruments
 
 Mubite connects to two different platforms:
 
-| Platform | Instruments | Leverage |
-|----------|-------------|----------|
-| **Bybit** | 700+ crypto pairs, gold, limited commodities | Up to 100x |
-| **Cleo** | Tokenised stocks (Tesla, Apple, etc.), commodities, 560+ crypto pairs | Up to 100x (crypto) / lower for stocks |
+Platform: Bybit – Instruments: 700+ crypto pairs, gold, limited commodities – Leverage: Up to 100x
+Platform: Cleo – Instruments: Tokenised stocks (Tesla, Apple, etc.), commodities, 560+ crypto pairs – Leverage: Up to 100x (crypto) / lower for stocks
 
-**Important:** Mubite does **not** offer forex pairs. If you trade only currency pairs, Mubite is not for you.
+Important: Mubite does not offer forex pairs. If you trade only currency pairs, Mubite is not for you.
 
----
+Profit Split & Fees
 
-**Profit Split & Fees**
+Instant Funding: Starts at 70%. You can purchase an add‑on at checkout to raise it to 80% or 90%.
+Challenges (1‑Step / 2‑Step): Profit split starts at 80% and can be upgraded.
 
-- **Instant Funding:** Starts at 70%. You can purchase an add‑on at checkout to raise it to 80% or 90%.  
-- **Challenges (1‑Step / 2‑Step):** Profit split starts at 80% and can be upgraded.
-
-**Pricing examples (2‑Step Challenge):**  
-- $5,000 account – $79  
-- $10,000 account – $89  
-- $25,000 account – $199  
-- $50,000 account – $399  
-- $100,000 account – $599  
-- $200,000 account – $949  
+Pricing examples (2‑Step Challenge):
+$5,000 account – $79
+$10,000 account – $89
+$25,000 account – $199
+$50,000 account – $399
+$100,000 account – $599
+$200,000 account – $949
 
 All challenge fees are refunded with your first payout.
 
----
+Payout Process & Mubite Funded Score
 
-**Payout Process & Mubite Funded Score**
+Mubite uses a proprietary Mubite Funded Score system to manage payouts:
+You can request a payout every 14 days.
+Minimum payout: $50
+Maximum per request: 5% of your account balance (e.g., $2,500 on a $50,000 account).
+No profit targets after funding – just follow the drawdown rules.
 
-Mubite uses a proprietary **Mubite Funded Score** system to manage payouts:
+Most Trustpilot reviews report payouts within 24‑48 hours – faster than the advertised 14‑day window.
 
-- You can request a payout every **14 days**.  
-- Minimum payout: $50  
-- Maximum per request: **5% of your account balance** (e.g., $2,500 on a $50,000 account).  
-- No profit targets after funding – just follow the drawdown rules.
+Pros & Cons
 
-Most Trustpilot reviews report payouts within **24‑48 hours** – faster than the advertised 14‑day window.
+Pros
+Instant funding – no evaluation stress.
+700+ crypto pairs across two platforms.
+Zero trading restrictions – scalping, news trading, weekend holding, EAs allowed.
+High Trustpilot score (4.8) with real payout proofs.
+Up to 90% profit split (with add‑ons).
+No minimum trading days for payout.
 
----
+Cons
+Crypto only – no forex or indices.
+New firm (launched 2024) – long‑term track record not yet proven.
+Drawdown rules can be strict for the Instant Funding model.
+Payout cap (5% of account per request) may be limiting for large accounts.
 
-**Pros & Cons**
+Trust & Reputation
 
-**Pros**  
-- Instant funding – no evaluation stress.  
-- 700+ crypto pairs across two platforms.  
-- Zero trading restrictions – scalping, news trading, weekend holding, EAs allowed.  
-- High Trustpilot score (4.8) with real payout proofs.  
-- Up to 90% profit split (with add‑ons).  
-- No minimum trading days for payout.
-
-**Cons**  
-- Crypto only – no forex or indices.  
-- New firm (launched 2024) – long‑term track record not yet proven.  
-- Drawdown rules can be strict for the Instant Funding model.  
-- Payout cap (5% of account per request) may be limiting for large accounts.
-
----
-
-**Trust & Reputation**
-
-- **Trustpilot:** 4.8 / 5 stars (150+ reviews).  
-- **Founder:** Peter Andreas (6+ years in crypto trading).  
-- **Community:** Active Discord with fast support.  
-- **Payout reliability:** Early reports show consistent, fast payouts (many received within 24 hours).
+Trustpilot: 4.8 / 5 stars (150+ reviews).
+Founder: Peter Andreas (6+ years in crypto trading).
+Community: Active Discord with fast support.
+Payout reliability: Early reports show consistent, fast payouts (many received within 24 hours).
 
 Mubite is still a young firm, but its transparent rules, third‑party ratings, and growing payout history make it a promising choice for crypto‑native traders.
 
----
+Get 20% Off Your Mubite Challenge
 
-**Get 20% Off Your Mubite Challenge**
+We have secured an exclusive 20% discount for PropCoupons readers. Use the code PROPMUB at checkout to save on any Mubite challenge or instant funding account.
 
-We have secured an exclusive **20% discount** for PropCoupons readers. Use the code **PROPMUB** at checkout to save on any Mubite challenge or instant funding account.
-
-👉 [Claim your 20% discount at Mubite](https://mubite.com/en/register?ref=PROPMUB)`,
-    author: "Mike Chen",
-    date: "2026-04-15",
-    category: "Review",
-    tags: ["Mubite", "Crypto", "Review", "Sponsored"],
-    readTime: "8 min read"
+Claim your 20% discount at Mubite: https://mubite.com/en/register?ref=PROPMUB
   },
 
   // ========== YOUR EXISTING POSTS (UNCHANGED) ==========

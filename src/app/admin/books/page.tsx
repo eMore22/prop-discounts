@@ -1,7 +1,4 @@
 "use client";
-
-export const dynamic = 'force-dynamic';
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -10,7 +7,6 @@ export default function AdminBooksRedirect() {
   useEffect(() => {
     router.replace('/admin');
   }, [router]);
-
   return (
     <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
       <div className="text-center">
